@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<!--
+    Type on Strap jekyll theme v2.3.4
+    Copyright 2016-2021 Sylhare
+    Theme free for personal and commercial use under the MIT license
+    https://github.com/sylhare/Type-on-Strap/blob/master/LICENSE
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=0.5, maximum-scale=5">
+
+    <!-- Main JS (navbar.js, katex_init.js and masonry_init.js)-->
+    <script defer src="/assets/js/main.min.js"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/main.css">
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/atom+xml" title="CodingFeline" href="https://www.yslibrary.net/feed.xml"/>
+    
+    
+
+    <!-- KaTeX 0.12.0 -->
+    
+    <script defer src="/assets/js/vendor/katex.min.js"></script>
+    <script defer src="/assets/js/vendor/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+    
+
+    <!-- Mermaid 8.9.2 -->
+    
+
+    <!-- Simple Jekyll Search 1.9.1 -->
+    <script src="/assets/js/vendor/simple-jekyll-search.min.js" type="text/javascript"></script>
+
+    <!-- Google Analytics / Cookie Consent -->
+    <script>
+      const cookieName = 'cookie-notice-dismissed-https://www.yslibrary.net';
+      const isCookieConsent = 'false';
+      const analyticsName = 'UA-61198465-1';
+    </script>
+
+    
+    
+        <!-- Global site tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-61198465-1"></script>
+        <!-- Page analysis (analytics.js) -->
+        <script async src='https://www.google-analytics.com/analytics.js'></script>
+    
+
+    <!-- seo tags -->
+    <meta property="og:image" content="https://www.yslibrary.net/assets/img/dactyl.jpeg">
+    
+    <meta property="og:type" content="website" />
+    
+    <!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Kotlin Multiplatform Project向けのGraphQLラッパー生成ライブラリ、kgqlを作った | CodingFeline</title>
+<meta name="generator" content="Jekyll v4.2.0" />
+<meta property="og:title" content="Kotlin Multiplatform Project向けのGraphQLラッパー生成ライブラリ、kgqlを作った" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="AndroidとKotlin Multiplatform Projectで使える、GraphQLのドキュメントからコードを生成するGradle Pluginを作った。 kgqlという。" />
+<meta property="og:description" content="AndroidとKotlin Multiplatform Projectで使える、GraphQLのドキュメントからコードを生成するGradle Pluginを作った。 kgqlという。" />
+<link rel="canonical" href="https://www.yslibrary.net/2019/02/27/kgql-graphql-kotlin-mpp/" />
+<meta property="og:url" content="https://www.yslibrary.net/2019/02/27/kgql-graphql-kotlin-mpp/" />
+<meta property="og:site_name" content="CodingFeline" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-02-27T00:00:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Kotlin Multiplatform Project向けのGraphQLラッパー生成ライブラリ、kgqlを作った" />
+<script type="application/ld+json">
+{"mainEntityOfPage":{"@type":"WebPage","@id":"https://www.yslibrary.net/2019/02/27/kgql-graphql-kotlin-mpp/"},"description":"AndroidとKotlin Multiplatform Projectで使える、GraphQLのドキュメントからコードを生成するGradle Pluginを作った。 kgqlという。","url":"https://www.yslibrary.net/2019/02/27/kgql-graphql-kotlin-mpp/","@type":"BlogPosting","headline":"Kotlin Multiplatform Project向けのGraphQLラッパー生成ライブラリ、kgqlを作った","dateModified":"2019-02-27T00:00:00+00:00","datePublished":"2019-02-27T00:00:00+00:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- RSS -->
+    <link type="application/atom+xml" rel="alternate" href="https://www.yslibrary.net/feed.xml" title="CodingFeline" />
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:title" content="Kotlin Multiplatform Project向けのGraphQLラッパー生成ライブラリ、kgqlを作った">
+    <meta name="twitter:description" content="AndroidとKotlin Multiplatform Projectで使える、GraphQLのドキュメントからコードを生成するGradle Pluginを作った。kgqlという。これ実際の成果物を見てもらうのが早いと思うので、こんな感じ。// User.gqlquery User($login: String...">
+    
+    <meta name="twitter:creator" content="@_yshrsmz">
+    <meta name="twitter:site" content="@_yshrsmz">
+    
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:image" content="https://www.yslibrary.net/assets/img/dactyl.jpeg">
+    <meta name="twitter:image:alt" content="Kotlin Multiplatform Project向けのGraphQLラッパー生成ライブラリ、kgqlを作った">
+</head>
+
+  <body>
+    <header class="site-header">
+
+    <!-- Logo and title -->
+	<div class="branding">
+        
+		<a href="/">
+			<img alt="logo img" class="avatar" src="/assets/img/logo.png" />
+		</a>
+        
+        <a class="site-title" aria-label="CodingFeline" href="/">
+        CodingFeline
+		</a>
+	</div>
+
+    <!-- Toggle menu -->
+    <nav class="clear">
+    <a aria-label="pull" id="pull" class="toggle" href="#">
+    <i class="fas fa-bars fa-lg"></i>
+    </a>
+
+    <!-- Menu -->
+    <ul class="hide">
+        
+
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="ABOUT" title="ABOUT" href="/about/">
+                     ABOUT 
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="PRODUCTS" title="PRODUCTS" href="/products/">
+                     PRODUCTS 
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Search" title="Search" href="/search/">
+                     <i class="fas fa-search" aria-hidden="true"></i>
+                    
+                </a>
+            </li>
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Tags" title="Tags" href="/tags/">
+                     <i class="fas fa-tags" aria-hidden="true"></i>
+                    
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+    </ul>
+
+	</nav>
+</header>
+
+    <div class="content">
+      <article >
+  <header id="main" style="">
+    <div class="title-padder">
+      
+      <h1 id="Kotlin+Multiplatform+Project%E5%90%91%E3%81%91%E3%81%AEGraphQL%E3%83%A9%E3%83%83%E3%83%91%E3%83%BC%E7%94%9F%E6%88%90%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E3%80%81kgql%E3%82%92%E4%BD%9C%E3%81%A3%E3%81%9F" class="title">Kotlin Multiplatform Project向けのGraphQLラッパー生成ライブラリ、kgqlを作った</h1>
+      
+
+
+<div class="post-info">
+    <p class="meta">
+      
+      
+      February 27, 2019
+    </p></div>
+
+      
+    </div>
+  </header>
+
+  <section class="post-content">
+  
+      <p>AndroidとKotlin Multiplatform Projectで使える、GraphQLのドキュメントからコードを生成するGradle Pluginを作った。<br />
+<a href="https://github.com/yshrsmz/kgql">kgql</a>という。</p>
+
+<p>これ実際の成果物を見てもらうのが早いと思うので、こんな感じ。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// User.gql
+query User($login: String!) {
+  user(login: $login) {
+    id
+    login
+    bio
+    avatarUrl
+    company
+    createdAt
+  }
+}
+
+query Viewer {
+  viewer {
+    login
+  }
+}
+</code></pre></div></div>
+
+<p>たとえばすごいシンプルだけど、上記のGraphQLドキュメントからはこんなコードが生成される。<br />
+内部的には<a href="https://github.com/graphql-java/graphql-java">graphql-java</a>を使ってパースしている。</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span> <span class="nn">com.sample</span>
+
+<span class="k">import</span> <span class="nn">com.codingfeline.kgql.core.KgqlRequestBody</span>
+<span class="k">import</span> <span class="nn">kotlin.String</span>
+<span class="k">import</span> <span class="nn">kotlin.Unit</span>
+<span class="k">import</span> <span class="nn">kotlinx.serialization.KSerializer</span>
+<span class="k">import</span> <span class="nn">kotlinx.serialization.Optional</span>
+<span class="k">import</span> <span class="nn">kotlinx.serialization.SerialName</span>
+<span class="k">import</span> <span class="nn">kotlinx.serialization.Serializable</span>
+
+<span class="k">internal</span> <span class="kd">object</span> <span class="nc">UserDocument</span> <span class="p">{</span>
+    <span class="k">private</span> <span class="kd">val</span> <span class="py">document</span><span class="p">:</span> <span class="nc">String</span> <span class="p">=</span> <span class="s">"""
+            |query User(${'$'}login: String!) {
+            |  user(login: ${'$'}login) {
+            |    id
+            |    login
+            |    bio
+            |    avatarUrl
+            |    company
+            |    createdAt
+            |  }
+            |}
+            |
+            |query Viewer {
+            |  viewer {
+            |    login
+            |  }
+            |}
+            |"""</span><span class="p">.</span><span class="nf">trimMargin</span><span class="p">()</span>
+
+    <span class="kd">object</span> <span class="nc">UserQuery</span> <span class="p">{</span>
+        <span class="cm">/**
+         * Generate Json string of [Request]
+         */</span>
+        <span class="k">fun</span> <span class="nf">requestBody</span><span class="p">(</span><span class="n">variables</span><span class="p">:</span> <span class="nc">Variables</span><span class="p">):</span> <span class="nc">String</span> <span class="p">=</span>
+                <span class="n">kotlinx</span><span class="p">.</span><span class="n">serialization</span><span class="p">.</span><span class="n">json</span><span class="p">.</span><span class="nc">Json</span><span class="p">.</span><span class="nf">stringify</span><span class="p">(</span><span class="nf">serializer</span><span class="p">(),</span> <span class="nc">Request</span><span class="p">(</span><span class="n">variables</span> <span class="p">=</span>
+                <span class="n">variables</span><span class="p">))</span>
+
+        <span class="k">fun</span> <span class="nf">serializer</span><span class="p">():</span> <span class="nc">KSerializer</span><span class="p">&lt;</span><span class="nc">Request</span><span class="p">&gt;</span> <span class="p">=</span> <span class="nc">Request</span><span class="p">.</span><span class="nf">serializer</span><span class="p">()</span>
+
+        <span class="nd">@Serializable</span>
+        <span class="kd">data class</span> <span class="nc">Variables</span><span class="p">(</span><span class="nd">@SerialName</span><span class="p">(</span><span class="n">value</span> <span class="p">=</span> <span class="s">"login"</span><span class="p">)</span> <span class="kd">val</span> <span class="py">login</span><span class="p">:</span> <span class="nc">String</span><span class="p">)</span>
+
+        <span class="nd">@Serializable</span>
+        <span class="kd">data class</span> <span class="nc">Request</span><span class="p">(</span>
+            <span class="nd">@SerialName</span><span class="p">(</span><span class="n">value</span> <span class="p">=</span> <span class="s">"variables"</span><span class="p">)</span> <span class="k">override</span> <span class="kd">val</span> <span class="py">variables</span><span class="p">:</span> <span class="nc">Variables</span><span class="p">?,</span>
+            <span class="nd">@Optional</span> <span class="nd">@SerialName</span><span class="p">(</span><span class="n">value</span> <span class="p">=</span> <span class="s">"operationName"</span><span class="p">)</span> <span class="k">override</span> <span class="kd">val</span> <span class="py">operationName</span><span class="p">:</span> <span class="nc">String</span><span class="p">?</span> <span class="p">=</span>
+                    <span class="s">"User"</span><span class="p">,</span>
+            <span class="nd">@SerialName</span><span class="p">(</span><span class="n">value</span> <span class="p">=</span> <span class="s">"query"</span><span class="p">)</span> <span class="k">override</span> <span class="kd">val</span> <span class="py">query</span><span class="p">:</span> <span class="nc">String</span> <span class="p">=</span> <span class="n">document</span>
+        <span class="p">)</span> <span class="p">:</span> <span class="nc">KgqlRequestBody</span><span class="p">&lt;</span><span class="nc">Variables</span><span class="p">&gt;</span>
+    <span class="p">}</span>
+
+    <span class="kd">object</span> <span class="nc">ViewerQuery</span> <span class="p">{</span>
+        <span class="cm">/**
+         * Generate Json string of [Request]
+         */</span>
+        <span class="k">fun</span> <span class="nf">requestBody</span><span class="p">():</span> <span class="nc">String</span> <span class="p">=</span> <span class="n">kotlinx</span><span class="p">.</span><span class="n">serialization</span><span class="p">.</span><span class="n">json</span><span class="p">.</span><span class="nc">Json</span><span class="p">.</span><span class="nf">stringify</span><span class="p">(</span><span class="nf">serializer</span><span class="p">(),</span>
+                <span class="nc">Request</span><span class="p">())</span>
+
+        <span class="k">fun</span> <span class="nf">serializer</span><span class="p">():</span> <span class="nc">KSerializer</span><span class="p">&lt;</span><span class="nc">Request</span><span class="p">&gt;</span> <span class="p">=</span> <span class="nc">Request</span><span class="p">.</span><span class="nf">serializer</span><span class="p">()</span>
+
+        <span class="nd">@Serializable</span>
+        <span class="kd">data class</span> <span class="nc">Request</span><span class="p">(</span>
+            <span class="nd">@SerialName</span><span class="p">(</span><span class="n">value</span> <span class="p">=</span> <span class="s">"variables"</span><span class="p">)</span> <span class="nd">@Optional</span> <span class="k">override</span> <span class="kd">val</span> <span class="py">variables</span><span class="p">:</span> <span class="nc">Unit</span><span class="p">?</span> <span class="p">=</span> <span class="k">null</span><span class="p">,</span>
+            <span class="nd">@Optional</span> <span class="nd">@SerialName</span><span class="p">(</span><span class="n">value</span> <span class="p">=</span> <span class="s">"operationName"</span><span class="p">)</span> <span class="k">override</span> <span class="kd">val</span> <span class="py">operationName</span><span class="p">:</span> <span class="nc">String</span><span class="p">?</span> <span class="p">=</span>
+                    <span class="s">"Viewer"</span><span class="p">,</span>
+            <span class="nd">@SerialName</span><span class="p">(</span><span class="n">value</span> <span class="p">=</span> <span class="s">"query"</span><span class="p">)</span> <span class="k">override</span> <span class="kd">val</span> <span class="py">query</span><span class="p">:</span> <span class="nc">String</span> <span class="p">=</span> <span class="n">document</span>
+        <span class="p">)</span> <span class="p">:</span> <span class="nc">KgqlRequestBody</span><span class="p">&lt;</span><span class="nc">Unit</span><span class="p">&gt;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<p>Kotlin Multiplatform Project対応のHttpClient、Ktorと一緒に利用するとこんな感じになる。<br />
+ちなみにこの例ではGitHubのAPIを使っている。</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span> <span class="nn">com.sample</span>
+
+<span class="k">import</span> <span class="nn">com.codingfeline.kgql.core.KgqlResponse</span>
+<span class="k">import</span> <span class="nn">com.codingfeline.kgql.core.KgqlError</span>
+<span class="k">import</span> <span class="nn">com.sample.UserDocument</span>
+<span class="k">import</span> <span class="nn">io.ktor.client.HttpClient</span>
+<span class="k">import</span> <span class="nn">io.ktor.client.features.json.JsonFeature</span>
+<span class="k">import</span> <span class="nn">io.ktor.client.request.headers</span>
+<span class="k">import</span> <span class="nn">io.ktor.client.request.post</span>
+<span class="k">import</span> <span class="nn">io.ktor.http.Url</span>
+<span class="k">import</span> <span class="nn">kotlinx.serialization.json.JSON</span>
+<span class="k">import</span> <span class="nn">kotlinx.serialization.Serializable</span>
+
+<span class="k">const</span> <span class="kd">val</span> <span class="py">TOKEN</span> <span class="p">=</span> <span class="s">"YOUR_GITHUB_TOKEN"</span>
+
+<span class="nd">@Serializable</span>
+<span class="kd">data class</span> <span class="nc">ViewerWrapper</span><span class="p">(</span>
+    <span class="kd">val</span> <span class="py">viewer</span><span class="p">:</span> <span class="nc">Viewer</span>
+<span class="p">)</span>
+
+<span class="nd">@Serializable</span>
+<span class="kd">data class</span> <span class="nc">Viewer</span><span class="p">(</span>
+    <span class="kd">val</span> <span class="py">login</span><span class="p">:</span> <span class="nc">String</span>
+<span class="p">)</span>
+
+<span class="nd">@Serializable</span>
+<span class="kd">data class</span> <span class="nc">ViewerResponse</span><span class="p">(</span>
+    <span class="k">override</span> <span class="kd">val</span> <span class="py">data</span><span class="p">:</span> <span class="nc">ViewerWrapper</span><span class="p">?,</span>
+    <span class="k">override</span> <span class="kd">val</span> <span class="py">errors</span><span class="p">:</span> <span class="nc">List</span><span class="p">&lt;</span><span class="nc">KgqlError</span><span class="p">&gt;?</span>
+<span class="p">):</span> <span class="nc">KgqlResponse</span><span class="p">&lt;</span><span class="nc">ViewerWrapper</span><span class="p">&gt;</span>
+
+
+<span class="kd">class</span> <span class="nc">GitHubApi</span> <span class="p">{</span>
+
+    <span class="k">private</span> <span class="kd">val</span> <span class="py">client</span> <span class="p">=</span> <span class="nc">HttpClient</span> <span class="p">{</span>
+        <span class="nf">install</span><span class="p">(</span><span class="nc">JsonFeature</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="k">suspend</span> <span class="k">fun</span> <span class="nf">fetchLogin</span><span class="p">():</span> <span class="nc">Viewer</span><span class="p">?</span> <span class="p">{</span>
+
+        <span class="kd">val</span> <span class="py">response</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="n">post</span><span class="p">&lt;</span><span class="nc">String</span><span class="p">&gt;(</span><span class="n">url</span> <span class="p">=</span> <span class="nc">Url</span><span class="p">(</span><span class="s">"https://api.github.com/graphql"</span><span class="p">))</span> <span class="p">{</span>
+            <span class="c1">// ここ！</span>
+            <span class="n">body</span> <span class="p">=</span> <span class="nc">UserDocument</span><span class="p">.</span><span class="nc">ViewerQuery</span><span class="p">.</span><span class="nf">requestBody</span><span class="p">()</span>
+
+            <span class="nf">headers</span> <span class="p">{</span>
+                <span class="nf">append</span><span class="p">(</span><span class="s">"Authorization"</span><span class="p">,</span> <span class="s">"bearer $TOKEN"</span><span class="p">)</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="kd">val</span> <span class="py">res</span> <span class="p">=</span> <span class="nc">JSON</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="nc">ViewerResponse</span><span class="p">.</span><span class="nf">serializer</span><span class="p">(),</span> <span class="n">response</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">res</span><span class="p">.</span><span class="n">data</span><span class="o">?.</span><span class="n">viewer</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>GraphQL基本的にただのPOSTなので、戻り値は好きにパースしてくれというスタンス。</p>
+
+<h2 id="使い方">使い方</h2>
+
+<p>Kotlinは1.3.20以降。<br />
+Gradleは5.1.1以降を推奨。Jetifier使わなければ4.10でも動くかも。<br />
+一応Android ProjectでもKMPでも動くはず</p>
+
+<div class="language-gradle highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// ./build.gradle</span>
+<span class="n">buildScript</span> <span class="o">{</span>
+    <span class="k">repositories</span> <span class="o">{</span>
+        <span class="n">jcenter</span><span class="o">()</span>
+        <span class="n">maven</span> <span class="o">{</span> <span class="n">url</span> <span class="s1">'https://dl.bintray.com/yshrsmz/kgql'</span> <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="k">dependencies</span> <span class="o">{</span>
+        <span class="n">classpath</span> <span class="s1">'org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.21'</span>
+        <span class="n">classpath</span> <span class="s1">'com.codingfeline.kgql:gradle-plugin:0.2.1'</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-gradle highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// ./common/build.gradle</span>
+<span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">'org.jetbrains.kotlin.multiplatform'</span>
+<span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">'com.codingfeline.kgql'</span>
+
+<span class="k">repositories</span> <span class="o">{</span>
+     <span class="n">maven</span> <span class="o">{</span> <span class="n">url</span> <span class="s2">"https://dl.bintray.com/yshrsmz/kgql"</span> <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="n">kotlin</span> <span class="o">{</span>
+    <span class="c1">// KMPのターゲット設定</span>
+    <span class="n">jvm</span><span class="o">()</span>
+    <span class="n">iosX64</span><span class="o">(</span><span class="s1">'ios'</span><span class="o">)</span>
+<span class="o">}</span>
+
+<span class="n">kgql</span> <span class="o">{</span>
+    <span class="c1">// 出力されるクラスのパッケージ名</span>
+    <span class="n">packageName</span> <span class="o">=</span> <span class="s2">"com.sample"</span>
+    <span class="c1">// 入力元のGraphQLドキュメントファイルを格納するディレクトリ</span>
+    <span class="c1">// デフォルトは`src/main/kgql`、Android Projectは`src/${variant}/kgql`</span>
+    <span class="c1">// Android Projectの場合はここを変更しても意味ない。</span>
+    <span class="n">sourceSet</span> <span class="o">=</span> <span class="n">files</span><span class="o">(</span><span class="s2">"src/main/kgql"</span><span class="o">)</span>
+    <span class="n">typeMapper</span> <span class="o">=</span> <span class="o">[</span>
+        <span class="c1">// プリミティブでない型に対応するクラスのマッパ。</span>
+        <span class="c1">// Gradle Pluginは対象コードにアクセス出来ないので、FQNが必要。</span>
+        <span class="s2">"UserProfile"</span><span class="o">:</span> <span class="s2">"com.sample.data.UserProfile"</span>
+    <span class="o">]</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>上記設定をしたら、<code class="language-plaintext highlighter-rouge">kgql.sourceSet</code>に指定した場所にGraphQLのドキュメントを置く。拡張子は<code class="language-plaintext highlighter-rouge">.gql</code>で。</p>
+
+<p><code class="language-plaintext highlighter-rouge">generateKgqlInterface</code>というタスクができているはずなので、実行するとドキュメントファイルが生成される。<br />
+各種ビルドタスクに依存関係を設定してあるので、適当にビルドしても生成されるはず。</p>
+
+<h2 id="今後やりたいこと">今後やりたいこと</h2>
+
+<p>現状引数のデフォルト値は無視するような作りになっているので、そこはなんとかうまい方法を考えたい。</p>
+
+<p>あとはもう少しインタフェースを整備して、Ktor向けのサポートライブラリも用意してあげたい。</p>
+
+<p>Apolloの実装とか参考にしたらいいのができそう。</p>
+
+<h2 id="その他">その他</h2>
+
+<p>Kotlin Multiplatform Project周りはまだ色々整備されてないので今がチャンス！</p>
+
+<h2 id="リンク">リンク</h2>
+
+<ul>
+  <li><a href="https://github.com/yshrsmz/kgql">https://github.com/yshrsmz/kgql</a></li>
+</ul>
+
+    
+  </section>
+
+  <!-- Social media shares -->
+  
+
+<div class="share-buttons">
+    <ul class="share-buttons">
+        <div class="meta">Share</div>
+        
+        <li>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https://www.yslibrary.net/2019/02/27/kgql-graphql-kotlin-mpp/" target="_blank" title=" Facebook">
+			<i class="fab fa-facebook-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Share on Facebook</span>
+		</a>
+        </li>
+         
+        <li>
+            <a href="https://twitter.com/intent/tweet?text=Kotlin+Multiplatform+Project%E5%90%91%E3%81%91%E3%81%AEGraphQL%E3%83%A9%E3%83%83%E3%83%91%E3%83%BC%E7%94%9F%E6%88%90%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E3%80%81kgql%E3%82%92%E4%BD%9C%E3%81%A3%E3%81%9F%20https%3A%2F%2Fwww.yslibrary.net%2F2019%2F02%2F27%2Fkgql-graphql-kotlin-mpp%2F" target="_blank" title="">
+			<i class="fab fa-twitter-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Tweet</span>
+		</a>
+        </li>
+            
+        <li>
+            <a href="https://www.reddit.com/submit?url=https://www.yslibrary.net/2019/02/27/kgql-graphql-kotlin-mpp/&title=Kotlin+Multiplatform+Project%E5%90%91%E3%81%91%E3%81%AEGraphQL%E3%83%A9%E3%83%83%E3%83%91%E3%83%BC%E7%94%9F%E6%88%90%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E3%80%81kgql%E3%82%92%E4%BD%9C%E3%81%A3%E3%81%9F%20%7C%20CodingFeline" target="_blank" title=" Reddit">
+			<i class="fab fa-reddit-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Share on Reddit</span>
+		</a>
+        </li>
+           
+        <li>
+            <a href="mailto:?subject=Kotlin Multiplatform Project向けのGraphQLラッパー生成ライブラリ、kgqlを作った%20%7C%20CodingFeline&body=https://www.yslibrary.net/2019/02/27/kgql-graphql-kotlin-mpp/" target="_blank" title="">
+			<i class="fas fa-envelope-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Email</span>
+		</a>
+        </li>
+        
+    </ul>
+</div>
+
+
+
+
+   <!-- Tag list -->
+  
+  
+
+
+  <div class="tag-list">
+    <ul>
+      
+        <li class="meta">Tags</li>
+      
+
+      
+        <li><a class="button" href="/tags#kmp">
+          <p><i class="fas fa-tag fa-fw fa-sm"></i> kmp</p>
+        </a></li>
+      
+        <li><a class="button" href="/tags#kotlin">
+          <p><i class="fas fa-tag fa-fw fa-sm"></i> kotlin</p>
+        </a></li>
+      
+    </ul>
+  </div>
+
+
+
+</article>
+
+<!-- Disqus -->
+
+<div class="comments">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'yslibrary';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+</div>
+
+
+<!-- Post navigation -->
+
+  <div id="post-nav">
+    
+    <div id="previous-post">
+        <a alt="ChromeのタブからMarkdown記法のリンクを生成する拡張機能、Tabs2Linksを作った" href="/2019/03/20/chrome-extension-tabs2links/">
+            <p>Previous post</p>
+            ChromeのタブからMarkdown記法のリンクを生成する拡張機能、Tabs2Linksを作った
+        </a>
+    </div>
+    
+
+    
+    <div id="next-post">
+        <a alt="Kotlin Multiplatform Project向けのBuildConfig、BuildKonfigを作った" href="/2019/02/27/buildkonfig-kotlin-mpp/">
+            <p>Next post</p>
+            Kotlin Multiplatform Project向けのBuildConfig、BuildKonfigを作った
+        </a>
+    </div>
+    
+</div>
+
+
+
+<!-- To change color of links in the page -->
+<style>
+  header#main {
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+  }
+  
+  
+  
+  
+</style>
+
+    </div>
+    <footer class="site-footer">
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- yslibrary.net - bottom -->
+<ins class="adsbygoogle"
+     style="display:block; margin-top:10px; margin-bottom:10px;"
+     data-ad-client="ca-pub-1022395241918455"
+     data-ad-slot="6501231341"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+    <p class="text">
+        © 2020, yshrsmz</p>
+            <div class="footer-icons">
+                <ul>
+                <!-- Social icons from Font Awesome, if enabled -->
+                
+<li>
+    <a feed.xml href="http://feeds.feedburner.com/TheoreticalCat"
+       title="Follow RSS feed">
+        <span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+    <a href="https://github.com/yshrsmz" title="Follow on GitHub">
+		<span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+<li>
+    <a href="https://www.linkedin.com/in/yshrsmz/" title="Follow on LinkedIn">
+		<span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+<li>
+    <a href="https://www.reddit.com/user/yshrsmz"
+       title="Follow on Reddit">
+		<span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-reddit fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+<li>
+    <a href="https://stackexchange.com/users/456702/yshrsmz" title="Follow on Stack Exchange">
+		<span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-stack-exchange fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+<li>
+    <a href="https://stackoverflow.com/users/855599/yshrsmz" title="Follow on Stack Overflow">
+		<span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-stack-overflow fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+<li>
+    <a class="type" href="https://twitter.com/_yshrsmz"
+       title="Follow on Twitter">
+        <span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+                </ul>
+            </div>
+</footer>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+  </body>
+</html>

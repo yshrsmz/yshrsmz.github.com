@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<!--
+    Type on Strap jekyll theme v2.3.4
+    Copyright 2016-2021 Sylhare
+    Theme free for personal and commercial use under the MIT license
+    https://github.com/sylhare/Type-on-Strap/blob/master/LICENSE
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=0.5, maximum-scale=5">
+
+    <!-- Main JS (navbar.js, katex_init.js and masonry_init.js)-->
+    <script defer src="/assets/js/main.min.js"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/main.css">
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/atom+xml" title="CodingFeline" href="https://www.yslibrary.net/feed.xml"/>
+    
+    
+
+    <!-- KaTeX 0.12.0 -->
+    
+    <script defer src="/assets/js/vendor/katex.min.js"></script>
+    <script defer src="/assets/js/vendor/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+    
+
+    <!-- Mermaid 8.9.2 -->
+    
+
+    <!-- Simple Jekyll Search 1.9.1 -->
+    <script src="/assets/js/vendor/simple-jekyll-search.min.js" type="text/javascript"></script>
+
+    <!-- Google Analytics / Cookie Consent -->
+    <script>
+      const cookieName = 'cookie-notice-dismissed-https://www.yslibrary.net';
+      const isCookieConsent = 'false';
+      const analyticsName = 'UA-61198465-1';
+    </script>
+
+    
+    
+        <!-- Global site tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-61198465-1"></script>
+        <!-- Page analysis (analytics.js) -->
+        <script async src='https://www.google-analytics.com/analytics.js'></script>
+    
+
+    <!-- seo tags -->
+    <meta property="og:image" content="https://www.yslibrary.net/assets/img/dactyl.jpeg">
+    
+    <meta property="og:type" content="website" />
+    
+    <!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>(Android) Architecture ComponentsのViewModelは如何にしてRotationを生き残るか | CodingFeline</title>
+<meta name="generator" content="Jekyll v4.2.0" />
+<meta property="og:title" content="(Android) Architecture ComponentsのViewModelは如何にしてRotationを生き残るか" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="TL;DL;" />
+<meta property="og:description" content="TL;DL;" />
+<link rel="canonical" href="https://www.yslibrary.net/2017/05/19/how-viewmodel-retail-itself/" />
+<meta property="og:url" content="https://www.yslibrary.net/2017/05/19/how-viewmodel-retail-itself/" />
+<meta property="og:site_name" content="CodingFeline" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2017-05-19T00:00:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="(Android) Architecture ComponentsのViewModelは如何にしてRotationを生き残るか" />
+<script type="application/ld+json">
+{"mainEntityOfPage":{"@type":"WebPage","@id":"https://www.yslibrary.net/2017/05/19/how-viewmodel-retail-itself/"},"description":"TL;DL;","url":"https://www.yslibrary.net/2017/05/19/how-viewmodel-retail-itself/","@type":"BlogPosting","headline":"(Android) Architecture ComponentsのViewModelは如何にしてRotationを生き残るか","dateModified":"2017-05-19T00:00:00+00:00","datePublished":"2017-05-19T00:00:00+00:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- RSS -->
+    <link type="application/atom+xml" rel="alternate" href="https://www.yslibrary.net/feed.xml" title="CodingFeline" />
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:title" content="(Android) Architecture ComponentsのViewModelは如何にしてRotationを生き残るか">
+    <meta name="twitter:description" content="TL;DL;retainInstance = trueなFragmentにキャッシュされているので、Activity/Fragmentが本当に殺されるまで生き残ることができる。Google I/O 2017で、Architecture Components という新しいライブラリ群が発表されました。LiveDat...">
+    
+    <meta name="twitter:creator" content="@_yshrsmz">
+    <meta name="twitter:site" content="@_yshrsmz">
+    
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:image" content="https://www.yslibrary.net/assets/img/dactyl.jpeg">
+    <meta name="twitter:image:alt" content="(Android) Architecture ComponentsのViewModelは如何にしてRotationを生き残るか">
+</head>
+
+  <body>
+    <header class="site-header">
+
+    <!-- Logo and title -->
+	<div class="branding">
+        
+		<a href="/">
+			<img alt="logo img" class="avatar" src="/assets/img/logo.png" />
+		</a>
+        
+        <a class="site-title" aria-label="CodingFeline" href="/">
+        CodingFeline
+		</a>
+	</div>
+
+    <!-- Toggle menu -->
+    <nav class="clear">
+    <a aria-label="pull" id="pull" class="toggle" href="#">
+    <i class="fas fa-bars fa-lg"></i>
+    </a>
+
+    <!-- Menu -->
+    <ul class="hide">
+        
+
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="ABOUT" title="ABOUT" href="/about/">
+                     ABOUT 
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="PRODUCTS" title="PRODUCTS" href="/products/">
+                     PRODUCTS 
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Search" title="Search" href="/search/">
+                     <i class="fas fa-search" aria-hidden="true"></i>
+                    
+                </a>
+            </li>
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Tags" title="Tags" href="/tags/">
+                     <i class="fas fa-tags" aria-hidden="true"></i>
+                    
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+    </ul>
+
+	</nav>
+</header>
+
+    <div class="content">
+      <article >
+  <header id="main" style="">
+    <div class="title-padder">
+      
+      <h1 id="%28Android%29+Architecture+Components%E3%81%AEViewModel%E3%81%AF%E5%A6%82%E4%BD%95%E3%81%AB%E3%81%97%E3%81%A6Rotation%E3%82%92%E7%94%9F%E3%81%8D%E6%AE%8B%E3%82%8B%E3%81%8B" class="title">(Android) Architecture ComponentsのViewModelは如何にしてRotationを生き残るか</h1>
+      
+
+
+<div class="post-info">
+    <p class="meta">
+      
+      
+      May 19, 2017
+    </p></div>
+
+      
+    </div>
+  </header>
+
+  <section class="post-content">
+  
+      <h2 id="tldl">TL;DL;</h2>
+
+<p><code class="language-plaintext highlighter-rouge">retainInstance = true</code>なFragmentにキャッシュされているので、Activity/Fragmentが本当に殺されるまで生き残ることができる。</p>
+
+<hr />
+
+<p>Google I/O 2017で、<a href="https://developer.android.com/topic/libraries/architecture/index.html"><code class="language-plaintext highlighter-rouge">Architecture Components</code></a> という新しいライブラリ群が発表されました。</p>
+
+<p><code class="language-plaintext highlighter-rouge">LiveData</code>, <code class="language-plaintext highlighter-rouge">ViewModel</code>, <code class="language-plaintext highlighter-rouge">LifecycleObserver</code>, <code class="language-plaintext highlighter-rouge">LifecycleOwner</code>, <code class="language-plaintext highlighter-rouge">Room</code>といったこれらのライブラリは、開発者がより強固で、テスタブルで、かつメンテナンス性が高いアプリケーションを作るための手助けとなるべく作られています。</p>
+
+<p>今回はその中でも<code class="language-plaintext highlighter-rouge">ViewModel</code>について少し調べてみました。</p>
+
+<h2 id="what-is-viewmodel">What is ViewModel?</h2>
+
+<p>詳しい説明は<a href="https://developer.android.com/topic/libraries/architecture/viewmodel.html"><code class="language-plaintext highlighter-rouge">ViewModel</code>のリファレンス</a>に譲りますが、簡単に言うと「Activity/Fragmentのローテーション等による再生成をこえて状態を保持するためのコンポーネント」です。</p>
+
+<p>今までActivity/Fragmentのメンバ変数に保存していたような値や非同期処理を<code class="language-plaintext highlighter-rouge">ViewModel</code>に書いておけば、Activity/Fragmentが再生成されたとしても値や非同期処理の状態が維持されてそのまま使えます。</p>
+
+<p><code class="language-plaintext highlighter-rouge">onSavedInstanceState</code>でいちいち<code class="language-plaintext highlighter-rouge">Bundle</code>に詰め込んだりしなくてすみます。
+私自身はあまり使ったことがありませんが、<code class="language-plaintext highlighter-rouge">AsyncTask</code>等をいちいち書く必要がなくなります。</p>
+
+<p>でも、どうやって？</p>
+
+<h2 id="how-does-viewmodel-retain-itself">How does ViewModel retain itself?</h2>
+
+<p>※これはGoogle I/O 2017で発表された1.0.0-alpha1時点での話です</p>
+
+<p><code class="language-plaintext highlighter-rouge">ViewModel</code>は下記のような感じで取得します。使う側のActivity/Fragmentではキャッシュから取得するとか新規作成するとか、そういうことを意識する必要はありません。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">FooViewModel</span> <span class="n">viewModel</span> <span class="o">=</span> <span class="nc">ViewModelProviders</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="n">fragment</span><span class="o">).</span><span class="na">get</span><span class="o">(</span><span class="nc">FooViewModel</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">ViewModelProviders#of</code>にはActivityかFragmentを渡すことができます。一つ注意することがあって、Fragmentを渡すときは<code class="language-plaintext highlighter-rouge">fragment.getActivity() != null</code>でなければならず、detachされているFragmentでは使うことができません。</p>
+
+<p><code class="language-plaintext highlighter-rouge">ViewModelProviders#of</code>はActivity/Fragmentのみを引数に取るものと、Activity/Fragmentに加えて<code class="language-plaintext highlighter-rouge">ViewModel</code>のファクトリクラスを引数に取るものがあります。</p>
+
+<p>ファクトリクラスを渡さない場合は引数なしのコンストラクタを呼び出して<code class="language-plaintext highlighter-rouge">ViewModel</code>をインスタンス化するようです。</p>
+
+<p>また、<code class="language-plaintext highlighter-rouge">ViewModel</code>の代わりに<code class="language-plaintext highlighter-rouge">AndroidViewModel</code>というinterfaceを実装すると引数が<code class="language-plaintext highlighter-rouge">Application</code>のコンストラクタを使う模様です。</p>
+
+<p>Dagger等のDIライブラリを使う場合はファクトリクラスを使うことになりそうです。</p>
+
+<p>さて、<code class="language-plaintext highlighter-rouge">ViewModelProvider</code>はこんな感じでインスタンス化されています。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// ViewModelProviders.java</span>
+<span class="kd">public</span> <span class="kd">static</span> <span class="nc">ViewModelProvider</span> <span class="nf">of</span><span class="o">(</span><span class="nd">@NonNull</span> <span class="nc">Fragment</span> <span class="n">fragment</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nc">FragmentActivity</span> <span class="n">activity</span> <span class="o">=</span> <span class="n">fragment</span><span class="o">.</span><span class="na">getActivity</span><span class="o">();</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">activity</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">(</span><span class="s">"Can't create ViewModelProvider for detached fragment"</span><span class="o">);</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+        <span class="n">initializeFactoryIfNeeded</span><span class="o">(</span><span class="n">activity</span><span class="o">.</span><span class="na">getApplication</span><span class="o">());</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">ViewModelProvider</span><span class="o">(</span><span class="nc">ViewModelStores</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="n">fragment</span><span class="o">),</span> <span class="n">sDefaultFactory</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>呼び出されているコンストラクタのシグネチャはこんな具合です。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ViewModelProvider(ViewModelStore store, ViewModelProvider.Factory factory)
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">ViewModelStore</code>とかいかにもあやしい名前のクラスが引数にあるので詳しく見てみましょう。
+<code class="language-plaintext highlighter-rouge">ViewModelStores#of</code>の中を見てみるとこんな感じ</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="nc">ViewModelStore</span> <span class="nf">of</span><span class="o">(</span><span class="nc">Fragment</span> <span class="n">fragment</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="nc">HolderFragment</span><span class="o">.</span><span class="na">holderFragmentFor</span><span class="o">(</span><span class="n">fragment</span><span class="o">).</span><span class="na">getViewModelStore</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">HolderFragment</code>なるものが出てきました。</p>
+
+<p>コードを見てみると、コンストラクタで<code class="language-plaintext highlighter-rouge">setRetainInstance(true);</code>を呼んでいます。<code class="language-plaintext highlighter-rouge">retainInstance = true</code>にすると親Activity/Fragmentが再生成されても対象のFragmentは生き残るようになるので、この仕組みを使って<code class="language-plaintext highlighter-rouge">ViewModel</code>をActivity/fragmentの再生成後も使えるようにしているようです。</p>
+
+<p><code class="language-plaintext highlighter-rouge">ViewModelStore</code>はこの<code class="language-plaintext highlighter-rouge">HolderFragment</code>で管理されています。</p>
+
+<p><code class="language-plaintext highlighter-rouge">ViewModelStore</code>の実態は<code class="language-plaintext highlighter-rouge">HashMap&lt;String, ViewModel&gt;</code>です。ここで基本的には<code class="language-plaintext highlighter-rouge">ViewModel</code>のクラス名をキーとして<code class="language-plaintext highlighter-rouge">ViewModel</code>のインスタンスを管理しています。</p>
+
+<p><code class="language-plaintext highlighter-rouge">HolderFragment</code>はActivity/Fragment毎に作られるので、一つの<code class="language-plaintext highlighter-rouge">ViewModelStore</code>が管理するのは自<code class="language-plaintext highlighter-rouge">HolderFragment</code>の直接の親Activity/Fragmentの<code class="language-plaintext highlighter-rouge">ViewModel</code>だけです。</p>
+
+<p>クラス名がキーなので同一Activity内、同一Fragment内で同じ<code class="language-plaintext highlighter-rouge">ViewModel</code>を複数使うことはできなそうな感じもしましたが、よくよく見ると外部からキーを指定できる<code class="language-plaintext highlighter-rouge">get</code>メソッドのオーバーロードも用意されていたので一応そういうユースケースも考慮されていそうです。</p>
+
+<p><code class="language-plaintext highlighter-rouge">ViewModel</code>の保存周り、ホントはもうちょっとゴニョゴニョしてるんだけど概要としてはこんな感じです。とてもわかりやすいコードなのでぜひ一読してみてください。</p>
+
+<h2 id="終わりに">終わりに</h2>
+
+<p>ここ一年くらい触ってるyet another Fragmentの<a href="https://github.com/bluelinelabs/Conductor">Conductor</a>がController(Fragmentのようなもの)をキャッシュするのにやっぱり<code class="language-plaintext highlighter-rouge">retainInstance = true</code>なFragmentを使ってて、Architecture Componentsの発表を聞いたときに同じようなことやってるのかなーって思ってたら案の定でちょっとニンマリしてしまった。</p>
+
+<p>特に黒魔術してるわけでもなく、既存の仕組みをうまく使ってるだけなのでこの仕組み自体が黒歴史になることはなさそう。</p>
+
+<p><code class="language-plaintext highlighter-rouge">ViewModel</code>はActivity/Fragmentへの参照を持つことは推奨されてないので必然的にユニットテストしやすいコードになっていきそう。</p>
+
+<p>とはいえ<code class="language-plaintext highlighter-rouge">ViewModel</code>だけで完全にテスタブルになるわけではないし、<code class="language-plaintext highlighter-rouge">ViewModel</code>はActivity/Fragmentの再生成をこえた状態のキャッシュに一つの道を示しただけなので、これですべてが解決するわけではない。</p>
+
+<p>今までの知見と組み合わせつつ、幸せになれるコードを書けるようやっていきましょう、ということでざっくりとしたコードリーディングを終わります。</p>
+
+    
+  </section>
+
+  <!-- Social media shares -->
+  
+
+<div class="share-buttons">
+    <ul class="share-buttons">
+        <div class="meta">Share</div>
+        
+        <li>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https://www.yslibrary.net/2017/05/19/how-viewmodel-retail-itself/" target="_blank" title=" Facebook">
+			<i class="fab fa-facebook-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Share on Facebook</span>
+		</a>
+        </li>
+         
+        <li>
+            <a href="https://twitter.com/intent/tweet?text=%28Android%29+Architecture+Components%E3%81%AEViewModel%E3%81%AF%E5%A6%82%E4%BD%95%E3%81%AB%E3%81%97%E3%81%A6Rotation%E3%82%92%E7%94%9F%E3%81%8D%E6%AE%8B%E3%82%8B%E3%81%8B%20https%3A%2F%2Fwww.yslibrary.net%2F2017%2F05%2F19%2Fhow-viewmodel-retail-itself%2F" target="_blank" title="">
+			<i class="fab fa-twitter-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Tweet</span>
+		</a>
+        </li>
+            
+        <li>
+            <a href="https://www.reddit.com/submit?url=https://www.yslibrary.net/2017/05/19/how-viewmodel-retail-itself/&title=%28Android%29+Architecture+Components%E3%81%AEViewModel%E3%81%AF%E5%A6%82%E4%BD%95%E3%81%AB%E3%81%97%E3%81%A6Rotation%E3%82%92%E7%94%9F%E3%81%8D%E6%AE%8B%E3%82%8B%E3%81%8B%20%7C%20CodingFeline" target="_blank" title=" Reddit">
+			<i class="fab fa-reddit-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Share on Reddit</span>
+		</a>
+        </li>
+           
+        <li>
+            <a href="mailto:?subject=(Android) Architecture ComponentsのViewModelは如何にしてRotationを生き残るか%20%7C%20CodingFeline&body=https://www.yslibrary.net/2017/05/19/how-viewmodel-retail-itself/" target="_blank" title="">
+			<i class="fas fa-envelope-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Email</span>
+		</a>
+        </li>
+        
+    </ul>
+</div>
+
+
+
+
+   <!-- Tag list -->
+  
+  
+
+
+  <div class="tag-list">
+    <ul>
+      
+        <li class="meta">Tags</li>
+      
+
+      
+        <li><a class="button" href="/tags#android">
+          <p><i class="fas fa-tag fa-fw fa-sm"></i> android</p>
+        </a></li>
+      
+        <li><a class="button" href="/tags#java">
+          <p><i class="fas fa-tag fa-fw fa-sm"></i> java</p>
+        </a></li>
+      
+    </ul>
+  </div>
+
+
+
+</article>
+
+<!-- Disqus -->
+
+<div class="comments">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'yslibrary';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+</div>
+
+
+<!-- Post navigation -->
+
+  <div id="post-nav">
+    
+    <div id="previous-post">
+        <a alt="Let's Splitを作った話" href="/2017/08/29/letssplit-buildlog/">
+            <p>Previous post</p>
+            Let's Splitを作った話
+        </a>
+    </div>
+    
+
+    
+    <div id="next-post">
+        <a alt="(Ubuntu) /bootの容量がなくなった時にすること" href="/2017/04/05/things-to-do-when-ubuntu-boot-disk-is-full/">
+            <p>Next post</p>
+            (Ubuntu) /bootの容量がなくなった時にすること
+        </a>
+    </div>
+    
+</div>
+
+
+
+<!-- To change color of links in the page -->
+<style>
+  header#main {
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+  }
+  
+  
+  
+  
+</style>
+
+    </div>
+    <footer class="site-footer">
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- yslibrary.net - bottom -->
+<ins class="adsbygoogle"
+     style="display:block; margin-top:10px; margin-bottom:10px;"
+     data-ad-client="ca-pub-1022395241918455"
+     data-ad-slot="6501231341"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+    <p class="text">
+        © 2020, yshrsmz</p>
+            <div class="footer-icons">
+                <ul>
+                <!-- Social icons from Font Awesome, if enabled -->
+                
+<li>
+    <a feed.xml href="http://feeds.feedburner.com/TheoreticalCat"
+       title="Follow RSS feed">
+        <span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+    <a href="https://github.com/yshrsmz" title="Follow on GitHub">
+		<span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+<li>
+    <a href="https://www.linkedin.com/in/yshrsmz/" title="Follow on LinkedIn">
+		<span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+<li>
+    <a href="https://www.reddit.com/user/yshrsmz"
+       title="Follow on Reddit">
+		<span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-reddit fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+<li>
+    <a href="https://stackexchange.com/users/456702/yshrsmz" title="Follow on Stack Exchange">
+		<span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-stack-exchange fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+<li>
+    <a href="https://stackoverflow.com/users/855599/yshrsmz" title="Follow on Stack Overflow">
+		<span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-stack-overflow fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+<li>
+    <a class="type" href="https://twitter.com/_yshrsmz"
+       title="Follow on Twitter">
+        <span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+                </ul>
+            </div>
+</footer>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+  </body>
+</html>

@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<!--
+    Type on Strap jekyll theme v2.3.4
+    Copyright 2016-2021 Sylhare
+    Theme free for personal and commercial use under the MIT license
+    https://github.com/sylhare/Type-on-Strap/blob/master/LICENSE
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=0.5, maximum-scale=5">
+
+    <!-- Main JS (navbar.js, katex_init.js and masonry_init.js)-->
+    <script defer src="/assets/js/main.min.js"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/main.css">
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/atom+xml" title="CodingFeline" href="https://www.yslibrary.net/feed.xml"/>
+    
+    
+
+    <!-- KaTeX 0.12.0 -->
+    
+    <script defer src="/assets/js/vendor/katex.min.js"></script>
+    <script defer src="/assets/js/vendor/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+    
+
+    <!-- Mermaid 8.9.2 -->
+    
+
+    <!-- Simple Jekyll Search 1.9.1 -->
+    <script src="/assets/js/vendor/simple-jekyll-search.min.js" type="text/javascript"></script>
+
+    <!-- Google Analytics / Cookie Consent -->
+    <script>
+      const cookieName = 'cookie-notice-dismissed-https://www.yslibrary.net';
+      const isCookieConsent = 'false';
+      const analyticsName = 'UA-61198465-1';
+    </script>
+
+    
+    
+        <!-- Global site tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-61198465-1"></script>
+        <!-- Page analysis (analytics.js) -->
+        <script async src='https://www.google-analytics.com/analytics.js'></script>
+    
+
+    <!-- seo tags -->
+    <meta property="og:image" content="https://www.yslibrary.net/assets/img/dactyl.jpeg">
+    
+    <meta property="og:type" content="website" />
+    
+    <!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>TwitterにURLを共有するAndroidアプリ、Omnitweetyを公開した | CodingFeline</title>
+<meta name="generator" content="Jekyll v4.2.0" />
+<meta property="og:title" content="TwitterにURLを共有するAndroidアプリ、Omnitweetyを公開した" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Thoughts, stories and ideas" />
+<meta property="og:description" content="Thoughts, stories and ideas" />
+<link rel="canonical" href="https://www.yslibrary.net/2015/11/10/omnitweety-andrid-released-share-url-twitter/" />
+<meta property="og:url" content="https://www.yslibrary.net/2015/11/10/omnitweety-andrid-released-share-url-twitter/" />
+<meta property="og:site_name" content="CodingFeline" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2015-11-10T00:00:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="TwitterにURLを共有するAndroidアプリ、Omnitweetyを公開した" />
+<script type="application/ld+json">
+{"mainEntityOfPage":{"@type":"WebPage","@id":"https://www.yslibrary.net/2015/11/10/omnitweety-andrid-released-share-url-twitter/"},"description":"Thoughts, stories and ideas","url":"https://www.yslibrary.net/2015/11/10/omnitweety-andrid-released-share-url-twitter/","@type":"BlogPosting","headline":"TwitterにURLを共有するAndroidアプリ、Omnitweetyを公開した","dateModified":"2015-11-10T00:00:00+00:00","datePublished":"2015-11-10T00:00:00+00:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- RSS -->
+    <link type="application/atom+xml" rel="alternate" href="https://www.yslibrary.net/feed.xml" title="CodingFeline" />
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:title" content="TwitterにURLを共有するAndroidアプリ、Omnitweetyを公開した">
+    <meta name="twitter:description" content="掲題のとおり、アプリをGoogle Play Storeに公開した。名前は”Omnitweety”。「オムニツイーティ」と読む。機能はホントにシンプルで、「ブラウザ系アプリのシェア機能から、ワンタップでURLをTwitterに共有する」だけだ。      ブラウザの共有からOmnitweetyを選択       ...">
+    
+    <meta name="twitter:creator" content="@_yshrsmz">
+    <meta name="twitter:site" content="@_yshrsmz">
+    
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:image" content="https://www.yslibrary.net/assets/img/dactyl.jpeg">
+    <meta name="twitter:image:alt" content="TwitterにURLを共有するAndroidアプリ、Omnitweetyを公開した">
+</head>
+
+  <body>
+    <header class="site-header">
+
+    <!-- Logo and title -->
+	<div class="branding">
+        
+		<a href="/">
+			<img alt="logo img" class="avatar" src="/assets/img/logo.png" />
+		</a>
+        
+        <a class="site-title" aria-label="CodingFeline" href="/">
+        CodingFeline
+		</a>
+	</div>
+
+    <!-- Toggle menu -->
+    <nav class="clear">
+    <a aria-label="pull" id="pull" class="toggle" href="#">
+    <i class="fas fa-bars fa-lg"></i>
+    </a>
+
+    <!-- Menu -->
+    <ul class="hide">
+        
+
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="ABOUT" title="ABOUT" href="/about/">
+                     ABOUT 
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="PRODUCTS" title="PRODUCTS" href="/products/">
+                     PRODUCTS 
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Search" title="Search" href="/search/">
+                     <i class="fas fa-search" aria-hidden="true"></i>
+                    
+                </a>
+            </li>
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Tags" title="Tags" href="/tags/">
+                     <i class="fas fa-tags" aria-hidden="true"></i>
+                    
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+    </ul>
+
+	</nav>
+</header>
+
+    <div class="content">
+      <article >
+  <header id="main" style="">
+    <div class="title-padder">
+      
+      <h1 id="Twitter%E3%81%ABURL%E3%82%92%E5%85%B1%E6%9C%89%E3%81%99%E3%82%8BAndroid%E3%82%A2%E3%83%97%E3%83%AA%E3%80%81Omnitweety%E3%82%92%E5%85%AC%E9%96%8B%E3%81%97%E3%81%9F" class="title">TwitterにURLを共有するAndroidアプリ、Omnitweetyを公開した</h1>
+      
+
+
+<div class="post-info">
+    <p class="meta">
+      
+      
+      November 10, 2015
+    </p></div>
+
+      
+    </div>
+  </header>
+
+  <section class="post-content">
+  
+      <p><img src="https://lh3.googleusercontent.com/q8OyY9We1h1ieTTjKGPsGWzfSQDI9Q05EFACUlqkaY2YwDjbvANstl1Y11JQ-YEexj0shTp6UyHvsah7XGF0hf3Mnk4Z5-iJDdYTbYUtu5VGwfcum7JaI_I2zs5eYtOcOp0IjRQyySl1YbezCtbU9EC4PEoh-nHbZ_9hpuYvNBmyX1a8fD_HqHlEGpK6h34Uj92DgOBskw-oMuLwkyWZQibMc4FRpbo10U-zYa9hWEIdFxCyORIQlCsq5EbptMyN_hjulZtX5QYmIKKwh8KN7Iz9PWG08Lflo0DZU-nDHpjqnQsmTwmp0NC7OXex2JVI9KW3iAOpJzAZSF9zjJHgFjenG6_WYZoqQlpqA2eQHUbEpuX1hTyRUnoju7b1dLMiPslNQqvogaql_o6Ib8UsDytB3TlgvyNXt7b_m-WaxZfHq0-4wKMCmwptVyAAe3mx4kf0ul5Qa3CRm-e_pJp7w5CU-2PJmuWocsqsF9IoDc0ulU_nhI3BSydu22MO-yP2lzh6a7RhWdPw5Mm-d9VPB8x3dTIF5IOgbeNloxQUzqo=w1024-h500-no" alt="logo" /></p>
+
+<p>掲題のとおり、アプリを<a href="https://play.google.com/store/apps/details?id=net.yslibrary.omnitweety">Google Play Storeに公開した</a>。</p>
+
+<p>名前は”Omnitweety”。「オムニツイーティ」と読む。</p>
+
+<p>機能はホントにシンプルで、「ブラウザ系アプリのシェア機能から、ワンタップでURLをTwitterに共有する」だけだ。</p>
+
+<ol>
+  <li>
+    <p>ブラウザの共有からOmnitweetyを選択
+  <img src="https://lh3.googleusercontent.com/x_0xOYFFqsU6QhfgwaD6F_TM5HtdrbQ_eroLLd4qrIcp4VAr2WA2I5Mgxp8rt0lGTMhxAFAC-4PzAvm9SXsdsQQSMhQs91SpY654goapuyLgqrl3JzNJ_9BcZ0lHogYYrHYmy-fccEHX4ozt0yD3ikQSbgD-_bvK6ujCHgGIsAPXF3hBsDD_FH9On0k1sOtmeBZPG1yxjd7pcSiMneYfQOdc7u2QqImZEPQWMMcolYTV2puqpInu63YW9LctSa-sUGhY8XoZLzqEKzgaJA1djSEFHJzfDD--fiO7nmXdC3ih2g17DDzV4u27Frz-705yFT-Nliz_t7O_RScEPFa1RfRxAfaa-HxjnTtILxw6lGvC6yjFq467aLoAVqmMdbaXPQUE3XWG176arc_GmyURv5dSLOwBMWpxABDnWz6-7FzNGMLHHkKX1pZBMp6GlsKNj5D2Z-wOsgFPCR7pxXJQxzZeTYVpv0kgmwNVQLwvJyMKlhp94DkWZuRu51d3mo73vHV8R_8eKs3gLJryrYLwn8ezsRSPgtwWNU9BCkwOX2k=w440-h782-no" alt="introduction_1" /></p>
+  </li>
+  <li>
+    <p>画面下部にポップアップが表示される。あとは待っていれば自動でTwitterに共有される。真ん中の青いボタンをタップすれば即座に共有される。
+  <img src="https://lh3.googleusercontent.com/t4TzJC81JCzxR4-wKDLcFXvaltiNQw-PiJWrVqlrRedRlXvG7A881_eUT9PJe4iUjT_UZUsGIOZa_P7JRyj6RbxZHcfG8W-g-mPzfYvR8zG2bj5lz-ubpjCSgNoNltWPzia2mM1piOT_ieBTct1AqwWznRRaIFMSPomx8Ssea_yKFgAigvH4nZK4FI02zXMGconoGpFTN2YmIvp23bNC4fapRBj_6hZLLyFaSeAWDsnBn1C82XGMJTtYjjVhc39wrTKsD3DzSw5gwee72VEXMs6Hc2QWVFto51JKYwrSdolljLiqtZhwlzmr1E4i2b8VK0r7ACDagGOnEejFCFPa5ZONO3L5aKctIBbOPRPxvadaqsOz5dTLXp29BaV-8tLiu4Rd02h1Jstih4MsjJUoLps2isxYKFOrXEjqzvAcRjeoEMENPwp6Xwa8W8Svxn-wTJ1MxyJVgX2VQe2D30348m7GHgTJThxk2UPlfHYDidbJNWubUd8ycWu6DSCKzc_KTnBoV_5g0cImPP-nUMoe2KacdoPGRz6hP1r1B35Cqvo=w440-h782-no" alt="introduction_2" /></p>
+  </li>
+  <li>
+    <p>もし共有する前にコメントを入れたい場合は、ポップアップの鉛筆アイコンをタップすれば編集画面が起動する。(文字数はURL短縮を考慮)
+  <img src="https://lh3.googleusercontent.com/uFHwDKG5CofEeFViDZxSgfy3szYQ0PBtSIgaGhZTmhCocJqEatw8FnuJ2suXAFnm614ULVi-0b8-OUiUKtANpW7hkIVlFOusrke37RFG3LtdQtNGNl1OhaMensbk4rsUZEN7UlfrpynDfnMRW31nsa3OIoDOHMscx6oqvtXY9rwSjfbjge4Zqu754xyAiOvcm6Sbq-Ibf8lVyrMBnx4UTCrUwc0DsObWi9tTlfBRNyVa5zMr01MsASQNqVO2oLNqdvTclAFnuUIyQzIqdR1CBGB16eW8flMACdcorvsihFlkx8tiwU9C3EWDppBIuclSa00F0wEf0RnzZpPqEoUJKvt9w3T-l3kNdxKGJOuPm3pNDAL7aUrlr1-bLxgMdf5A58u70qh9IrmVGzFq0TJeV3K5zvH6SpxeE4FoYRdRDL1oBWntj7c4aRzaVldO6LxzwMu8aJ654kbjVsoHgNjI4YPJ8wn4wecrmSu5LXBpuyI1xCC7hIYwLwPK5Hnkwom9_50zDQS4rD2zIf-sQZRVOQ7RrNOTVylvFWiq39WXiWI=w440-h782-no" alt="introduction_3" /></p>
+  </li>
+</ol>
+
+<p>操作は基本的にこれだけだ。あとは設定画面で”NowBrowsing:”の部分(ヘッダー)を編集できる。</p>
+
+<h2 id="モチベーション">モチベーション</h2>
+
+<p>私はTwitterにURLをシェアすることが結構あるんだけど、その際のフローは大体下記のとおりだ。</p>
+
+<ol>
+  <li>ブラウザのシェア機能からTwitterクライアントアプリを選択する</li>
+  <li>クリップボード管理アプリからヘッダーに使ってる定型文をコピーする</li>
+  <li>Twitterクライアントの入力欄に貼り付ける</li>
+  <li>タイトルが長かったら適度に削除する</li>
+  <li>共有する</li>
+</ol>
+
+<p>結構手順多くて、しかもこれが毎回のことだから非常にめんどくさい。
+Google Play Storeを探してもこれをいい感じに短縮してくれるアプリが見つからなかったので、じゃあ作ってしまえ、となった。</p>
+
+<p>作るにあたって決めた要件は下記の通り</p>
+
+<ul>
+  <li>ブラウザを離れずにシェアできること</li>
+  <li>共有する際のテンプレートを予め自由に設定できること</li>
+  <li>共有時にコメントを付けたい場合は、自由に編集できること</li>
+</ul>
+
+<p>そして、上記要件から導き出された仕様が下記のものだ。</p>
+
+<ul>
+  <li>ブラウザからシェアすると、オーバーレイでボタンが表示される(編集、すぐ共有、キャンセル)</li>
+  <li>そのまま放置するとn秒後に自動で共有される</li>
+  <li>共有時は、Twitterの短縮URL文字数を考慮し、自動でタイトルが短縮される</li>
+  <li>編集ボタンをタップすると編集用ダイアログが表示される</li>
+  <li>編集ダイアログではヘッダー・タイトルが編集できる</li>
+</ul>
+
+<p>こんな感じで開発を始めた。
+いろいろと初めての挑戦をしたこともあって、だいたいコーディングだけで15人日くらいかかった。</p>
+
+<h2 id="使ったライブラリとか">使ったライブラリとか</h2>
+
+<h3 id="dagger2"><a href="https://github.com/google/dagger">Dagger2</a></h3>
+
+<p>とてもイケてるDIライブラリ。Componentの分割方法とか結構悩むところは多いけど、これなしでアプリ作るのはもう考えられない。</p>
+
+<p>今回はグローバルのAppComponentが一つあって、その下に各Activity毎にActivityComponentを作る構成にしてみた。FragmentやViewにも、ActivityComponentからinjectする感じ。</p>
+
+<h3 id="immutables"><a href="https://github.com/immutables/immutables">Immutables</a></h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public abstract book {
+  String title();
+  String author();
+}
+</code></pre></div></div>
+
+<p>みたいなアブストラクトなモデルクラスを用意しておくと、アノテーションプロセッサを使ってイミュータブルなモデルクラスを作ってくれるライブラリ。ビルダークラス周りとか機能が充実しているので結構便利。<br />
+Gson連携もできるけど、後述するTwitter Kitが使ってるGsonの設定をいじれないのでうまく使うことができなかった。<br />
+最初はプレゼンテーション層やデータ層のモデルクラスを全部これで作ってたんだけど、最終的にRealmのLazy Loadをフル活用しよう、という方向になったので使う箇所が減ってしまった。DBにSQLiteを使う時やGsonを自由にいじれる時、そしてアプリの各層を疎結合にしたい時は(というかRealm使わなければ)とても便利だと思う。</p>
+
+<h3 id="rxjavarxandroid"><a href="https://github.com/ReactiveX/RxJava">RxJava</a>/<a href="https://github.com/ReactiveX/RxAndroid">RxAndroid</a></h3>
+
+<p>色々リアクティブに扱えるライブラリ。リスト操作やスレッド周りの処理が楽に書けるので、今回もお世話になっている。</p>
+
+<h3 id="databinding"><a href="http://developer.android.com/intl/ja/tools/data-binding/guide.html">Databinding</a></h3>
+
+<p>Androidにもついにやってきたデータバインディング。<br />
+xmlにロジックを書くの、なれるまでちょっとモニョるしAndroid Studioのサポートもまだまだだけど、モデルクラスに値を設定するだけで画面が更新されるっていうのはちょっとライフチェンジングだった。いい使い方を模索したい。</p>
+
+<h3 id="recyclerview-multipleviewtypeadapter"><a href="https://github.com/yqritc/RecyclerView-MultipleViewTypesAdapter">RecyclerView-MultipleViewTypeAdapter</a></h3>
+
+<p>RecyclerViewで複数のViewTypeを扱う時の処理を簡単に書ける。基本的にいいんだけど、今回良く使った<code class="language-plaintext highlighter-rouge">EnumBindListAdapter</code>はEnumとDataBinderの関連付けが弱かったり、ちょっと足りないところがあるのでそのうちオレオレ版を書くかも。</p>
+
+<h3 id="fabric-twitter-kit"><a href="https://get.fabric.io/android">Fabric Twitter Kit</a></h3>
+
+<p><a href="http://yslibrary.net/2015/09/12/twitter-app-created-during-summer-vacation/">前回作ったアプリ</a>で非常に便利だったので、今回も継続使用。</p>
+
+<h3 id="twiter-text"><a href="https://github.com/twitter/twitter-text">twiter-text</a></h3>
+
+<p>Twitterのステータス本文に関する様々な処理を行ってくれる。URLの短縮を考慮した文字数の計算とか、ステータス本文からURLのみ取得するとか。Twitter謹製なので、これ使っておけば間違いないかなーって感じ。</p>
+
+<h3 id="realm"><a href="https://github.com/realm/realm-java/">Realm</a></h3>
+
+<p>最近流行りのDBライブラリ。<br />
+動作は速くて最近よく使ってるけど、まだまだ制限多いかなーって印象。<br />
+RxJavaサポート待ってます。</p>
+
+<h3 id="tray"><a href="https://github.com/grandcentrix/tray">Tray</a></h3>
+
+<p>マルチプロセスをサポートした、SharedPreferenceの代替ライブラリ。<br />
+個人的にはマルチプロセスもそうだけど、自動で作成日時や更新日時を保存してくれるのがよい。Android MのAuto Backupもサポートしている。</p>
+
+<h2 id="アーキテクチャ">アーキテクチャ</h2>
+
+<p>今回は昨今の流行りに乗ってMVPでの実装を試してみた。</p>
+
+<p>https://github.com/android10/Android-CleanArchitecture
+参考にしたのは↑このレポジトリで、いわゆる”Clean Architecture”だ。</p>
+
+<p>今までビジネスロジックは機能ごとに一つのクラスにまとめるタイプの実装ばかりしていたので、1ユースケース1クラス、という実装はとても新鮮だった。クラス数・メソッド数はすごい勢いで増えるけど、ユースケース毎にクラスが分かれてるから実装がシンプルで見やすくなってよい。また、データの取得や保存ロジックも別レイヤに分かれているのでコードの見通しはやっぱりよい。</p>
+
+<p>ただ正直言って、数画面しかないこのレベルのアプリケーションでは完全にオーバーキルだった。今回は単にClean Architectureやってみたかったから採用したけど、アプリの規模にあったアーキテクチャ選ぶのも重要だと実感した。</p>
+
+<p>最初はこのレポジトリの実装例に忠実に、各レイヤで別々にモデルクラス用意して、レイヤ間で受け渡しするときにパースして…ってやってたんだけど、そのやり方だとRealmの持ち味であるLazy Loadが活かせない。</p>
+
+<p>なので、いろいろ悩んだ結果結局Realmで管理してるデータは、<code class="language-plaintext highlighter-rouge">RealmObject</code>をそのまま各レイヤで使うことにした。アーキテクチャ的にはあまり美しくないけど、Realmの利点を活かしたいなら仕方ない気がしている。うまいことRealm使えるアーキテクチャ模索したい。</p>
+
+<h2 id="アイコン">アイコン</h2>
+
+<p>アイコンは今回かなりこだわった箇所で、<a href="https://99designs.jp/">99designs</a>というサイトで<a href="https://99designs.jp/icon-button-design/contests/android-app-icon-unique-twitter-client-554071/entries?filter=all">クラウドソーシングしてみた</a>。3万円ほどでたくさんデザインが集まり、非常に満足している。ただ、満足しているとはいっても応募作品の中に盗作があったりして思うところはあるので、そのうちまとめようと思っている。</p>
+
+<h2 id="そういえばなんでomnitweetyなのか">そういえばなんでOmnitweetyなのか？</h2>
+
+<p>同じような機能のChrome拡張機能を<a href="https://chrome.google.com/webstore/detail/omnitweety/jkghejckpigfbolkdkplfokccgpjjilb">以前リリースしてる</a>ので、名前揃えたほうがいいよなーと思ったのでこの名前に。Chromeのオムニバー(アドレスバー)からツイートするので”Omnitweety”だ。ホントは”Omnitweet”にしたかったけど名前がとられてたから”y”をつけてみた。<br />
+拡張機能と名前を揃えよう、と思いつく前は”TweetLink”とかそのまんまの名前を考えていた。</p>
+
+<h2 id="今後の予定">今後の予定</h2>
+
+<p>幾つか機能追加を検討中。</p>
+
+<ul>
+  <li>フッター設定</li>
+  <li>通知バーからツイート</li>
+  <li>Omnitweetyから共有したURLの履歴表示</li>
+</ul>
+
+<p>こちらからは以上です。</p>
+
+<p>Omnitweety PlayStoreリンク: https://play.google.com/store/apps/details?id=net.yslibrary.omnitweety</p>
+
+
+    
+  </section>
+
+  <!-- Social media shares -->
+  
+
+<div class="share-buttons">
+    <ul class="share-buttons">
+        <div class="meta">Share</div>
+        
+        <li>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https://www.yslibrary.net/2015/11/10/omnitweety-andrid-released-share-url-twitter/" target="_blank" title=" Facebook">
+			<i class="fab fa-facebook-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Share on Facebook</span>
+		</a>
+        </li>
+         
+        <li>
+            <a href="https://twitter.com/intent/tweet?text=Twitter%E3%81%ABURL%E3%82%92%E5%85%B1%E6%9C%89%E3%81%99%E3%82%8BAndroid%E3%82%A2%E3%83%97%E3%83%AA%E3%80%81Omnitweety%E3%82%92%E5%85%AC%E9%96%8B%E3%81%97%E3%81%9F%20https%3A%2F%2Fwww.yslibrary.net%2F2015%2F11%2F10%2Fomnitweety-andrid-released-share-url-twitter%2F" target="_blank" title="">
+			<i class="fab fa-twitter-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Tweet</span>
+		</a>
+        </li>
+            
+        <li>
+            <a href="https://www.reddit.com/submit?url=https://www.yslibrary.net/2015/11/10/omnitweety-andrid-released-share-url-twitter/&title=Twitter%E3%81%ABURL%E3%82%92%E5%85%B1%E6%9C%89%E3%81%99%E3%82%8BAndroid%E3%82%A2%E3%83%97%E3%83%AA%E3%80%81Omnitweety%E3%82%92%E5%85%AC%E9%96%8B%E3%81%97%E3%81%9F%20%7C%20CodingFeline" target="_blank" title=" Reddit">
+			<i class="fab fa-reddit-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Share on Reddit</span>
+		</a>
+        </li>
+           
+        <li>
+            <a href="mailto:?subject=TwitterにURLを共有するAndroidアプリ、Omnitweetyを公開した%20%7C%20CodingFeline&body=https://www.yslibrary.net/2015/11/10/omnitweety-andrid-released-share-url-twitter/" target="_blank" title="">
+			<i class="fas fa-envelope-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Email</span>
+		</a>
+        </li>
+        
+    </ul>
+</div>
+
+
+
+
+   <!-- Tag list -->
+  
+  
+
+
+  <div class="tag-list">
+    <ul>
+      
+        <li class="meta">Tags</li>
+      
+
+      
+        <li><a class="button" href="/tags#android">
+          <p><i class="fas fa-tag fa-fw fa-sm"></i> android</p>
+        </a></li>
+      
+        <li><a class="button" href="/tags#omnitweety">
+          <p><i class="fas fa-tag fa-fw fa-sm"></i> omnitweety</p>
+        </a></li>
+      
+        <li><a class="button" href="/tags#twitter">
+          <p><i class="fas fa-tag fa-fw fa-sm"></i> twitter</p>
+        </a></li>
+      
+    </ul>
+  </div>
+
+
+
+</article>
+
+<!-- Disqus -->
+
+<div class="comments">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'yslibrary';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+</div>
+
+
+<!-- Post navigation -->
+
+  <div id="post-nav">
+    
+    <div id="previous-post">
+        <a alt="「まったりAndroid Framework Code Reading &#35;2」に参加してきた" href="/2015/12/07/android-framework-code-reading-2/">
+            <p>Previous post</p>
+            「まったりAndroid Framework Code Reading &#35;2」に参加してきた
+        </a>
+    </div>
+    
+
+    
+    <div id="next-post">
+        <a alt="CompositeSubscriptionは再利用できる" href="/2015/10/13/compositesubscription-is-reusable/">
+            <p>Next post</p>
+            CompositeSubscriptionは再利用できる
+        </a>
+    </div>
+    
+</div>
+
+
+
+<!-- To change color of links in the page -->
+<style>
+  header#main {
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+  }
+  
+  
+  
+  
+</style>
+
+    </div>
+    <footer class="site-footer">
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- yslibrary.net - bottom -->
+<ins class="adsbygoogle"
+     style="display:block; margin-top:10px; margin-bottom:10px;"
+     data-ad-client="ca-pub-1022395241918455"
+     data-ad-slot="6501231341"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+    <p class="text">
+        © 2020, yshrsmz</p>
+            <div class="footer-icons">
+                <ul>
+                <!-- Social icons from Font Awesome, if enabled -->
+                
+<li>
+    <a feed.xml href="http://feeds.feedburner.com/TheoreticalCat"
+       title="Follow RSS feed">
+        <span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+    <a href="https://github.com/yshrsmz" title="Follow on GitHub">
+		<span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+<li>
+    <a href="https://www.linkedin.com/in/yshrsmz/" title="Follow on LinkedIn">
+		<span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+<li>
+    <a href="https://www.reddit.com/user/yshrsmz"
+       title="Follow on Reddit">
+		<span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-reddit fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+<li>
+    <a href="https://stackexchange.com/users/456702/yshrsmz" title="Follow on Stack Exchange">
+		<span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-stack-exchange fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+<li>
+    <a href="https://stackoverflow.com/users/855599/yshrsmz" title="Follow on Stack Overflow">
+		<span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-stack-overflow fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+<li>
+    <a class="type" href="https://twitter.com/_yshrsmz"
+       title="Follow on Twitter">
+        <span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+                </ul>
+            </div>
+</footer>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+  </body>
+</html>

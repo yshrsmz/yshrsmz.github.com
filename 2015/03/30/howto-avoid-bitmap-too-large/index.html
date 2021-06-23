@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<!--
+    Type on Strap jekyll theme v2.3.4
+    Copyright 2016-2021 Sylhare
+    Theme free for personal and commercial use under the MIT license
+    https://github.com/sylhare/Type-on-Strap/blob/master/LICENSE
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=0.5, maximum-scale=5">
+
+    <!-- Main JS (navbar.js, katex_init.js and masonry_init.js)-->
+    <script defer src="/assets/js/main.min.js"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/main.css">
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/atom+xml" title="CodingFeline" href="https://www.yslibrary.net/feed.xml"/>
+    
+    
+
+    <!-- KaTeX 0.12.0 -->
+    
+    <script defer src="/assets/js/vendor/katex.min.js"></script>
+    <script defer src="/assets/js/vendor/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+    
+
+    <!-- Mermaid 8.9.2 -->
+    
+
+    <!-- Simple Jekyll Search 1.9.1 -->
+    <script src="/assets/js/vendor/simple-jekyll-search.min.js" type="text/javascript"></script>
+
+    <!-- Google Analytics / Cookie Consent -->
+    <script>
+      const cookieName = 'cookie-notice-dismissed-https://www.yslibrary.net';
+      const isCookieConsent = 'false';
+      const analyticsName = 'UA-61198465-1';
+    </script>
+
+    
+    
+        <!-- Global site tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-61198465-1"></script>
+        <!-- Page analysis (analytics.js) -->
+        <script async src='https://www.google-analytics.com/analytics.js'></script>
+    
+
+    <!-- seo tags -->
+    <meta property="og:image" content="https://www.yslibrary.net/assets/img/dactyl.jpeg">
+    
+    <meta property="og:type" content="website" />
+    
+    <!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>(Android) Bitmap too large to 〜が出た時の対処法 | CodingFeline</title>
+<meta name="generator" content="Jekyll v4.2.0" />
+<meta property="og:title" content="(Android) Bitmap too large to 〜が出た時の対処法" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Bitmapを扱っているとたまに下記のようなエラーにぶち当たることがあります。" />
+<meta property="og:description" content="Bitmapを扱っているとたまに下記のようなエラーにぶち当たることがあります。" />
+<link rel="canonical" href="https://www.yslibrary.net/2015/03/30/howto-avoid-bitmap-too-large/" />
+<meta property="og:url" content="https://www.yslibrary.net/2015/03/30/howto-avoid-bitmap-too-large/" />
+<meta property="og:site_name" content="CodingFeline" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2015-03-30T00:00:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="(Android) Bitmap too large to 〜が出た時の対処法" />
+<script type="application/ld+json">
+{"mainEntityOfPage":{"@type":"WebPage","@id":"https://www.yslibrary.net/2015/03/30/howto-avoid-bitmap-too-large/"},"description":"Bitmapを扱っているとたまに下記のようなエラーにぶち当たることがあります。","url":"https://www.yslibrary.net/2015/03/30/howto-avoid-bitmap-too-large/","@type":"BlogPosting","headline":"(Android) Bitmap too large to 〜が出た時の対処法","dateModified":"2015-03-30T00:00:00+00:00","datePublished":"2015-03-30T00:00:00+00:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- RSS -->
+    <link type="application/atom+xml" rel="alternate" href="https://www.yslibrary.net/feed.xml" title="CodingFeline" />
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:title" content="(Android) Bitmap too large to 〜が出た時の対処法">
+    <meta name="twitter:description" content="Bitmapを扱っているとたまに下記のようなエラーにぶち当たることがあります。W/OpenGLRenderer: Bitmap too large to be uploaded into a texture(4000x4000, max=2048x2048)読んで字の通り、Bitmapが大きすぎて、OpenGLR...">
+    
+    <meta name="twitter:creator" content="@_yshrsmz">
+    <meta name="twitter:site" content="@_yshrsmz">
+    
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:image" content="https://www.yslibrary.net/assets/img/dactyl.jpeg">
+    <meta name="twitter:image:alt" content="(Android) Bitmap too large to 〜が出た時の対処法">
+</head>
+
+  <body>
+    <header class="site-header">
+
+    <!-- Logo and title -->
+	<div class="branding">
+        
+		<a href="/">
+			<img alt="logo img" class="avatar" src="/assets/img/logo.png" />
+		</a>
+        
+        <a class="site-title" aria-label="CodingFeline" href="/">
+        CodingFeline
+		</a>
+	</div>
+
+    <!-- Toggle menu -->
+    <nav class="clear">
+    <a aria-label="pull" id="pull" class="toggle" href="#">
+    <i class="fas fa-bars fa-lg"></i>
+    </a>
+
+    <!-- Menu -->
+    <ul class="hide">
+        
+
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="ABOUT" title="ABOUT" href="/about/">
+                     ABOUT 
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="PRODUCTS" title="PRODUCTS" href="/products/">
+                     PRODUCTS 
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Search" title="Search" href="/search/">
+                     <i class="fas fa-search" aria-hidden="true"></i>
+                    
+                </a>
+            </li>
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Tags" title="Tags" href="/tags/">
+                     <i class="fas fa-tags" aria-hidden="true"></i>
+                    
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+    </ul>
+
+	</nav>
+</header>
+
+    <div class="content">
+      <article >
+  <header id="main" style="">
+    <div class="title-padder">
+      
+      <h1 id="%28Android%29+Bitmap+too+large+to+%E3%80%9C%E3%81%8C%E5%87%BA%E3%81%9F%E6%99%82%E3%81%AE%E5%AF%BE%E5%87%A6%E6%B3%95" class="title">(Android) Bitmap too large to 〜が出た時の対処法</h1>
+      
+
+
+<div class="post-info">
+    <p class="meta">
+      
+      
+      March 30, 2015
+    </p></div>
+
+      
+    </div>
+  </header>
+
+  <section class="post-content">
+  
+      <p>Bitmapを扱っているとたまに下記のようなエラーにぶち当たることがあります。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>W/OpenGLRenderer: Bitmap too large to be uploaded into a texture(4000x4000, max=2048x2048)
+</code></pre></div></div>
+
+<p>読んで字の通り、Bitmapが大きすぎて、OpenGLRendererで取り扱えない。<br />
+限界は縦横2048pxまでのようです。<br />
+解決方法は２つあります。</p>
+
+<ul>
+  <li>画像を2048x2048まで縮小する</li>
+  <li>ハードウェアアクセラレーションを無効にする。</li>
+</ul>
+
+<p>サムネイルとかフルサイズで表示する必要がない時は縮小するのが良さそう。<br />
+ただ、フルスクリーンで画像を表示してピンチズームとかしたい時は２つ目の方法でいきたい。</p>
+
+<p>OS 4.0以降だと各Viewで個別にハードウェアアクセラレーションをOFFにしましょう。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mImageView</span><span class="o">.</span><span class="na">setLayerType</span><span class="o">(</span><span class="nc">View</span><span class="o">.</span><span class="na">LAYER_TYPE_SOFTWARE</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
+</code></pre></div></div>
+
+<p>ただこれだとメモリ足りなくなる端末もありそうだから、<code class="language-plaintext highlighter-rouge">AndroidManifest.xml</code>でヒープサイズも設定しておいたほうがいいかも？</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;Application</span>
+    <span class="na">android:name=</span><span class="s">"net.yslibrary.android.foo.MainApplication"</span>
+    <span class="na">android:label=</span><span class="s">"foo"</span>
+    <span class="na">android:largeHeap=</span><span class="s">"true"</span><span class="nt">&gt;</span>
+</code></pre></div></div>
+
+
+    
+  </section>
+
+  <!-- Social media shares -->
+  
+
+<div class="share-buttons">
+    <ul class="share-buttons">
+        <div class="meta">Share</div>
+        
+        <li>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https://www.yslibrary.net/2015/03/30/howto-avoid-bitmap-too-large/" target="_blank" title=" Facebook">
+			<i class="fab fa-facebook-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Share on Facebook</span>
+		</a>
+        </li>
+         
+        <li>
+            <a href="https://twitter.com/intent/tweet?text=%28Android%29+Bitmap+too+large+to+%E3%80%9C%E3%81%8C%E5%87%BA%E3%81%9F%E6%99%82%E3%81%AE%E5%AF%BE%E5%87%A6%E6%B3%95%20https%3A%2F%2Fwww.yslibrary.net%2F2015%2F03%2F30%2Fhowto-avoid-bitmap-too-large%2F" target="_blank" title="">
+			<i class="fab fa-twitter-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Tweet</span>
+		</a>
+        </li>
+            
+        <li>
+            <a href="https://www.reddit.com/submit?url=https://www.yslibrary.net/2015/03/30/howto-avoid-bitmap-too-large/&title=%28Android%29+Bitmap+too+large+to+%E3%80%9C%E3%81%8C%E5%87%BA%E3%81%9F%E6%99%82%E3%81%AE%E5%AF%BE%E5%87%A6%E6%B3%95%20%7C%20CodingFeline" target="_blank" title=" Reddit">
+			<i class="fab fa-reddit-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Share on Reddit</span>
+		</a>
+        </li>
+           
+        <li>
+            <a href="mailto:?subject=(Android) Bitmap too large to 〜が出た時の対処法%20%7C%20CodingFeline&body=https://www.yslibrary.net/2015/03/30/howto-avoid-bitmap-too-large/" target="_blank" title="">
+			<i class="fas fa-envelope-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Email</span>
+		</a>
+        </li>
+        
+    </ul>
+</div>
+
+
+
+
+   <!-- Tag list -->
+  
+  
+
+
+  <div class="tag-list">
+    <ul>
+      
+        <li class="meta">Tags</li>
+      
+
+      
+        <li><a class="button" href="/tags#android">
+          <p><i class="fas fa-tag fa-fw fa-sm"></i> android</p>
+        </a></li>
+      
+        <li><a class="button" href="/tags#java">
+          <p><i class="fas fa-tag fa-fw fa-sm"></i> java</p>
+        </a></li>
+      
+    </ul>
+  </div>
+
+
+
+</article>
+
+<!-- Disqus -->
+
+<div class="comments">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'yslibrary';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+</div>
+
+
+<!-- Post navigation -->
+
+  <div id="post-nav">
+    
+    <div id="previous-post">
+        <a alt="(Android) 端末にインストールされているアプリのAPKファイルを取得する" href="/2015/04/17/android-how-to-get-apk-from-device/">
+            <p>Previous post</p>
+            (Android) 端末にインストールされているアプリのAPKファイルを取得する
+        </a>
+    </div>
+    
+
+    
+    <div id="next-post">
+        <a alt="Mac OSX 10.9(Mavericks) Server でプッシュ通知サービスの証明書を更新する" href="/2014/08/05/howto-update-mac-server-push-certificates/">
+            <p>Next post</p>
+            Mac OSX 10.9(Mavericks) Server でプッシュ通知サービスの証明書を更新する
+        </a>
+    </div>
+    
+</div>
+
+
+
+<!-- To change color of links in the page -->
+<style>
+  header#main {
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+  }
+  
+  
+  
+  
+</style>
+
+    </div>
+    <footer class="site-footer">
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- yslibrary.net - bottom -->
+<ins class="adsbygoogle"
+     style="display:block; margin-top:10px; margin-bottom:10px;"
+     data-ad-client="ca-pub-1022395241918455"
+     data-ad-slot="6501231341"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+    <p class="text">
+        © 2020, yshrsmz</p>
+            <div class="footer-icons">
+                <ul>
+                <!-- Social icons from Font Awesome, if enabled -->
+                
+<li>
+    <a feed.xml href="http://feeds.feedburner.com/TheoreticalCat"
+       title="Follow RSS feed">
+        <span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+    <a href="https://github.com/yshrsmz" title="Follow on GitHub">
+		<span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+<li>
+    <a href="https://www.linkedin.com/in/yshrsmz/" title="Follow on LinkedIn">
+		<span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+<li>
+    <a href="https://www.reddit.com/user/yshrsmz"
+       title="Follow on Reddit">
+		<span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-reddit fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+<li>
+    <a href="https://stackexchange.com/users/456702/yshrsmz" title="Follow on Stack Exchange">
+		<span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-stack-exchange fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+<li>
+    <a href="https://stackoverflow.com/users/855599/yshrsmz" title="Follow on Stack Overflow">
+		<span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-stack-overflow fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+<li>
+    <a class="type" href="https://twitter.com/_yshrsmz"
+       title="Follow on Twitter">
+        <span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+                </ul>
+            </div>
+</footer>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+  </body>
+</html>

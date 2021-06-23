@@ -1,0 +1,1001 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://www.yslibrary.net/feed.xml" rel="self" type="application/atom+xml" /><link href="https://www.yslibrary.net/" rel="alternate" type="text/html" /><updated>2021-06-23T05:03:07+00:00</updated><id>https://www.yslibrary.net/feed.xml</id><title type="html">CodingFeline</title><subtitle>Thoughts, stories and ideas</subtitle><entry><title type="html">YarnとReactとTypeScriptとDuplicate identifierエラー</title><link href="https://www.yslibrary.net/2021/06/06/dedupe-react-type-conflict/" rel="alternate" type="text/html" title="YarnとReactとTypeScriptとDuplicate identifierエラー" /><published>2021-06-06T00:00:00+00:00</published><updated>2021-06-06T00:00:00+00:00</updated><id>https://www.yslibrary.net/2021/06/06/dedupe-react-type-conflict</id><content type="html" xml:base="https://www.yslibrary.net/2021/06/06/dedupe-react-type-conflict/">&lt;p&gt;React と TypeScript で使っていると、型定義の更新時に下記のようなエラーに遭遇することがある&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Run yarn app:build
+Error: ../../node_modules/@types/react-dom/node_modules/@types/react/index.d.ts(3047,14): error TS2300: Duplicate identifier 'LibraryManagedAttributes'.
+Error: ../../node_modules/@types/react/index.d.ts(3047,14): error TS2300: Duplicate identifier 'LibraryManagedAttributes'.
+Error: Process completed with exit code 2.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;@types/react の型定義が複数あって解決に失敗している感じ。&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;yarn.lock&lt;/code&gt; を作り直せばもちろん解決できるんだけど、もっとスマートなやり方があった。&lt;/p&gt;
+
+&lt;p&gt;yarn v1 だったら &lt;a href=&quot;https://github.com/atlassian/yarn-deduplicate&quot;&gt;atlassian/yarn-deduplicate&lt;/a&gt; を使えばいいし、 yarn v2 だったらビルトインコマンドの &lt;a href=&quot;https://yarnpkg.com/cli/dedupe&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;yarn dedupe&lt;/code&gt;&lt;/a&gt; を使えばよい。&lt;/p&gt;
+
+&lt;p&gt;renovate を利用してパッケージ更新をしているなら、&lt;a href=&quot;https://docs.renovatebot.com/configuration-options/#postupdateoptions&quot;&gt;postUpdateOptions&lt;/a&gt; で &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;yarnDedupeFewer&lt;/code&gt; か &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;yarnDedupeHighest&lt;/code&gt; を設定してあげればいい感じにしてくれそう。&lt;/p&gt;</content><author><name></name></author><category term="programming" /><category term="react" /><category term="typescript" /><category term="yarn" /><category term="renovate" /><category term="til" /><summary type="html">React と TypeScript で使っていると、型定義の更新時に下記のようなエラーに遭遇することがある</summary></entry><entry><title type="html">tailwindcss の config ファイルを babel-plugin-preval で読み込む</title><link href="https://www.yslibrary.net/2021/04/28/tailwindcss-babel-preval/" rel="alternate" type="text/html" title="tailwindcss の config ファイルを babel-plugin-preval で読み込む" /><published>2021-04-28T00:00:00+00:00</published><updated>2021-04-28T00:00:00+00:00</updated><id>https://www.yslibrary.net/2021/04/28/tailwindcss-babel-preval</id><content type="html" xml:base="https://www.yslibrary.net/2021/04/28/tailwindcss-babel-preval/">&lt;p&gt;tailwindcss の tailwind.config.js をコードから参照したいとき、なにも考えなくていいなら &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tailwindcss/resolveConfig&lt;/code&gt; を使えば実現できる。&lt;/p&gt;
+
+&lt;p&gt;ただこのやり方だとビルド時にだけあればいいプラグインなどが依存関係に入ってきてしまい、成果物が肥大化してしまう。&lt;/p&gt;
+
+&lt;p&gt;そこで&lt;a href=&quot;https://tailwindcss.com/docs/configuration#referencing-in-java-script&quot;&gt;公式ドキュメント&lt;/a&gt;では &lt;a href=&quot;https://github.com/kentcdodds/babel-plugin-preval&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;babel-plugin-preval&lt;/code&gt;&lt;/a&gt; 使うといいよ、って書いてあるけどじゃあ実際どう使うの、ということは書いてない。&lt;/p&gt;
+
+&lt;p&gt;こうやる。&lt;/p&gt;
+
+&lt;p&gt;場所はどこでもいいんだけど、 babel が解決できる場所に下記のような内容のファイルを作成する。今回は &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;./config/tailwindcss.js&lt;/code&gt; とした。&lt;/p&gt;
+
+&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// @preval&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// babel-plugin-prevalでコンパイル時に実行される&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// see https://tailwindcss.com/docs/configuration#referencing-in-java-script&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;resolveConfig&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;tailwindcss/resolveConfig&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;tailwindConfig&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;../tailwind.config&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;config&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;resolveConfig&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;tailwindConfig&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;module&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;exports&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;colors&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;theme&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;colors&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;いくつか書き方があるけど、今回は &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@preval&lt;/code&gt; を使う。&lt;br /&gt;
+今回は colors だけ export しているけど、用途に応じて &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;config.theme&lt;/code&gt; を export したり、いろいろできる。&lt;/p&gt;
+
+&lt;p&gt;babel-plugin-preval はトランスパイルなしで実行されるので、実行環境でそのまま動かせるコードを書く必要がある。&lt;br /&gt;
+また、最終的な成果物も同様である(っぽい)。&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;export default {...}&lt;/code&gt; ではなく &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;module.exports = {...}&lt;/code&gt; にしているのはそのため。&lt;/p&gt;
+
+&lt;p&gt;babel の設定に preval プラグインを追加したら、あとはコンパイルするだけ。&lt;/p&gt;
+
+&lt;p&gt;コードからは&lt;/p&gt;
+
+&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;colors&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;~/config/tailwindcss&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;的に参照できる。&lt;/p&gt;
+
+&lt;p&gt;TypeScript の場合は好きに型定義したらいい&lt;/p&gt;
+
+&lt;div class=&quot;language-typescript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kr&quot;&gt;declare&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;module&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;~/config/tailwindcss&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;// `~/tailwind.config.js` のtheme.colorsと対応&lt;/span&gt;
+  &lt;span class=&quot;kr&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;TailwindColors&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// 色定義&lt;/span&gt;
+
+    &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]:&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Record&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kr&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;colors&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;TailwindColors&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name></name></author><category term="programming" /><category term="node.js" /><category term="tailwindcss" /><category term="typescript" /><category term="til" /><summary type="html">tailwindcss の tailwind.config.js をコードから参照したいとき、なにも考えなくていいなら tailwindcss/resolveConfig を使えば実現できる。</summary></entry><entry><title type="html">yarn install と NODE_ENV</title><link href="https://www.yslibrary.net/2021/04/27/yarn-install-node-env/" rel="alternate" type="text/html" title="yarn install と NODE_ENV" /><published>2021-04-27T00:00:00+00:00</published><updated>2021-04-27T00:00:00+00:00</updated><id>https://www.yslibrary.net/2021/04/27/yarn-install-node-env</id><content type="html" xml:base="https://www.yslibrary.net/2021/04/27/yarn-install-node-env/">&lt;h2 id=&quot;tldr&quot;&gt;TL;DR;&lt;/h2&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;NODE_ENV=production&lt;/code&gt; が設定済みの環境で &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;yarn install&lt;/code&gt; を実行すると &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;yarn install --production&lt;/code&gt; と同等の動作をする&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;言われてみればそれはそう、って感じではあるし、&lt;a href=&quot;https://classic.yarnpkg.com/en/docs/cli/install#toc-yarn-install-production-true-false&quot;&gt;ドキュメントにもそう書いてある&lt;/a&gt;。&lt;/p&gt;
+
+&lt;div class=&quot;language-docker highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;ARG&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; BUILD_ENV=production&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; public.ecr.aws/bitnami/node:14.16.1 AS build-stage&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;ARG&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; BUILD_ENV&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;ENV&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; NODE_ENV=${BUILD_ENV}&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;RUN &lt;/span&gt;install_packages curl ca-certificates
+&lt;span class=&quot;k&quot;&gt;RUN &lt;/span&gt;curl &lt;span class=&quot;nt&quot;&gt;-sfL&lt;/span&gt; https://install.goreleaser.com/github.com/tj/node-prune.sh | bash &lt;span class=&quot;nt&quot;&gt;-s&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-b&lt;/span&gt; /usr/local/bin
+
+&lt;span class=&quot;k&quot;&gt;WORKDIR&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; /app&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;COPY&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; . .&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;RUN &lt;/span&gt;yarn &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;RUN &lt;/span&gt;yarn build:&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;BUILD_ENV&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;RUN &lt;/span&gt;yarn &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--production&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;RUN &lt;/span&gt;/usr/local/bin/node-prune
+
+&lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; public.ecr.aws/bitnami/node:14.16.1-prod AS production-stage&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;ARG&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; BUILD_ENV&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;ENV&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; NODE_ENV ${BUILD_ENV}&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;RUN &lt;/span&gt;install_packages curl ca-certificates
+
+&lt;span class=&quot;k&quot;&gt;COPY&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; --from=build-stage /app /app&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;WORKDIR&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; /app&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;ENTRYPOINT&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; [ &quot;./node_modules/.bin/nuxt&quot;, &quot;start&quot; ]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;こんな Dockerfile を書いて、 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BUILD_ENV=production&lt;/code&gt; で実行した時に &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;yarn build:production&lt;/code&gt; が失敗しててめっちゃつまった。エラー的には &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ts-loader&lt;/code&gt; が見つからないとかそんな感じ。&lt;/p&gt;
+
+&lt;p&gt;いろいろ書き換えながら試してたら、最初に書いてたとおり &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;NODE_ENV=production&lt;/code&gt; と環境変数を設定しちゃってたのが原因だった。devDependencies がインストールされない状態。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Yarn will not install any package listed in devDependencies if the NODE_ENV environment variable is set to production&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://classic.yarnpkg.com/en/docs/cli/install#toc-yarn-install-production-true-false&quot;&gt;ドキュメントにもそう書いてあった&lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;今回の場合は、 build-stage ではそもそも &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;NODE_ENV&lt;/code&gt; 必要なかったので &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ENV NODE_ENV=${BUILD_ENV}&lt;/code&gt; をこのステージから削除して解決。&lt;/p&gt;
+
+&lt;p&gt;ドキュメントはちゃんと読みましょう。&lt;/p&gt;</content><author><name></name></author><category term="programming" /><category term="node.js" /><category term="docker" /><category term="til" /><summary type="html">TL;DR;</summary></entry><entry><title type="html">2020年を振り返って</title><link href="https://www.yslibrary.net/2020/12/31/lookingback-2020/" rel="alternate" type="text/html" title="2020年を振り返って" /><published>2020-12-31T00:00:00+00:00</published><updated>2020-12-31T00:00:00+00:00</updated><id>https://www.yslibrary.net/2020/12/31/lookingback-2020</id><content type="html" xml:base="https://www.yslibrary.net/2020/12/31/lookingback-2020/">&lt;p&gt;2020年を振り返るよ。&lt;br /&gt;
+買ってよかったもののまとめは&lt;a href=&quot;/2020/12/28/bestbuy2020/&quot;&gt;こちら&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;目次&lt;/strong&gt;&lt;/p&gt;
+&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#仕事&quot; id=&quot;markdown-toc-仕事&quot;&gt;仕事&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#2018年の後半から作っていたアプリがようやくリリースされた&quot; id=&quot;markdown-toc-2018年の後半から作っていたアプリがようやくリリースされた&quot;&gt;2018年の後半から作っていたアプリがようやくリリースされた&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#nuxtjsで記事メディアの立ち上げ&quot; id=&quot;markdown-toc-nuxtjsで記事メディアの立ち上げ&quot;&gt;Nuxt.jsで記事メディアの立ち上げ&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#nuxtjsで既存サービスのリニューアル進行中&quot; id=&quot;markdown-toc-nuxtjsで既存サービスのリニューアル進行中&quot;&gt;Nuxt.jsで既存サービスのリニューアル(進行中)&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#個人プロジェクト&quot; id=&quot;markdown-toc-個人プロジェクト&quot;&gt;個人(プロジェクト)&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#monotweetyがtwitter-apiのアクセス制限された&quot; id=&quot;markdown-toc-monotweetyがtwitter-apiのアクセス制限された&quot;&gt;MonotweetyがTwitter APIのアクセス制限された&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#twitter4kt&quot; id=&quot;markdown-toc-twitter4kt&quot;&gt;Twitter4kt&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#個人生活&quot; id=&quot;markdown-toc-個人生活&quot;&gt;個人(生活)&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#新型コロナウィルス&quot; id=&quot;markdown-toc-新型コロナウィルス&quot;&gt;新型コロナウィルス&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#フェレットが死んだ&quot; id=&quot;markdown-toc-フェレットが死んだ&quot;&gt;フェレットが死んだ&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#猫が増えた&quot; id=&quot;markdown-toc-猫が増えた&quot;&gt;猫が増えた&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#アボカド育て始めた&quot; id=&quot;markdown-toc-アボカド育て始めた&quot;&gt;アボカド育て始めた&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;仕事&quot;&gt;仕事&lt;/h2&gt;
+
+&lt;p&gt;今年はAndroidアプリエンジニアというよりはWebフロントエンドエンジニアとしての仕事が多かった。&lt;br /&gt;
+AndroidとWebフロントと掛け持ちしてるとタスク溢れが深刻なのでどうにかしたい。&lt;/p&gt;
+
+&lt;h3 id=&quot;2018年の後半から作っていたアプリがようやくリリースされた&quot;&gt;2018年の後半から作っていたアプリがようやくリリースされた&lt;/h3&gt;
+
+&lt;p&gt;長かった。実装に時間がかかったというよりはビジネス的なアレコレでのびのびになっていた感じ。&lt;br /&gt;
+Kotlin Multiplatform Projectで、Android/iOS向けに作ってます。
+プレゼンテーション層(ViewModel)より下はすべて共通コード。&lt;/p&gt;
+
+&lt;p&gt;内訳はおおよそこんな感じで、まあまあ頑張ったんではなかろうか&lt;/p&gt;
+
+&lt;blockquote class=&quot;twitter-tweet&quot;&gt;&lt;p lang=&quot;ja&quot; dir=&quot;ltr&quot;&gt;弊Kotlin Multiplatform Project(Android/iOS)のコード内訳です。Obj-CとJavaの部分は直接取り込む必要のあった外部ライブラリなのでそれは差っ引いてほしい。 &lt;a href=&quot;https://t.co/PX8nevjR4y&quot;&gt;pic.twitter.com/PX8nevjR4y&lt;/a&gt;&lt;/p&gt;&amp;mdash; せーい (@_yshrsmz) &lt;a href=&quot;https://twitter.com/_yshrsmz/status/1309068540180336640?ref_src=twsrc%5Etfw&quot;&gt;September 24, 2020&lt;/a&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;ちょっと詳しい解説は&lt;a href=&quot;https://www.yslibrary.net/2020/12/26/review-kmp-in-production/&quot;&gt;こちら&lt;/a&gt;にまとめている。&lt;br /&gt;
+どうでもいいけど、↑この記事は勉強会で話した内容をベースに書いた。発表するにあたって構成はちゃんとまとめてあるので、記事自体は結構な速度で書くことができ、よい感じだった。&lt;br /&gt;
+来年はもうちょっと発表の機会を増やして、発表ベースでブログ書いていってもいいかもしれない。&lt;/p&gt;
+
+&lt;h3 id=&quot;nuxtjsで記事メディアの立ち上げ&quot;&gt;Nuxt.jsで記事メディアの立ち上げ&lt;/h3&gt;
+
+&lt;p&gt;4-5月にかけてシュッと作った。&lt;br /&gt;
+Nuxt.jsの静的サイト生成モードで出力して、S3にデプロイする感じ。&lt;/p&gt;
+
+&lt;p&gt;AndroidDagashiとほぼ同じ実装でやってるのでそこまで悩むことはなかったけど、仕事としてWebフロントエンドやるのは6年ぶりなのでまあ緊張した。&lt;/p&gt;
+
+&lt;p&gt;デプロイの最適化とかまだまだできることはあるので引き続きやっていく。&lt;/p&gt;
+
+&lt;h3 id=&quot;nuxtjsで既存サービスのリニューアル進行中&quot;&gt;Nuxt.jsで既存サービスのリニューアル(進行中)&lt;/h3&gt;
+
+&lt;p&gt;古いSpring Bootで書かれた8年もののサービスを今風な技術スタックで書き直そうぜ！　というプロジェクト。&lt;br /&gt;
+ざっくり言うと既存のサーバサイドはGraphQL APIに書き直して、フロントエンドはNuxt.jsでSSRしよう、という感じ。&lt;/p&gt;
+
+&lt;p&gt;昨今のWebフロントエンドは本当に求められるものが多いなあ、AWS完全に理解した、とか言いながらいろいろやっている。&lt;/p&gt;
+
+&lt;p&gt;趣味で始めたことを仕事に転用して、更にそこからステップアップして、といい感じで趣味と実益を兼ねられていて大変良い流れになっている気がしている。&lt;/p&gt;
+
+&lt;h2 id=&quot;個人プロジェクト&quot;&gt;個人(プロジェクト)&lt;/h2&gt;
+
+&lt;p&gt;やっぱ本業のほうがある程度忙しいと個人開発まで頭がまわらないなー、と改めて感じた一年だった。&lt;br /&gt;
+コロナ禍で外に出る機会が減って体力が落ちてるのもあるとは思うけど。&lt;/p&gt;
+
+&lt;h3 id=&quot;monotweetyがtwitter-apiのアクセス制限された&quot;&gt;MonotweetyがTwitter APIのアクセス制限された&lt;/h3&gt;
+
+&lt;p&gt;お前のクライアントからスパムっぽいツイート多いんだが、と神は仰せです。&lt;/p&gt;
+
+&lt;p&gt;Twitterの対応には若干うんざりしつつもいい機会なので、１から書き直してみた。 
+RxJavaからKotlin Coroutinesにしてみたり、プレゼンテーション層をMVIにしてみたり。&lt;br /&gt;
+開発開始が2016年だから、今となっては古い思想で作っているコードも多くて自分のコードながらなかなか新鮮だった。&lt;/p&gt;
+
+&lt;p&gt;TwitterKit for Androidからも移行しなきゃだと思ってたので、この機会に依存を削除。&lt;br /&gt;
+Twitter4Jを使うのもアレなので後述するTwitter APIクライアントライブラリを自作してみた。&lt;/p&gt;
+
+&lt;p&gt;スパム的なメンションを行えないようにフッターに&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@&lt;/code&gt;を入れられないようにしてみたけど、API開放したよって返信メールで「ツイートに含むメンションは一つまでにしろ」とか「自発メンションをするな」とか言われたのでbot運用で使ってるAPIキーと思われている可能性が微レ存。&lt;br /&gt;
+たしかにツイート作成以外のエンドポイントはほとんど使ってないから、スパムbotと思われても仕方ない見え方をしているかも。&lt;/p&gt;
+
+&lt;p&gt;そもそも&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@&lt;/code&gt;マークをツイートできないようにするか、あるいは定期的にタイムライン取得して普通のクライアントアプリに見えるようにしてみるとか、再公開にはもうちょい作業が必要そう。&lt;/p&gt;
+
+&lt;p&gt;Monotweetyは自分が使いたくて作っているものなので、公開した結果スパム認定されて自分も使えなくなってしまっては意味がない。そもそも公開停止して完全個人利用にしてしまうのもありかもしれない。&lt;/p&gt;
+
+&lt;h3 id=&quot;twitter4kt&quot;&gt;Twitter4kt&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/yshrsmz/twitter4kt&quot;&gt;https://github.com/yshrsmz/twitter4kt&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Monotweetyの件と関連して作り始めた自家製のTwitter APIクライアントライブラリ。&lt;br /&gt;
+OAuth周りとかリクエストの署名周りとか、仕様を調べながら実装してなかなかおもしろかった。&lt;/p&gt;
+
+&lt;p&gt;現状JVMしかないけど一応Kotlin Multiplatform Projectな構成で作っている。&lt;/p&gt;
+
+&lt;p&gt;とりあえず自分のニーズが満たせればいいのでサポートしてるエンドポイントは限られているけど、継続的にメンテして育てていけたらいいなあ、とは思っている。&lt;/p&gt;
+
+&lt;h2 id=&quot;個人生活&quot;&gt;個人(生活)&lt;/h2&gt;
+
+&lt;h3 id=&quot;新型コロナウィルス&quot;&gt;新型コロナウィルス&lt;/h3&gt;
+
+&lt;p&gt;幸い身近なところで感染している人は今のところいなそう。&lt;/p&gt;
+
+&lt;p&gt;勤務先的には今のところ週二回リモートワークが全体の方針だけど、相談して週一回くらいの出社にしている。&lt;/p&gt;
+
+&lt;p&gt;一番の懸念は運動量なのでなんとかしたいところ。&lt;/p&gt;
+
+&lt;p&gt;リングフィットアドベンチャーは続かないし、夜散歩は運動負荷的に足りるのか足りないのか…&lt;/p&gt;
+
+&lt;p&gt;妻も同じような働き方してるので四六時中一緒だけど、今のところ仲良くやっている。&lt;br /&gt;
+同じAndroidアプリエンジニアだったりするので、お互いの仕事が何となくわかってかつ共通の話題が多いのもプラスに働いてるのかも。&lt;/p&gt;
+
+&lt;h3 id=&quot;フェレットが死んだ&quot;&gt;フェレットが死んだ&lt;/h3&gt;
+
+&lt;p&gt;ちょうど(と言っていいのかはアレだけど)コロナ禍でほぼリモートワークだったのが幸いして看病できたし、看取ることもできた。&lt;br /&gt;
+例年通りに通勤していたら彼はもっと早くに死んでいただろうし、死の過程を見届けることもできなかっただろう。&lt;/p&gt;
+
+&lt;p&gt;8月9日(日)、およそ7年半。インスリノーマだった。&lt;br /&gt;
+8月8日の朝から意識はあるけどご飯は全然食べない、という状態だった。夜妻が様子を見に行ったらベッドの外でまばたきもせずぐったりしていた。口元にウェットフードを持っていっても、いつもなら目の色を変えてがっついていたペーストを持っていっても反応しない。&lt;/p&gt;
+
+&lt;p&gt;ああ、その時が来たんだな、と思った。&lt;/p&gt;
+
+&lt;p&gt;それからは妻と交代で見守って、8月9日の17時くらいに亡くなった。&lt;br /&gt;
+言い方は悪いけど面白いもので、私がちょっとポテチ食べたいなーと思ってリビングに行って15〜30分くらい目を離している隙に逝ってしまった。ポテチ食べながら妻と「結構体力あったんだねー」なんて話していたというのに。&lt;/p&gt;
+
+&lt;p&gt;ケージの前に戻ったら明らかにお腹が動いてなくて、触っても鼓動もなくて息もしてなくて。&lt;br /&gt;
+抱き上げて妻を呼んで、「がんばったねえ」とか言いながらちょっと泣いてしまった。&lt;/p&gt;
+
+&lt;p&gt;すぐにからだを拭いて、発泡スチロールの箱に保冷剤と一緒に入れた。本当に偶然なんだけど、ちょうどその日にまとめ買いしていた冷凍ラムチョップが届いていたので程よい大きさの発泡スチロールの箱が手元にあったのだ。
+そしてその日のうちに火葬の予約を入れて、次の日に火葬。翌週の動物病院の予約をキャンセルしたりもした。&lt;/p&gt;
+
+&lt;p&gt;火葬は専用のトラックに来てもらって、近所の道路上でやってもらう感じだった。一時間もかからないで真っ白い骨になって、小さな骨壷に収まってしまった。&lt;/p&gt;
+
+&lt;p&gt;ちょうど三連休の中日に逝き、翌日葬儀の都合もついて、しかも都合のいいことに保冷用の発泡スチロール箱まであって、と本当に最後の段取りがうまいフェレットだった。こんな偶然、なかなかない。&lt;/p&gt;
+
+&lt;p&gt;いろいろ不出来な飼い主だったけど、彼と過ごした七年半はとてもよいものだった。ありがとう。&lt;/p&gt;
+
+&lt;h4 id=&quot;後日談&quot;&gt;後日談&lt;/h4&gt;
+
+&lt;p&gt;フェレットの死後一瞬間くらいの間に、夜の散歩中にハクビシンとアライグマを、日中にたぬきを見かけた。&lt;br /&gt;
+コロナ禍に入ってから夜散歩をするのが趣味で、ハクビシンは今年に入って一度見かけたことがあるけど、アライグマとたぬきは初めてだった。&lt;br /&gt;
+特に信仰のない私でも霊的なものの存在を信じてしまいそうになるようなタイミングだった。&lt;br /&gt;
+「寂しくないように送ってくれたのかねえ」、なんて妻と言い合ったりした。&lt;/p&gt;
+
+&lt;h3 id=&quot;猫が増えた&quot;&gt;猫が増えた&lt;/h3&gt;
+
+&lt;blockquote class=&quot;twitter-tweet&quot;&gt;&lt;p lang=&quot;und&quot; dir=&quot;ltr&quot;&gt;&lt;a href=&quot;https://twitter.com/hashtag/%E3%81%BE%E3%81%9F%E8%88%8C%E3%81%97%E3%81%BE%E3%81%84%E5%BF%98%E3%82%8C%E3%81%A6%E3%82%8B?src=hash&amp;amp;ref_src=twsrc%5Etfw&quot;&gt;#また舌しまい忘れてる&lt;/a&gt; &lt;a href=&quot;https://t.co/0CfsBTpmey&quot;&gt;pic.twitter.com/0CfsBTpmey&lt;/a&gt;&lt;/p&gt;&amp;mdash; せーい (@_yshrsmz) &lt;a href=&quot;https://twitter.com/_yshrsmz/status/1343545702702411784?ref_src=twsrc%5Etfw&quot;&gt;December 28, 2020&lt;/a&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;増えたと言うか増やした。
+フェレット死んだあとシャム猫？をひろう夢を見たのがきっかけ(今思うと”シャム猫”というよりはシルバーミットだったんだと思う)。&lt;/p&gt;
+
+&lt;p&gt;しばらく散歩がてら探してたけどその子とは巡り会えず(かわりにハクビシンやらアライグマやらたぬきには遭遇したけど)、そうこうしているうちにあれやこれやで保護猫カフェから引き取ることになった。&lt;/p&gt;
+
+&lt;p&gt;キジトラ中毛ボブテイルな女の子で、うちにはいなかったタイプで大変かわいい。&lt;/p&gt;
+
+&lt;p&gt;子猫はマジでエンタメだしいろんなことやらかす天然のデバッガーだしで日々楽しいと同時に忙しい。&lt;/p&gt;
+
+&lt;p&gt;先住には色々な面でストレスになってそうなのでうまいことフォローしていってあげたい。&lt;/p&gt;
+
+&lt;h3 id=&quot;アボカド育て始めた&quot;&gt;アボカド育て始めた&lt;/h3&gt;
+
+&lt;p&gt;初夏くらいからアボカドを育てている。&lt;br /&gt;
+スターバックスのフラペチーノ用容器で水耕栽培からはじめ、つい最近ベラボン+ガラス鉢に植え替えた。&lt;br /&gt;
+作業机の近くの窓辺に置いて毎日見守っていると、不思議と情が湧いてくる。&lt;/p&gt;
+
+&lt;p&gt;発芽までは１ヶ月から２ヶ月くらいかかるけど、一度芽が出るとわりとすくすく育つ。&lt;/p&gt;
+
+&lt;blockquote class=&quot;twitter-tweet&quot;&gt;&lt;p lang=&quot;ja&quot; dir=&quot;ltr&quot;&gt;コロナ禍始まってから育て始めたアボカド。最初は水耕栽培で、今はベラボン。少猫がマジでヤンチャで右側は若葉をかじられてしまった… &lt;a href=&quot;https://t.co/8mL9ZBjhHo&quot;&gt;pic.twitter.com/8mL9ZBjhHo&lt;/a&gt;&lt;/p&gt;&amp;mdash; せーい (@_yshrsmz) &lt;a href=&quot;https://twitter.com/_yshrsmz/status/1344517348032581632?ref_src=twsrc%5Etfw&quot;&gt;December 31, 2020&lt;/a&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;ただ分別のない子猫と共生させるのはむずかしい。&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;そんなこんなな2020年でした。&lt;/p&gt;
+
+&lt;p&gt;来年もやっていきましょう。&lt;/p&gt;</content><author><name></name></author><category term="diary" /><category term="diary" /><summary type="html">2020年を振り返るよ。 買ってよかったもののまとめはこちら</summary></entry><entry><title type="html">2020年買ってよかったもの</title><link href="https://www.yslibrary.net/2020/12/28/bestbuy2020/" rel="alternate" type="text/html" title="2020年買ってよかったもの" /><published>2020-12-28T00:00:00+00:00</published><updated>2020-12-28T00:00:00+00:00</updated><id>https://www.yslibrary.net/2020/12/28/bestbuy2020</id><content type="html" xml:base="https://www.yslibrary.net/2020/12/28/bestbuy2020/">&lt;p&gt;買ってよかったもの振り返るよ。&lt;br /&gt;
+タイトルがリンクになってます。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;目次&lt;/strong&gt;&lt;/p&gt;
+&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#生活&quot; id=&quot;markdown-toc-生活&quot;&gt;生活&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#casio-privia-px-s1000bk88鍵盤-電子ピアノ&quot; id=&quot;markdown-toc-casio-privia-px-s1000bk88鍵盤-電子ピアノ&quot;&gt;CASIO Privia PX-S1000BK(88鍵盤 電子ピアノ)&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#ソファ&quot; id=&quot;markdown-toc-ソファ&quot;&gt;ソファ&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#棚付き昇降式テーブル-幅120cm&quot; id=&quot;markdown-toc-棚付き昇降式テーブル-幅120cm&quot;&gt;棚付き昇降式テーブル 幅120cm&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#コレス-コーングラインダー-シルバー-c330&quot; id=&quot;markdown-toc-コレス-コーングラインダー-シルバー-c330&quot;&gt;コレス コーングラインダー シルバー C330&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#postcoffee&quot; id=&quot;markdown-toc-postcoffee&quot;&gt;PostCoffee&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#niid-x-urbanature-クロスボディバッグ-防水-radiant-urban-sling-r1&quot; id=&quot;markdown-toc-niid-x-urbanature-クロスボディバッグ-防水-radiant-urban-sling-r1&quot;&gt;NIID X URBANATURE クロスボディバッグ 防水 Radiant Urban Sling R1&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#ガジェット&quot; id=&quot;markdown-toc-ガジェット&quot;&gt;ガジェット&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#amazonベーシック-モニターアーム-デュアル-ディスプレイタイプ&quot; id=&quot;markdown-toc-amazonベーシック-モニターアーム-デュアル-ディスプレイタイプ&quot;&gt;Amazonベーシック モニターアーム デュアル ディスプレイタイプ&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#オカムラ-オフィスチェア-シルフィ-エキストラハイバック-メッシュ-アジャストアーム-樹脂脚-ブラックフレーム&quot; id=&quot;markdown-toc-オカムラ-オフィスチェア-シルフィ-エキストラハイバック-メッシュ-アジャストアーム-樹脂脚-ブラックフレーム&quot;&gt;オカムラ オフィスチェア シルフィ― エキストラハイバック メッシュ アジャストアーム 樹脂脚 ブラックフレーム&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#jvc-sp-a7wt-b-nagaraku-ウェアラブルネックスピーカー&quot; id=&quot;markdown-toc-jvc-sp-a7wt-b-nagaraku-ウェアラブルネックスピーカー&quot;&gt;JVC SP-A7WT-B NAGARAKU ウェアラブルネックスピーカー&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#xperia-5-ii&quot; id=&quot;markdown-toc-xperia-5-ii&quot;&gt;Xperia 5 II&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#moonlander左右分割キーボード&quot; id=&quot;markdown-toc-moonlander左右分割キーボード&quot;&gt;Moonlander(左右分割キーボード)&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;生活&quot;&gt;生活&lt;/h2&gt;
+
+&lt;h3 id=&quot;casio-privia-px-s1000bk88鍵盤-電子ピアノ&quot;&gt;&lt;a href=&quot;https://amzn.to/2KD0nlm&quot;&gt;CASIO Privia PX-S1000BK(88鍵盤 電子ピアノ)&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;せっかく家にいる時間が増えたので楽器でもやろうと思って購入。&lt;br /&gt;
+鍵盤もそこそこ重くていい感じ。&lt;/p&gt;
+
+&lt;p&gt;フルートやってたので楽譜は読めたけど、やっぱり複数音が出る楽器は難しい。&lt;/p&gt;
+
+&lt;h3 id=&quot;ソファ&quot;&gt;&lt;a href=&quot;https://netshop.shimachu.co.jp/shop/g/g054277-2100001439835-00/&quot;&gt;ソファ&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;ソファの座面と背もたれ部分が別れてて、好きなように配置することができる。何か作業するときは浅く座るようにもできるし、背もたれをどかせば簡単なベッドのようにも使える。&lt;/p&gt;
+
+&lt;h3 id=&quot;棚付き昇降式テーブル-幅120cm&quot;&gt;&lt;a href=&quot;https://www.dinos.co.jp/p/1904000381/&quot;&gt;棚付き昇降式テーブル 幅120cm&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;昇降式テーブルはいいぞ。&lt;br /&gt;
+食事中は低くできるし、作業時には高くできる。棚があるのでテーブルの上をきれいに保つこともできる(保てるとは言っていない)。&lt;/p&gt;
+
+&lt;h3 id=&quot;コレス-コーングラインダー-シルバー-c330&quot;&gt;&lt;a href=&quot;https://amzn.to/2L0FkJg&quot;&gt;コレス コーングラインダー シルバー C330&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;買ったというか妻から誕生日プレゼントでもらった。&lt;br /&gt;
+付属のコンテナ？はプラ製で帯電してしまうのが玉に瑕。我が家では陶器製のマグカップで代用している。&lt;/p&gt;
+
+&lt;p&gt;毎日朝昼コーヒー豆挽いて飲んでいるけど、メンテナンスもしやすいし大変よい。&lt;/p&gt;
+
+&lt;h3 id=&quot;postcoffee&quot;&gt;&lt;a href=&quot;https://postcoffee.co/&quot;&gt;PostCoffee&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;コーヒー関連でこれも。&lt;br /&gt;
+月に一回か二回、コーヒー豆を届けてくれるサービス。&lt;/p&gt;
+
+&lt;p&gt;届いたコーヒーに対して感想をつけていくと次第に自分好みのコーヒー豆が届くようになっていく。&lt;br /&gt;
+一度の配達で三種類の豆が来るので、色々楽しめていい感じ。&lt;/p&gt;
+
+&lt;h3 id=&quot;niid-x-urbanature-クロスボディバッグ-防水-radiant-urban-sling-r1&quot;&gt;&lt;a href=&quot;https://amzn.to/38EwcT5&quot;&gt;NIID X URBANATURE クロスボディバッグ 防水 Radiant Urban Sling R1&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;一目惚れしてKickstarterで支援したものが届いた。&lt;br /&gt;
+ギリギリiPad Proの11inchが入るくらいのサイズ感。&lt;/p&gt;
+
+&lt;p&gt;サイドポケットやら底面のベルトやら、細かいギミックが好き。&lt;br /&gt;
+NIIDのバッグはどれもスタイリッシュでお気に入りのブランドの一つ。&lt;/p&gt;
+
+&lt;h2 id=&quot;ガジェット&quot;&gt;ガジェット&lt;/h2&gt;
+
+&lt;h3 id=&quot;amazonベーシック-モニターアーム-デュアル-ディスプレイタイプ&quot;&gt;&lt;a href=&quot;https://amzn.to/3psKj4G&quot;&gt;Amazonベーシック モニターアーム デュアル ディスプレイタイプ&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;これと&lt;a href=&quot;https://amzn.to/37PsGpz&quot;&gt;Amazonベーシック モニターアーム ノートパソコン用 アーム マウントトレー&lt;/a&gt;をあわせて使っている。&lt;/p&gt;
+
+&lt;p&gt;机の上を広く使いたくて導入。最初はモニターアーム+ノートPCスタンドで運用してたけど、ノートPCもアームで支持するようにしたら捗るんじゃないかと思い立ってデュアルアームに変更。&lt;/p&gt;
+
+&lt;p&gt;机の上は広く使えるようになったけど、残念ながらその分置くものも増えてきれいになったようには見えない。&lt;br /&gt;
+ケーブル類の整理が来年の課題。天板の下も有効活用していきたい。&lt;/p&gt;
+
+&lt;h3 id=&quot;オカムラ-オフィスチェア-シルフィ-エキストラハイバック-メッシュ-アジャストアーム-樹脂脚-ブラックフレーム&quot;&gt;&lt;a href=&quot;https://amzn.to/3nSQ1wk&quot;&gt;オカムラ オフィスチェア シルフィ― エキストラハイバック メッシュ アジャストアーム 樹脂脚 ブラックフレーム&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;4月くらいに首と腰の調子がめちゃくちゃ悪くなったタイミングで購入。&lt;br /&gt;
+それまでがパイプ椅子に毛が生えたくらいの椅子だったから調子悪くなるのも当たり前。&lt;/p&gt;
+
+&lt;p&gt;ホントならヘッドレストがもう少し調整できるやつとかじっくり検討したかったけど、最速で届いてそこそこ性能のいいやつの中から選んでこれにした。トータルでは満足している。&lt;/p&gt;
+
+&lt;h3 id=&quot;jvc-sp-a7wt-b-nagaraku-ウェアラブルネックスピーカー&quot;&gt;&lt;a href=&quot;https://amzn.to/2Jnudd2&quot;&gt;JVC SP-A7WT-B NAGARAKU ウェアラブルネックスピーカー&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;リモートワークの強い味方。&lt;br /&gt;
+メガネをしている関係でヘッドホン系は長時間つけられないし、イヤホンタイプのやつも耳が痛くなるからやはり長時間は無理。&lt;/p&gt;
+
+&lt;p&gt;家の中で使うぶんには音漏れを気にする必要はないので重宝している。&lt;br /&gt;
+首元にスピーカーがあるので、ある程度音を絞れば別の部屋から聞こえる心配もほぼない。&lt;br /&gt;
+音質はそこそこだけど主にビデオ会用なので特に気にしてない。&lt;/p&gt;
+
+&lt;p&gt;バッテリーもスペック上は連続15時間いけることになっているし、実際仕事で一日つけっぱなしにしていて充電が追加で必要になったことはない。&lt;/p&gt;
+
+&lt;p&gt;唯一の欠点は充電がMicro USBな点。&lt;/p&gt;
+
+&lt;h3 id=&quot;xperia-5-ii&quot;&gt;Xperia 5 II&lt;/h3&gt;
+
+&lt;p&gt;今年はOnePlus 8 ProとかRakuten Miniとかスマホはいくつか買ったけど、ダントツでXperia 5 IIが良かった。&lt;/p&gt;
+
+&lt;p&gt;OnePlus 8 Proは5GHzのWiFiになかなか繋がらず、繋がってもすぐに2.5GHzに切り替わってしまったりしてストレスマックスだったし、Rakuten Miniはそもそもメイン端末にできるようなスペックじゃないし。OnePlus 8 ProメインでSuica用にRakuten Mini持てばいいかなーって思ってたけどやはり二台持ちは面倒くさいということに気づいてXperia 5 IIを選択。&lt;/p&gt;
+
+&lt;p&gt;手にちょうど収まる大きさで、持った瞬間「ああ、OnePlu 8 Proって重かったんだな」と実感した。やっぱり最近のスマホは大きくなりすぎている…&lt;/p&gt;
+
+&lt;h3 id=&quot;moonlander左右分割キーボード&quot;&gt;&lt;a href=&quot;https://www.zsa.io/moonlander&quot;&gt;Moonlander(左右分割キーボード)&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;久しぶり既製品キーボード。ErgoDox EZでおなじみのメーカーさん。&lt;br /&gt;
+サムクラスタがチルトできたり、折りたたみ式のパームレストが本体にくっついてたり野心的。&lt;/p&gt;
+
+&lt;blockquote class=&quot;twitter-tweet&quot;&gt;&lt;p lang=&quot;ja&quot; dir=&quot;ltr&quot;&gt;久しぶりの既製品左右分割キーボード、Moonlander。折り畳めるパームレストが本体についてたりサムクラスタがチルトできたりして結構良い。ファームウェアはqmk! &lt;a href=&quot;https://t.co/yFQTKIJthm&quot;&gt;pic.twitter.com/yFQTKIJthm&lt;/a&gt;&lt;/p&gt;&amp;mdash; せーい (@_yshrsmz) &lt;a href=&quot;https://twitter.com/_yshrsmz/status/1343512391162589192?ref_src=twsrc%5Etfw&quot;&gt;December 28, 2020&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async=&quot;&quot; src=&quot;https://platform.twitter.com/widgets.js&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;
+
+&lt;p&gt;キースイッチのホットスワップにも対応。&lt;br /&gt;
+qmk_firmwareでカスタマイズ性担保しつつも、簡単なのであれば専用のグラフィカルなUIからキーマップ作れるのもよい。&lt;/p&gt;</content><author><name></name></author><category term="diary" /><category term="diary" /><category term="bestbuy" /><summary type="html">買ってよかったもの振り返るよ。 タイトルがリンクになってます。</summary></entry><entry><title type="html">Kotlin Multiplatform Projectを導入してみて</title><link href="https://www.yslibrary.net/2020/12/26/review-kmp-in-production/" rel="alternate" type="text/html" title="Kotlin Multiplatform Projectを導入してみて" /><published>2020-12-26T00:00:00+00:00</published><updated>2020-12-26T00:00:00+00:00</updated><id>https://www.yslibrary.net/2020/12/26/review-kmp-in-production</id><content type="html" xml:base="https://www.yslibrary.net/2020/12/26/review-kmp-in-production/">&lt;p&gt;本記事は&lt;a href=&quot;https://qiita.com/advent-calendar/2020/android&quot;&gt;Android Advent Calendar 2020&lt;/a&gt;の24日目です。&lt;/p&gt;
+
+&lt;p&gt;この記事は某勉強会で発表したもののトランスクリプト＋αです。&lt;/p&gt;
+
+&lt;p&gt;実際に仕事のAndroidアプリでKotlin Multiplatform Project(以後KMP)を導入してみてどんな感じだったか、というのをまとめていきます。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;目次&lt;/strong&gt;&lt;/p&gt;
+&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#前提&quot; id=&quot;markdown-toc-前提&quot;&gt;前提&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#コード割合&quot; id=&quot;markdown-toc-コード割合&quot;&gt;コード割合&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#アーキテクチャ&quot; id=&quot;markdown-toc-アーキテクチャ&quot;&gt;アーキテクチャ&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#レポジトリ構成&quot; id=&quot;markdown-toc-レポジトリ構成&quot;&gt;レポジトリ構成&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#ci&quot; id=&quot;markdown-toc-ci&quot;&gt;CI&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#kmpコードのアーキテクチャ&quot; id=&quot;markdown-toc-kmpコードのアーキテクチャ&quot;&gt;KMPコードのアーキテクチャ&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#viewmodelのインターフェイス&quot; id=&quot;markdown-toc-viewmodelのインターフェイス&quot;&gt;ViewModelのインターフェイス&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#共通化できないコードを共通コードで使う&quot; id=&quot;markdown-toc-共通化できないコードを共通コードで使う&quot;&gt;共通化できないコードを共通コードで使う&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#利用しているkmpのライブラリ&quot; id=&quot;markdown-toc-利用しているkmpのライブラリ&quot;&gt;利用しているKMPのライブラリ&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#kmpのメリット&quot; id=&quot;markdown-toc-kmpのメリット&quot;&gt;KMPのメリット&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#使い慣れた言語で書ける&quot; id=&quot;markdown-toc-使い慣れた言語で書ける&quot;&gt;使い慣れた言語で書ける&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#工数削減&quot; id=&quot;markdown-toc-工数削減&quot;&gt;工数削減&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#用語仕様に差が生まれない&quot; id=&quot;markdown-toc-用語仕様に差が生まれない&quot;&gt;用語/仕様に差が生まれない&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#viewを各プラットフォームで書ける&quot; id=&quot;markdown-toc-viewを各プラットフォームで書ける&quot;&gt;Viewを各プラットフォームで書ける&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#導入する範囲を選べる&quot; id=&quot;markdown-toc-導入する範囲を選べる&quot;&gt;導入する範囲を選べる&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#kmpのデメリット&quot; id=&quot;markdown-toc-kmpのデメリット&quot;&gt;KMPのデメリット&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#学習コスト&quot; id=&quot;markdown-toc-学習コスト&quot;&gt;学習コスト&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#kmpはまだα版&quot; id=&quot;markdown-toc-kmpはまだα版&quot;&gt;KMPはまだα版&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#まとめ&quot; id=&quot;markdown-toc-まとめ&quot;&gt;まとめ&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#kmpを使ってよかったか&quot; id=&quot;markdown-toc-kmpを使ってよかったか&quot;&gt;KMPを使ってよかったか&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#kmpをおすすめできるか&quot; id=&quot;markdown-toc-kmpをおすすめできるか&quot;&gt;KMPをおすすめできるか&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;前提&quot;&gt;前提&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;チーム構成: Android、iOS、デザイナー、バックエンド、各一人ずつ&lt;/li&gt;
+  &lt;li&gt;API: GraphQL&lt;/li&gt;
+  &lt;li&gt;参照系がメインのシンプルなアプリ&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;コード割合&quot;&gt;コード割合&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://lh3.googleusercontent.com/pw/ACtC-3fwBbQWoRzuihsoRs_IcPmqPuavNS4U0zCf0bPu_NVFv0iHFm9-taKVmMeVYJrYtyKjZzwBGU4LRZp8cDxnnkmihNnjnP9hW3pyh2XjGLgJMDNHDdgAq51tpCBXYz1vmF1uK_k06bQVNBlDeHKRvutCbQ=w616-h314-no?authuser=0&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;GitHubのコード割合的にはこんな感じです。Kotlinが48%。
+ただこれだとノイズが多いので、もう少しシンプルにしてみましょう。&lt;/p&gt;
+
+&lt;p&gt;まず、Objective-CとJavaは古の社内ライブラリなので除外します。&lt;br /&gt;
+その他、レイアウトファイルやら設定ファイルやら諸々も除外して、純粋にKotlinとSwiftの行数のみで比較してみます。&lt;br /&gt;
+そうすると、こんな感じになります。&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;区分&lt;/th&gt;
+      &lt;th&gt;割合&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;KMP&lt;/td&gt;
+      &lt;td&gt;68%&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Android(Kotlin)&lt;/td&gt;
+      &lt;td&gt;16%&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;iOS(Swift)&lt;/td&gt;
+      &lt;td&gt;16%&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;全体のおよそ7割がKotlinで書かれた共通コードです。&lt;br /&gt;
+この数字はiOS/Android合わせた全体に対しての比率なので、各OS毎で計算すると8割近くが共通コードとなっています。&lt;/p&gt;
+
+&lt;h2 id=&quot;アーキテクチャ&quot;&gt;アーキテクチャ&lt;/h2&gt;
+
+&lt;h3 id=&quot;レポジトリ構成&quot;&gt;レポジトリ構成&lt;/h3&gt;
+
+&lt;p&gt;レポジトリ構成はモノレポを採用しています。KMP, Android, iOSすべてのコードを一つのレポジトリで管理している、ということです。&lt;/p&gt;
+
+&lt;p&gt;モノレポを採用している理由はいくつかあるのですが、一番大きいのは「共通コードの読み込みが簡単」というものです。&lt;/p&gt;
+
+&lt;p&gt;モノレポじゃない選択肢としてKMP, Android, iOSをそれぞれ別個のレポジトリで管理する、というものも考えられます。&lt;br /&gt;
+しかし、その場合だとKMPの成果物を各OSのレポジトリから使用する際にひと手間必要になってきます。&lt;/p&gt;
+
+&lt;p&gt;git submoduleで読み込むのか&lt;/p&gt;
+
+&lt;p&gt;privateなMaven RepositoryやCocoaPods Repositoryを作るのか&lt;/p&gt;
+
+&lt;p&gt;あるいはsymlinkか…？&lt;/p&gt;
+
+&lt;p&gt;などなど。&lt;br /&gt;
+モノレポであればこういったことに悩む必要はありません。&lt;/p&gt;
+
+&lt;p&gt;今回のプロジェクトではAndroid/iOS間でのコード共有だけだったのでこの方針にしましたが、サーバサイドとのコード共有もしたい、とか要件が複雑になってきたらレポジトリの分割を検討してもいいと思います。&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;.
+├── android-features
+│   ├── common
+│   └── debugmenu
+├── androidApp
+├── core
+│   ├── base
+│   ├── di
+│   ├── model
+│   └── semver
+├── data
+│   ├── graphql-api
+│   ├── graphql-document
+│   ├── local
+│   ├── remote
+│   └── repository
+├── domain
+├── features
+│   ├── domain
+│   └── presentation
+├── iosApp
+├── presentation
+│   ├── analytics
+│   ├── auth
+│   ├── build
+│   ├── error
+│   ├── message
+│   ├── presentation-all
+│   ├── presentation-base
+│   └── servicestatus
+└── testing
+    ├── annotation
+    └── mpp-test
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;ディレクトリ構成はおおよそこんな感じです。&lt;br /&gt;
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;android-features&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;androidApp&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;iosApp&lt;/code&gt;以外がKMPのモジュールです。&lt;/p&gt;
+
+&lt;p&gt;モノレポにした副次的なメリットとして、自分の直接担当してないOSのコードへのオーナーシップが生まれる、というのがありました。&lt;br /&gt;
+iOSの人が共通コードを書く際はKMPのコードとiOS側のコードが含まれるPRを作るわけで、そうすると自然とiOSのコードも読むようになります。次第にiOS側のコードに対する提案とか、もっと言うとKMPのコードに対応するAndroid/iOSのコードを両方とも一人で書いてしまう、ということも相互に発生するようになってきました。&lt;/p&gt;
+
+&lt;h3 id=&quot;ci&quot;&gt;CI&lt;/h3&gt;
+
+&lt;p&gt;CIはbitriseを採用しています。設定は特に凝ったことをする必要はなくて、一つのレポジトリに対してAndroidとiOSのCI設定をそれぞれ行うだけです。&lt;/p&gt;
+
+&lt;p&gt;PRが作られたりコミットがpushされると、AndroidとiOSのビルドが同時並行で走ります。
+iOS向けのビルドではKotlin/Nativeのテストを行い、Android向けのビルドではKotlin/JVMのテストを行います。&lt;/p&gt;
+
+&lt;p&gt;iOSのビルドはどうしても時間がかかってしまうので、ktlintなど共通コード向けのLintはより軽量なAndroidのCIで実施しています。&lt;/p&gt;
+
+&lt;h3 id=&quot;kmpコードのアーキテクチャ&quot;&gt;KMPコードのアーキテクチャ&lt;/h3&gt;
+
+&lt;p&gt;全体的にはレイヤードアーキテクチャを採用しています。&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;+-----------+
+| ViewModel |
++-----------+
+    |  |
+    |  +----------+
+    V             V
++---------+   +---------+
+| UseCase |   | UseCase |
++---------+   +---------+
+    | |               |
+    | +------------+  |
+    V              V  V
++------------+   +------------+
+| Repository |   | Repository |
++------------+   +------------+
+    |  |                    |
+    |  +---------------+    +-----...
+    V                  V
++------------+   +-----------+
+| RemoteData |   | LocalData |
++------------+   +-----------+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;クラスの依存グラフはおおよそこんな感じになっています。レイヤードアーキテクチャのよくある構成になっているのではないかと思います。&lt;/p&gt;
+
+&lt;p&gt;プレゼンテーション層から下はすべてKMPで書かれた共通コードです。&lt;br /&gt;
+逆に言うと、OS固有のコードは基本的にActivityとかViewControllerとか、View層のものだけになっています。&lt;/p&gt;
+
+&lt;p&gt;データ層のみKMPで共通化、とか色々共通化の度合いに選択肢はあったのですが、せっかくの新規アプリなので「KMPでどこまでできるのか」を確かめる意味合いも含めてこのような決断をしました。&lt;/p&gt;
+
+&lt;p&gt;色々難しい点もありましたが、共通コードの割合も前述の通りかなりいい線いってますし、結果的に良かったのではないかと考えています。&lt;/p&gt;
+
+&lt;h3 id=&quot;viewmodelのインターフェイス&quot;&gt;ViewModelのインターフェイス&lt;/h3&gt;
+
+&lt;p&gt;さて、プレゼンテーション層より下はすべて共通コード、としたことで各OS側から意識する必要のあるKMPのコードは基本的にViewModelだけにすることができました。&lt;/p&gt;
+
+&lt;p&gt;ではViewModelは一体どんなインターフェイスになっているのでしょうか。&lt;/p&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// MviViewModelはAndroid側ではandroidxのViewModelを継承している&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;abstract&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MviViewModel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;INTENT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ACTION&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;STATE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;EFFECT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ViewModel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;state&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;STATE&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;states&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Flow&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;STATE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;effects&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Flow&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;EFFECT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;dispatch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;intent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;INTENT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;onCleared&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;擬似コードですが、ざっくり上記がViewModelのインターフェイスです。&lt;/p&gt;
+
+&lt;p&gt;今回のアプリではプレゼンテーション層のデザインパターンとしてMVI(Model-View-Intent)を採用しています。&lt;br /&gt;
+MVIについての詳細な説明は他の詳しい記事に譲りますが、下記のような特徴があります。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;単方向データフロー&lt;/li&gt;
+  &lt;li&gt;ImmutableなState&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;誤解を承知で大変ざっくり言ってしまうと、画面毎にReduxをする、というのが結構近い表現なのかなと思います。&lt;/p&gt;
+
+&lt;p&gt;よく見かけるMVIのパターンに追加して、今回のアプリでは &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Effect&lt;/code&gt; というものを追加しています。&lt;br /&gt;
+これはToastやDialogの表示、あるいは画面遷移イベントなど、一時的なイベントをViewに通知するための仕組みです。&lt;br /&gt;
+こういったイベント類をStateに含んでしまうと管理が複雑になってしまいがちなので、別物として扱っています。&lt;/p&gt;
+
+&lt;p&gt;上記のコードを見ていただくと、&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Effect&lt;/code&gt;は&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Event&lt;/code&gt;というクラスでラップされています。この&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Event&lt;/code&gt;クラスは、Android界隈でよく話題になる、&lt;a href=&quot;https://medium.com/androiddevelopers/livedata-with-snackbar-navigation-and-other-events-the-singleliveevent-case-ac2622673150&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SingleLiveEvent&lt;/code&gt;問題に対応するためのクラス&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;最近はStateFlowやSharedFlowが追加されこの辺の問題にも新たなアプローチが追加されそうですが、Flowを使っているからといってこの問題が100%解決できるわけではありません。そのため、本アプリでは今のところ&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Event&lt;/code&gt;ラッパーを利用して同じイベントが再通知されることを防いでいます。&lt;/p&gt;
+
+&lt;p&gt;全体的な処理の流れは下記のようになります。&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Viewから&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dispatch&lt;/code&gt;メソッドを通じてイベント(Intent)がViewModelに通知される&lt;/li&gt;
+  &lt;li&gt;ViewModelは通知されたイベントをもとに対応する処理を行い、新しいStateやEffectをFlowに流す&lt;/li&gt;
+  &lt;li&gt;Viewは購読しているStateやEffectのFlowから新しいState/Effectを受け取り、状態を更新する&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h4 id=&quot;iosからの使い方&quot;&gt;iOSからの使い方&lt;/h4&gt;
+
+&lt;p&gt;ViewModelのインターフェイスについて解説しましたが、ViewModelからの出力はkotlinx.coroutinesのFlowになっています。&lt;br /&gt;
+このFlow、iOSからはそのまま使うことができません。&lt;/p&gt;
+
+&lt;p&gt;そのため、下記のようなラッパークラスを用意してあげる必要があります。&lt;/p&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ViewModelAdapter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Intent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;STATE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;EFFECT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;(&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;viewModel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MviViewModel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;INTENT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;STATE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;EFFECT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;,&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;coroutineContext&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CoroutineContext&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CoroutineScope&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;coroutineContext&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;..&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;dispatch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;intent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;INTENT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;onStateChanged&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;callback&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;state&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;STATE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Unit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nf&quot;&gt;launch&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;viewModel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;states&lt;/span&gt;
+              &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;onEach&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;state&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;callback&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;state&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+              &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;collect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;onEffectReceived&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;callback&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;effect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;EFFECT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Unit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;onCleared&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;とまあこんな感じです。&lt;/p&gt;
+
+&lt;h3 id=&quot;共通化できないコードを共通コードで使う&quot;&gt;共通化できないコードを共通コードで使う&lt;/h3&gt;
+
+&lt;p&gt;各OS向けのライブラリとかOS固有の機能を共通側から使いたい場合もあります。&lt;br /&gt;
+たとえばFirebaseAnalyticsなどです。&lt;/p&gt;
+
+&lt;p&gt;こういった場合には下記の二種類の方法が考えられます。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;expect/actualを使う&lt;/li&gt;
+  &lt;li&gt;interfaceをKMP側で定義し、各プラットフォームで実装クラスを用意&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;どちらでも要件は達成できますが、テスト時にモックと入れ替えたりすることを考えるとinterfaceで用意するほうが楽です。&lt;br /&gt;
+&lt;a href=&quot;https://kotlinlang.org/docs/reference/mpp-connect-to-apis.html&quot;&gt;公式でもexpect/actualの利用は最小限に留めるよう推奨されている&lt;/a&gt;ので、本アプリでもそのようにしています。&lt;/p&gt;
+
+&lt;h3 id=&quot;利用しているkmpのライブラリ&quot;&gt;利用しているKMPのライブラリ&lt;/h3&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;ジャンル&lt;/th&gt;
+      &lt;th&gt;ライブラリ&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;DI&lt;/td&gt;
+      &lt;td&gt;Kodein&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;非同期/並列処理&lt;/td&gt;
+      &lt;td&gt;kotlinx.coroutines, CoroutineWorker, Stately&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;通信&lt;/td&gt;
+      &lt;td&gt;Ktor, kgql(GraphQL), kotlinx.serialization&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;ローカルキャッシュ&lt;/td&gt;
+      &lt;td&gt;sqldelight, multiplatform-settings&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;環境変数的なの&lt;/td&gt;
+      &lt;td&gt;BuildKonfig&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;ログ&lt;/td&gt;
+      &lt;td&gt;Napier&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h2 id=&quot;kmpのメリット&quot;&gt;KMPのメリット&lt;/h2&gt;
+
+&lt;h3 id=&quot;使い慣れた言語で書ける&quot;&gt;使い慣れた言語で書ける&lt;/h3&gt;
+
+&lt;p&gt;Androidエンジニアから見たらこれがかなり大きいでしょう。&lt;br /&gt;
+iOSエンジニアからすると、新言語という意味では他のクロスプラットフォームソリューションと大差ないかもしれません。SwiftとKotlinは似ているとよく言われますが、実際どうなんでしょうね。&lt;/p&gt;
+
+&lt;h3 id=&quot;工数削減&quot;&gt;工数削減&lt;/h3&gt;
+
+&lt;p&gt;本アプリでのケースではViewModel以下がすべて共通です。そのため、Android/iOSそれぞれ別で作っている場合と比べると、ViewModel以下の作成にかける工数が単純計算で半分ですみます(個人の感想です。実際の効果を保証するものではありません)。&lt;/p&gt;
+
+&lt;p&gt;自分がAndroidのViewを書いている間にiOSの人が別画面のViewModelを作っていて、AndroidのViewが書き終わったと思ったらAndroid担当は自分しかいないのに次の画面のViewModelがもう完成している、ということが実際にありました。&lt;/p&gt;
+
+&lt;p&gt;同じコードを共有するわけですからViewのコードも似通ったものになります。相互にコードを参考にしあったり実装の相談をしたり、ということもしやすいです。&lt;/p&gt;
+
+&lt;h3 id=&quot;用語仕様に差が生まれない&quot;&gt;用語/仕様に差が生まれない&lt;/h3&gt;
+
+&lt;p&gt;プレゼンテーション層が共通ですから、必然的に用語も同じになります。&lt;br /&gt;
+たとえばユーザのプロフィール画面がiOSでは&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AccountViewController&lt;/code&gt;でAndroidでは&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ProfileFragment&lt;/code&gt;、とか言うことは起きないわけです。ViewModelの名前が&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AccountViewModel&lt;/code&gt;だったら両OSともにそれに沿った名前になります。&lt;/p&gt;
+
+&lt;p&gt;ビジネス的に重要な部分も共通にできるので、入力フォームのバリデーションロジックがプラットフォームで異なるとか、ログの値や名称がプラットフォームで異なる、とかいう事態も回避することができます。&lt;/p&gt;
+
+&lt;p&gt;アプリ開発であるあるな「え、こんな機能あったんですか、Androidでは実装してないです…」も、共通部分のコードはAndroid/iOS両方のエンジニアがレビューしているはず、という前提に立てば基本的に発生しないはずです。&lt;/p&gt;
+
+&lt;h3 id=&quot;viewを各プラットフォームで書ける&quot;&gt;Viewを各プラットフォームで書ける&lt;/h3&gt;
+
+&lt;p&gt;これは考え方によるかもしれませんが、KMPでは基本的にViewを各プラットフォームで書くことになります。&lt;br /&gt;
+そのため、各OSの特性やデザインガイドラインを意識したUIを最適な方法で作ることができます。最新OSの機能も自由に使えるはずです。&lt;/p&gt;
+
+&lt;p&gt;KMPでもViewを共通化したい、という場合は現状すぐれた選択肢はないのですが、将来的にはJetpack Compose(というかJetBrains版のComposeというか)が対応するかもしれません&lt;/p&gt;
+
+&lt;h3 id=&quot;導入する範囲を選べる&quot;&gt;導入する範囲を選べる&lt;/h3&gt;
+
+&lt;p&gt;これも他のクロスプラットフォームソリューションと比べたときのメリットになると思います。&lt;/p&gt;
+
+&lt;p&gt;本アプリではできるだけたくさんのコードを共通化することを目標に開発していましたが、もちろんプロジェクトのニーズに応じて導入する範囲を選ぶことも可能です。&lt;br /&gt;
+たとえばリモートAPIクライアントだけKMPで書いてAndroid/iOS/Webフロントエンドで共有したい、とか。&lt;/p&gt;
+
+&lt;p&gt;KMPの成果物は、Androidからはjarやaar、iOSからはframework、JavaScriptからはnpmパッケージというように、各プラットフォームで自然に利用できる形で出力されます。&lt;br /&gt;
+使う側のコードでは特に込み入った設定は必要ないので、既存のプロジェクトでも比較的導入しやすいのではないかな、と思います。&lt;/p&gt;
+
+&lt;h2 id=&quot;kmpのデメリット&quot;&gt;KMPのデメリット&lt;/h2&gt;
+
+&lt;h3 id=&quot;学習コスト&quot;&gt;学習コスト&lt;/h3&gt;
+
+&lt;p&gt;デメリットという観点だと学習コストが一覧大きいでしょう。&lt;/p&gt;
+
+&lt;p&gt;まずiOSの人にKotlinを学んでもらう必要があります。&lt;/p&gt;
+
+&lt;p&gt;Androidエンジニアも、Kotlin普段遣いしているから楽勝、とはいきません。&lt;/p&gt;
+
+&lt;p&gt;Kotlin/Nativeには、マルチスレッド周りの挙動を中心に色々とKotlin/JVMとは異なる仕様がいくつかあります。&lt;br /&gt;
+Androidの感覚で並列処理を書いてしまうと、iOSでクラッシュするコードになってしまうことが多々あります。&lt;br /&gt;
+この特性を理解し、iOS(Kotlin/Native)で動くことをテスト等で確認しながら開発を進めていく必要があります。ちなみにiOSでちゃんと動けば基本的にAndroidでもちゃんと動きます。&lt;/p&gt;
+
+&lt;p&gt;日本語の資料がまだ少ない、というのも人によっては障害になるでしょう。&lt;br /&gt;
+英語の資料はそこそこありますし、Kotlin公式Slackでは活発にやり取りが行われているので、英語でのコミュケーションができれば必要な知識はだいたい揃います。&lt;br /&gt;
+GitHub/YouTrackのissueを読むのも色々な不具合をしらべる有効な手立てです。&lt;/p&gt;
+
+&lt;h3 id=&quot;kmpはまだα版&quot;&gt;KMPはまだα版&lt;/h3&gt;
+
+&lt;p&gt;NetflixやDropboxをはじめ、本番環境に導入している企業が多いので忘れてしまいがちですが、KMPはまだα版です。&lt;br /&gt;
+破壊的変更もしばしばあります。&lt;/p&gt;
+
+&lt;p&gt;最近だと、Kotlin 1.4.0に対応するKtorのリリースで、いきなりマルチスレッド対応版のkotlinx.coroutinesが必須になったことは記憶に新しいです。&lt;/p&gt;
+
+&lt;p&gt;将来的にKotlin/Nativeのメモリ管理モデルが完全にリプレースされることが予告されている点も、α版感あふれる事項です。&lt;/p&gt;
+
+&lt;p&gt;「なにもしてないのにIDEが真っ赤になった、よくわからないけど色々なキャッシュを全削除したら直った」みたいなこともたまに、普通のAndroid開発よりは高い頻度で発生します。&lt;/p&gt;
+
+&lt;p&gt;ライブラリも、ファイル操作周りをはじめ、まだ基本的なものが揃っていなかったりします。&lt;br /&gt;
+まあこれは考え方によってはチャンスでもあります。&lt;br /&gt;
+競合が少ないので、自分で作ったライブラリがコミュニティのデファクト・スタンダードになれる可能性も比較的高いです。&lt;/p&gt;
+
+&lt;h2 id=&quot;まとめ&quot;&gt;まとめ&lt;/h2&gt;
+
+&lt;h3 id=&quot;kmpを使ってよかったか&quot;&gt;KMPを使ってよかったか&lt;/h3&gt;
+
+&lt;p&gt;これはYESと言い切れます。&lt;/p&gt;
+
+&lt;p&gt;コードの共通化を無理なく、使いやすい言語で実現することができ、工数の削減も叶いました。&lt;/p&gt;
+
+&lt;p&gt;既存のプロジェクトへの導入も容易ですし、ビジネスロジックのみ共有したい、という要件の場合には有効な選択肢になりうると考えています。&lt;/p&gt;
+
+&lt;h3 id=&quot;kmpをおすすめできるか&quot;&gt;KMPをおすすめできるか&lt;/h3&gt;
+
+&lt;p&gt;この観点では、条件付きのYESになります。&lt;/p&gt;
+
+&lt;p&gt;KMPの学習コストは決して低くはないです。&lt;br /&gt;
+日本語の資料もまだ少ないですし、ある程度自分で調べる力が必要です。&lt;/p&gt;
+
+&lt;p&gt;フレームワーク側の実装を読んだり、GitHubやYouTrackのissueを調べたり。あるいは英語の文献を読んだりKotlin Slackをはじめとした英語のコミュニティで発言をしたり。&lt;/p&gt;
+
+&lt;p&gt;KMPが安定してくるに従って改善していくでしょうが、現状はある程度エンジニアとしての地力が求められる環境である、と言えるでしょう。&lt;/p&gt;
+
+&lt;p&gt;経験の浅い人が多いチームで、しかしそれでもクロスプラットフォームで開発したい、という場合もあるかと思います。&lt;br /&gt;
+そういった場合は、KMPではなくFlutterを選んだほうがいいかもしれません。&lt;/p&gt;
+
+&lt;p&gt;Flutterのほうが日本人のコミュニティが大きいですし、Viewまで共通で書けるため、各プラットフォームの知識はKMPほど必要ありません。&lt;/p&gt;
+
+&lt;p&gt;あるいはクロスプラットフォームを選択したい、という方針と真っ向から対立してしまいますが、素直にAndroid版とiOS版を個別で実装して経験を積む、という選択肢を検討してみるのもアリだと思います。&lt;br /&gt;
+FlutterにしてもKMPにしても各OSの仕様を知らないと解決できない問題が存在します。要件が複雑になればなるほどそういったケースは増えてくるので、各OSの知見がチーム内に少ない状態でクロスプラットフォームを選択してしまうと、結果的に工数が増えてしまう可能性があります。&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;以上です。&lt;/p&gt;
+
+&lt;p&gt;なんだかんだ色々書きましたが、私は日々KMPで開発してて大変楽しいです。&lt;/p&gt;</content><author><name></name></author><category term="programming" /><category term="kotlin" /><category term="kmp" /><summary type="html">本記事はAndroid Advent Calendar 2020の24日目です。</summary></entry><entry><title type="html">楽天モバイルをAndroid11なOnePlus 8 Proで使う</title><link href="https://www.yslibrary.net/2020/12/18/rakuten-mobile-oneplus8pro/" rel="alternate" type="text/html" title="楽天モバイルをAndroid11なOnePlus 8 Proで使う" /><published>2020-12-18T00:00:00+00:00</published><updated>2020-12-18T00:00:00+00:00</updated><id>https://www.yslibrary.net/2020/12/18/rakuten-mobile-oneplus8pro</id><content type="html" xml:base="https://www.yslibrary.net/2020/12/18/rakuten-mobile-oneplus8pro/">&lt;p&gt;普通にSIMさしてAPN設定しただけでは通信できるようにならない&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;項目&lt;/th&gt;
+      &lt;th&gt;値&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;APN名&lt;/td&gt;
+      &lt;td&gt;楽天(rakuten.jp)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;APN&lt;/td&gt;
+      &lt;td&gt;rakuten.jp&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;MCC&lt;/td&gt;
+      &lt;td&gt;440&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;MNC&lt;/td&gt;
+      &lt;td&gt;11&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;APNタイプ&lt;/td&gt;
+      &lt;td&gt;default,supl,dun&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;APNプロトコル&lt;/td&gt;
+      &lt;td&gt;IPv4/IPv6&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;APNローミングプロトコル&lt;/td&gt;
+      &lt;td&gt;IPv4/IPv6&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;PDPタイプ&lt;/td&gt;
+      &lt;td&gt;IPv4/IPv6&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;PDPタイプに関してはOnePlus8Proに入力欄はない&lt;/p&gt;
+
+&lt;p&gt;この設定をしたあと、追加で下記も必要&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;電話アプリを起動&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*#*#4636#*#*&lt;/code&gt;を入力し、「テスト中」モードに入る&lt;/li&gt;
+  &lt;li&gt;「携帯電話情報」をタップ&lt;/li&gt;
+  &lt;li&gt;「優先ネットワークの設定」から「LTE only」を選択&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;以上で通信が可能になる。&lt;/p&gt;
+
+&lt;p&gt;たまに設定がリセットされることもあるらしい。&lt;/p&gt;</content><author><name></name></author><category term="diary" /><category term="diary" /><category term="android" /><category term="til" /><summary type="html">普通にSIMさしてAPN設定しただけでは通信できるようにならない</summary></entry><entry><title type="html">Nuxt.js静的サイトモードのfallbackのSPAモードとnuxtServerInit</title><link href="https://www.yslibrary.net/2020/06/29/nuxtserverinit-in-spa-fallback/" rel="alternate" type="text/html" title="Nuxt.js静的サイトモードのfallbackのSPAモードとnuxtServerInit" /><published>2020-06-29T00:00:00+00:00</published><updated>2020-06-29T00:00:00+00:00</updated><id>https://www.yslibrary.net/2020/06/29/nuxtserverinit-in-spa-fallback</id><content type="html" xml:base="https://www.yslibrary.net/2020/06/29/nuxtserverinit-in-spa-fallback/">&lt;p&gt;大前提として、&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;nuxtServerInit&lt;/code&gt;というAction名のとおり、これはサーバサイドでしか実行されない。&lt;br /&gt;
+静的サイトモードだと、設定によるけど&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;generate&lt;/code&gt;コマンドの実行時に呼ばれる。&lt;/p&gt;
+
+&lt;p&gt;そしてfallbackのSPAモード。これは動的に扱いたいroute用の機能だけど、このSPAモード用のhtml(200.htmlとか404.htmlとか)の生成時には&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;nuxtServerInit&lt;/code&gt;は呼ばれない。&lt;/p&gt;
+
+&lt;p&gt;SPAモードでは&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;nuxtServerInit&lt;/code&gt;呼ばれない、という仕様なんだから確かにそのとおり。なんだけどこれを完全に失念しててSPAモードで表示していた一部ページと、そこから遷移した各ページで一部データにアクセスできない、という状況が生まれてしまっていた。&lt;/p&gt;
+
+&lt;p&gt;解決する方法はいくつかあるけど、今回はSPAモードでも&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;nuxtServerInit&lt;/code&gt;を呼ぶ方法を採用した。&lt;br /&gt;
+実装は簡単。&lt;/p&gt;
+
+&lt;p&gt;まずはStateに初期化済みかどうか判定できる値を用意する。&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;initialized: boolean&lt;/code&gt;みたいな値を用意するのでもいいだろう。&lt;/p&gt;
+
+&lt;p&gt;次にpluginを追加する。単純に、Stateが初期化済みでなければ&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;nuxtServerInit&lt;/code&gt;を実行する。&lt;br /&gt;
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;res&lt;/code&gt;とか&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;req&lt;/code&gt;とか&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;context&lt;/code&gt;の一部の値はクライアント側ではアクセスできないので、そこは注意が必要。&lt;/p&gt;
+
+&lt;div class=&quot;language-typescript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// ~/plugins/init.client.ts&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Context&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;@nuxt/types&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;RootState&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;~/store&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;default&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;({&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;store&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Context&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Promise&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;void&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;store&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;state&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;RootState&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;initialized&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;store&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;dispatch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;nuxtServerInit&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;nuxt.config.ts&lt;/code&gt;のplugin設定はこんな感じに&lt;/p&gt;
+
+&lt;div class=&quot;language-typescript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;...,&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;src&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;~/plugins/init.client.ts&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;mode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;client&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;mode: 'client'&lt;/code&gt;が重要。&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;nuxtServerInit&lt;/code&gt;はサーバサイドでは普通に呼ばれるので、SPAモード(=ブラウザ側)でのみ処理されればいい。&lt;/p&gt;
+
+&lt;h3 id=&quot;参考&quot;&gt;参考&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/nuxt/nuxt.js/issues/7051#issuecomment-604914461&quot;&gt;Generate and dynamic route fallback if static file is not generated · Issue #7051 · nuxt/nuxt.js&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><category term="programming" /><category term="vue.js" /><category term="nuxt.js" /><category term="til" /><summary type="html">大前提として、nuxtServerInitというAction名のとおり、これはサーバサイドでしか実行されない。 静的サイトモードだと、設定によるけどgenerateコマンドの実行時に呼ばれる。</summary></entry><entry><title type="html">Nuxt.jsでgenerateした時のfallbackオプションについて</title><link href="https://www.yslibrary.net/2020/06/13/nuxt-generate-fallback/" rel="alternate" type="text/html" title="Nuxt.jsでgenerateした時のfallbackオプションについて" /><published>2020-06-13T00:00:00+00:00</published><updated>2020-06-13T00:00:00+00:00</updated><id>https://www.yslibrary.net/2020/06/13/nuxt-generate-fallback</id><content type="html" xml:base="https://www.yslibrary.net/2020/06/13/nuxt-generate-fallback/">&lt;p&gt;https://ja.nuxtjs.org/api/configuration-generate/#fallback&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;generate.fallback=true&lt;/code&gt; にすると &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;404.html&lt;/code&gt; が生成される。
+これ、動的にルーティングしたいページへのリクエストが来たときに、「URLはそのままで&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;404.html&lt;/code&gt;を提供する」という使い方をするものだった。
+最初この使い方がよくわかってなくて、単純に存在しないページへのリクエストがあったときに単純にリダイレクトしてたけど、そういうことじゃなかった。&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;404.html&lt;/code&gt; ということで単純なエラーページぽく見えていたけど、実際はこのhtml上でURLに基づいてルーティングをしてくれる。
+そこで解決できたらそのままページを表示するし見つからなければ&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/components/layout/error.vue&lt;/code&gt;で書いたエラーページに遷移するし、という挙動。&lt;/p&gt;
+
+&lt;p&gt;わかってしまえばそりゃそうだ、という話でした。&lt;/p&gt;</content><author><name></name></author><category term="programming" /><category term="vue.js" /><category term="nuxt.js" /><category term="til" /><summary type="html">https://ja.nuxtjs.org/api/configuration-generate/#fallback</summary></entry><entry><title type="html">AndroidDagashiを支える技術</title><link href="https://www.yslibrary.net/2020/06/05/tech-stack-of-androiddagashi/" rel="alternate" type="text/html" title="AndroidDagashiを支える技術" /><published>2020-06-05T00:00:00+00:00</published><updated>2020-06-05T00:00:00+00:00</updated><id>https://www.yslibrary.net/2020/06/05/tech-stack-of-androiddagashi</id><content type="html" xml:base="https://www.yslibrary.net/2020/06/05/tech-stack-of-androiddagashi/">&lt;p&gt;&lt;a href=&quot;https://androiddagashi.github.io&quot;&gt;AndroidDagashi&lt;/a&gt;、ご存知ですか。&lt;/p&gt;
+
+&lt;p&gt;英語圏のものを中心に、Android関連のニュース/記事を日本人向けにまとめている週一更新のまとめサイトです。&lt;br /&gt;
+2018年の2月に開設して、おかげさまで2年が経ちました。&lt;/p&gt;
+
+&lt;p&gt;さて今日はAndroidDagashiをどうやって運用しているかざっくりまとめてみます。&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;全体像を図示するとだいたいこんな感じです&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://lh3.googleusercontent.com/pw/ACtC-3chGy286Ew_WJHL9FaWtes7VdRfEha6YAOBTs59Ih3Rd7arkWflEOua7Gr2oXdzrnuo504U_r2yslHD1mxFkxQi6LxpOOPCs5A24Pacd6ZVlqvdZQvjpHQbm60R3R-VrCx6ZgqI9vFLub0o-BmsojnpHA=w1500-h843-no&quot; alt=&quot;diagram&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;AndroidDagashiはドメインからわかる通り、GitHub Pagesでホストされた静的サイトです。&lt;br /&gt;
+&lt;a href=&quot;https://jp.vuejs.org/&quot;&gt;Vue.js&lt;/a&gt;を利用したWebアプリケーションフレームワークである&lt;a href=&quot;https://ja.nuxtjs.org/&quot;&gt;Nuxt.js&lt;/a&gt;の、静的サイト生成機能を使っています。&lt;/p&gt;
+
+&lt;p&gt;このサイトは、2つのGitHubレポジトリで構成されています。&lt;br /&gt;
+一つはサイト本体のコードが置いてある&lt;a href=&quot;https://github.com/AndroidDagashi/androiddagashi.github.io&quot;&gt;AndroidDagashi/androiddagashi.github.io&lt;/a&gt;。&lt;br /&gt;
+そして、記事データを管理する&lt;a href=&quot;https://github.com/AndroidDagashi/AndroidDagashi&quot;&gt;AndroidDagashi/AndroidDagashi&lt;/a&gt; です。&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AndroidDagashi/AndroidDagashi&lt;/code&gt; では、1マイルストーンを各週のページ、1 issueを1リンクとして管理しています。シェアしたいリンクをissueとして投稿して、そのissueを対応する週のマイルストーンに紐づける感じです。&lt;/p&gt;
+
+&lt;p&gt;デプロイには&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AndroidDagashi/androiddagashi.github.io&lt;/code&gt;のGitHub Actionsを利用しています。&lt;/p&gt;
+
+&lt;p&gt;デプロイ関係のワークフローは下記の3つです。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;1時間に一度、&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AndroidDagashi/AndroidDagashi&lt;/code&gt;から記事データを取得してサイト用のJSONファイルに加工し、pushする&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AndroidDagashi/androiddagashi.github.io&lt;/code&gt;へのpushをトリガーに起動し、サイトをビルドしGitHub Pagesにデプロイする&lt;/li&gt;
+  &lt;li&gt;GitHub Pagesへのデプロイ完了をトリガーに起動し、新着記事があったらTwitterへ投稿する&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;サイト用JSONファイルの作成ワークフローはclose済みのマイルストーンを取得するようになっています。&lt;br /&gt;
+1時間毎に動かしているのは、コメントとかあった時に反映するためにですね(現状あまり活用できていませんが…)。&lt;/p&gt;
+
+&lt;p&gt;JSONの生成ジョブは、特定のissueへのコメントで実行できるようにもしています。&lt;br /&gt;
+だいぶ泥臭い設定になっていますが、2020年5月末現在GitHub Actionは手動実行をサポートしていないのでその代替手段です。&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;そんな感じで、日々の運用作業は&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;リンク(issue)を投稿する&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;だけです。&lt;/p&gt;
+
+&lt;p&gt;ただそれ以外に毎週のリリース作業として、&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;その週に投稿されたリンクからめぼしいものをピックアップしてマイルストーンのサマリを作成&lt;/li&gt;
+  &lt;li&gt;リリース直前(だいたい日曜の20時リリースなので19時-20時の間)にマイルストーンをclose&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;があります。&lt;/p&gt;
+
+&lt;p&gt;半年前くらいまでは新着通知のツイートも手動だったんですが、一念発起して自動化しました(だいぶ楽になった)。&lt;br /&gt;
+やろうと思えばサマリの作成とマイルストーンのcloseも自動化できそうな気はするので、今後の課題です。&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;おわりに&quot;&gt;おわりに&lt;/h2&gt;
+
+&lt;p&gt;以上、ざっくりとしたAndroidDagashiのサイトについての説明でした。&lt;/p&gt;
+
+&lt;p&gt;この仕組み自体はGitHubとFirebase(無料枠で済むしTwitterに投稿とかしなければいらない)だけで成り立っているので、結構いろんな分野で汎用的に使えるのではないかなー、と思っています。AndroidDagashiでは記事データのレポジトリもサイトのレポジトリもpublicで運用していますが、privateにしても特に問題はないはずです。&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;androiddagashi.github.io&lt;/code&gt; はMITライセンスで公開しているので、気になった方はご自由にフォークして遊んでみてください。&lt;br /&gt;
+コントリビュートもお待ちしております！&lt;/p&gt;</content><author><name></name></author><category term="programming" /><category term="github" /><category term="vue.js" /><category term="nuxt.js" /><category term="androiddagashi" /><summary type="html">AndroidDagashi、ご存知ですか。</summary></entry></feed>

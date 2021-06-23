@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<!--
+    Type on Strap jekyll theme v2.3.4
+    Copyright 2016-2021 Sylhare
+    Theme free for personal and commercial use under the MIT license
+    https://github.com/sylhare/Type-on-Strap/blob/master/LICENSE
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=0.5, maximum-scale=5">
+
+    <!-- Main JS (navbar.js, katex_init.js and masonry_init.js)-->
+    <script defer src="/assets/js/main.min.js"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/main.css">
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/atom+xml" title="CodingFeline" href="https://www.yslibrary.net/feed.xml"/>
+    
+    
+
+    <!-- KaTeX 0.12.0 -->
+    
+    <script defer src="/assets/js/vendor/katex.min.js"></script>
+    <script defer src="/assets/js/vendor/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+    
+
+    <!-- Mermaid 8.9.2 -->
+    
+
+    <!-- Simple Jekyll Search 1.9.1 -->
+    <script src="/assets/js/vendor/simple-jekyll-search.min.js" type="text/javascript"></script>
+
+    <!-- Google Analytics / Cookie Consent -->
+    <script>
+      const cookieName = 'cookie-notice-dismissed-https://www.yslibrary.net';
+      const isCookieConsent = 'false';
+      const analyticsName = 'UA-61198465-1';
+    </script>
+
+    
+    
+        <!-- Global site tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-61198465-1"></script>
+        <!-- Page analysis (analytics.js) -->
+        <script async src='https://www.google-analytics.com/analytics.js'></script>
+    
+
+    <!-- seo tags -->
+    <meta property="og:image" content="https://www.yslibrary.net/assets/img/dactyl.jpeg">
+    
+    <meta property="og:type" content="website" />
+    
+    <!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>DartのPackage(ライブラリ)を公開する | CodingFeline</title>
+<meta name="generator" content="Jekyll v4.2.0" />
+<meta property="og:title" content="DartのPackage(ライブラリ)を公開する" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="unorm_dartというDartのPackageを公開したので公開周りのフローをまとめます。" />
+<meta property="og:description" content="unorm_dartというDartのPackageを公開したので公開周りのフローをまとめます。" />
+<link rel="canonical" href="https://www.yslibrary.net/2018/08/19/publishing-dart-package/" />
+<meta property="og:url" content="https://www.yslibrary.net/2018/08/19/publishing-dart-package/" />
+<meta property="og:site_name" content="CodingFeline" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-08-19T00:00:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="DartのPackage(ライブラリ)を公開する" />
+<script type="application/ld+json">
+{"mainEntityOfPage":{"@type":"WebPage","@id":"https://www.yslibrary.net/2018/08/19/publishing-dart-package/"},"description":"unorm_dartというDartのPackageを公開したので公開周りのフローをまとめます。","url":"https://www.yslibrary.net/2018/08/19/publishing-dart-package/","@type":"BlogPosting","headline":"DartのPackage(ライブラリ)を公開する","dateModified":"2018-08-19T00:00:00+00:00","datePublished":"2018-08-19T00:00:00+00:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- RSS -->
+    <link type="application/atom+xml" rel="alternate" href="https://www.yslibrary.net/feed.xml" title="CodingFeline" />
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:title" content="DartのPackage(ライブラリ)を公開する">
+    <meta name="twitter:description" content="unorm_dartというDartのPackageを公開したので公開周りのフローをまとめます。pub publish --dry-run を実行するといい感じにいろいろ教えてくれます。たとえばこんな感じ。Publishing unorm_dart 0.1.0 to https://pub.dartlang.org...">
+    
+    <meta name="twitter:creator" content="@_yshrsmz">
+    <meta name="twitter:site" content="@_yshrsmz">
+    
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:image" content="https://www.yslibrary.net/assets/img/dactyl.jpeg">
+    <meta name="twitter:image:alt" content="DartのPackage(ライブラリ)を公開する">
+</head>
+
+  <body>
+    <header class="site-header">
+
+    <!-- Logo and title -->
+	<div class="branding">
+        
+		<a href="/">
+			<img alt="logo img" class="avatar" src="/assets/img/logo.png" />
+		</a>
+        
+        <a class="site-title" aria-label="CodingFeline" href="/">
+        CodingFeline
+		</a>
+	</div>
+
+    <!-- Toggle menu -->
+    <nav class="clear">
+    <a aria-label="pull" id="pull" class="toggle" href="#">
+    <i class="fas fa-bars fa-lg"></i>
+    </a>
+
+    <!-- Menu -->
+    <ul class="hide">
+        
+
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="ABOUT" title="ABOUT" href="/about/">
+                     ABOUT 
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="PRODUCTS" title="PRODUCTS" href="/products/">
+                     PRODUCTS 
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Search" title="Search" href="/search/">
+                     <i class="fas fa-search" aria-hidden="true"></i>
+                    
+                </a>
+            </li>
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Tags" title="Tags" href="/tags/">
+                     <i class="fas fa-tags" aria-hidden="true"></i>
+                    
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+    </ul>
+
+	</nav>
+</header>
+
+    <div class="content">
+      <article >
+  <header id="main" style="">
+    <div class="title-padder">
+      
+      <h1 id="Dart%E3%81%AEPackage%28%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%29%E3%82%92%E5%85%AC%E9%96%8B%E3%81%99%E3%82%8B" class="title">DartのPackage(ライブラリ)を公開する</h1>
+      
+
+
+<div class="post-info">
+    <p class="meta">
+      
+      
+      August 19, 2018
+    </p></div>
+
+      
+    </div>
+  </header>
+
+  <section class="post-content">
+  
+      <p><a href="https://pub.dartlang.org/packages/unorm_dart">unorm_dart</a>というDartのPackageを公開したので公開周りのフローをまとめます。</p>
+
+<p><code class="language-plaintext highlighter-rouge">pub publish --dry-run</code> を実行するといい感じにいろいろ教えてくれます。たとえばこんな感じ。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Publishing unorm_dart 0.1.0 to https://pub.dartlang.org:
+|-- .gitignore
+|-- .idea
+|   |-- codeStyles
+|   |   |-- Project.xml
+|   |   '-- codeStyleConfig.xml
+|   '-- saveactions_settings.xml
+|-- CHANGELOG.md
+|-- LICENSE
+|-- README.md
+|-- analysis_options.yaml
+|-- example
+|   '-- unorm_dart_example.dart
+|-- lib
+|   |-- src
+|   |   |-- composite_iterator.dart
+|   |   |-- decomposite_iterator.dart
+|   |   |-- iterator.dart
+|   |   |-- recursive_decomposite_iterator.dart
+|   |   |-- uchar.dart
+|   |   |-- uchar_iterator.dart
+|   |   |-- unorm_dart_base.dart
+|   |   |-- unormdata.dart
+|   |   '-- utils.dart
+|   '-- unorm_dart.dart
+|-- pubspec.yaml
+'-- test
+    |-- normalization_test.dart
+    '-- unorm_dart_test.dart
+Missing requirements:
+* Your pubspec.yaml is missing a "homepage" field.
+Sorry, your package is missing a requirement and can't be published yet.
+For more information, see: https://www.dartlang.org/tools/pub/cmd/pub-lish.
+</code></pre></div></div>
+
+<p>表示される内容は以下の通り</p>
+
+<ul>
+  <li>公開するパッケージの名称、バージョン、公開先(基本的にpub.dartlang.orgのはず)</li>
+  <li>公開するパッケージに含まれるファイル</li>
+  <li>公開するために足りない要件</li>
+</ul>
+
+<p>一番最後の項目を潰していけば公開できるようになります。<br />
+今回の場合だと、<code class="language-plaintext highlighter-rouge">pubspec.yaml</code>にhomepageフィールドが足りないようです。homepageフィールドを追加してもう一度 <code class="language-plaintext highlighter-rouge">pub publish --dry-run</code> すると下記のようになります。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Publishing unorm_dart 0.1.0 to https://pub.dartlang.org:
+|-- .gitignore
+|-- .idea
+|   |-- codeStyles
+|   |   |-- Project.xml
+|   |   '-- codeStyleConfig.xml
+|   '-- saveactions_settings.xml
+|-- CHANGELOG.md
+|-- LICENSE
+|-- README.md
+|-- analysis_options.yaml
+|-- example
+|   '-- unorm_dart_example.dart
+|-- lib
+|   |-- src
+|   |   |-- composite_iterator.dart
+|   |   |-- decomposite_iterator.dart
+|   |   |-- iterator.dart
+|   |   |-- recursive_decomposite_iterator.dart
+|   |   |-- uchar.dart
+|   |   |-- uchar_iterator.dart
+|   |   |-- unorm_dart_base.dart
+|   |   |-- unormdata.dart
+|   |   '-- utils.dart
+|   '-- unorm_dart.dart
+|-- pubspec.yaml
+'-- test
+    |-- normalization_test.dart
+    '-- unorm_dart_test.dart
+
+Package has 0 warnings.
+</code></pre></div></div>
+
+<p>これで公開できるはずです。</p>
+
+<p>また、このときPackageに入れたくないファイルが含まれていないか確認しましょう。Packageに含まれないファイルは下記の通りです。</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">packages</code> ディレクトリ(Dart2系では使われていないはず)</li>
+  <li>このPackageのロックファイル(<code class="language-plaintext highlighter-rouge">pubspec.lock</code>)</li>
+  <li>Gitを使っていなければ、すべての隠しファイル(<code class="language-plaintext highlighter-rouge">.</code>から始まるファイル)</li>
+  <li>Gitを使っていれば、<code class="language-plaintext highlighter-rouge">.gitignore</code>に指定されているファイル</li>
+</ul>
+
+<p>つまり、基本的にGitで管理しているファイルはすべて公開されるパッケージに含まれます。公開されたくないものはレポジトリに入れないようにしましょう。<br />
+今回の場合だと、本来IntelliJの設定フォルダである <code class="language-plaintext highlighter-rouge">.idea</code> はPackageに入れたくないのですが、コードスタイルの設定はレポジトリで共有したいのでやむなく含まれています。</p>
+
+<p>用意ができたら <code class="language-plaintext highlighter-rouge">pub publish</code> で公開します。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Publishing unorm_dart 0.1.0 to https://pub.dartlang.org:
+|-- .gitignore
+|-- .idea
+|   |-- codeStyles
+|   |   |-- Project.xml
+|   |   '-- codeStyleConfig.xml
+|   '-- saveactions_settings.xml
+|-- CHANGELOG.md
+|-- LICENSE
+|-- README.md
+|-- analysis_options.yaml
+|-- example
+|   '-- unorm_dart_example.dart
+|-- lib
+|   |-- src
+|   |   |-- composite_iterator.dart
+|   |   |-- decomposite_iterator.dart
+|   |   |-- iterator.dart
+|   |   |-- recursive_decomposite_iterator.dart
+|   |   |-- uchar.dart
+|   |   |-- uchar_iterator.dart
+|   |   |-- unorm_dart_base.dart
+|   |   |-- unormdata.dart
+|   |   '-- utils.dart
+|   '-- unorm_dart.dart
+|-- pubspec.yaml
+'-- test
+    |-- normalization_test.dart
+    '-- unorm_dart_test.dart
+
+Looks great! Are you ready to upload your package (y/n)?
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">y</code> を入力</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Pub needs your authorization to upload packages on your behalf.
+In a web browser, go to https://accounts.google.com/o/oauth2/auth?access_type=XXXXXXXXXXXXXX
+Then click "Allow access".
+
+Waiting for your authorization...
+</code></pre></div></div>
+
+<p>WebブラウザでアクセスするためのURLが表示されるので、ブラウザを開きます。Packageを公開するにはGoogleアカウントが必要で、そのための承認作業です。</p>
+
+<p>無事アカウントの認証ができると、こんな画面が表示されます。ターミナルに戻ると公開処理が完了しているはずです。</p>
+
+<p><img src="https://lh3.googleusercontent.com/fnNkbwhsAV9gfc2p8AdvDclZYGzWuCwIdkiBFI7-hjCusG45S6LWbmVS2dUxjHTImSDmW8aQ6Lzy8PZ-s_9G7tcRd3_ryL7cW_FtCvb00663yjliPfOfZ5OsvgvvvJhPx9Cd7ICxNLZI4Ygx8ciVrH-WUJtWcOZ9OU7H2cFFpqeSRyya9zEXdjRyALCdM1QFFBS6hS4AgIP4ZNHHhh9tnPHDXwQvaptRj2TqJTq85DG6jLJwy1TWHIP_zdKjxq7CwyZZftzQxwYbFQJB6kRnnc2quVPCMj136cMJwvdcmcNxwyizfoAbiCvsYDlTMp9GnsaSD6g8dzPot-aB54-I1LYWT1xAv5dT8s_aYXUBIQF2VwmxyRJf0_nXYkOFcWk1XF3IIpWbhL__Sse7IKbN204sflXXIi3MkwmYuo2mFmYjSrpts52E_CWNExrIhotZAKEZ9nkBtqpWnSaUM2cyl_Nv37W3iZNlI72yXVXIwDokU0D9caYgpOX6C5NQ69B1d7e15NcVpfZaU_Q24XYOP2Tj_EiSL-vEJbLaHDXX0wh2Dbhj2XGfmqBV34LgjJLH9gyM2CXvFKcACxMV_831O01qLrRFnBZnsDhHKiOylPGZQmAXOOxKRjnzdslKCFk73_qmBqDTh9cCCyTm3nHQpNPvPfGEO0Zo2unV7dZyRf38sPpXPdkz9g=w900" alt="authorized" /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Authorization received, processing...
+Successfully authorized.
+Uploading... (3.4s)
+Successfully uploaded package.
+</code></pre></div></div>
+
+<p>30分くらい？待つと <a href="https://pub.dartlang.org">https://pub.dartlang.org</a> で検索に表示されるようになります。</p>
+
+<hr />
+
+<p>Dartのパッケージ公開、本当に楽でした。ほぼCLIで終わってしまうのはちょっと感動です。<br />
+今までJavaのライブラリ開発をいくつかしていて、bintrayやmaven centralに公開したこともあるのですが、その時の作業とは比べものにならないほどのお手軽さでした。</p>
+
+<p>今作ろうとしているサービスをFlutter/Dartで実現するためには必要なものがいくつもあるので、ちょこちょこコミュニティにPackageという形で貢献できたらなあ、と思います。</p>
+
+<h3 id="参考">参考</h3>
+<ul>
+  <li><a href="https://www.dartlang.org/tools/pub/publishing">Publishing a Package | Dart</a></li>
+  <li><a href="https://www.dartlang.org/tools/pub/pubspec">Pubspec Format | Dart</a></li>
+  <li><a href="https://www.dartlang.org/tools/pub/package-layout">Pub Package Layout Conventions | Dart</a></li>
+</ul>
+
+    
+  </section>
+
+  <!-- Social media shares -->
+  
+
+<div class="share-buttons">
+    <ul class="share-buttons">
+        <div class="meta">Share</div>
+        
+        <li>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https://www.yslibrary.net/2018/08/19/publishing-dart-package/" target="_blank" title=" Facebook">
+			<i class="fab fa-facebook-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Share on Facebook</span>
+		</a>
+        </li>
+         
+        <li>
+            <a href="https://twitter.com/intent/tweet?text=Dart%E3%81%AEPackage%28%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%29%E3%82%92%E5%85%AC%E9%96%8B%E3%81%99%E3%82%8B%20https%3A%2F%2Fwww.yslibrary.net%2F2018%2F08%2F19%2Fpublishing-dart-package%2F" target="_blank" title="">
+			<i class="fab fa-twitter-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Tweet</span>
+		</a>
+        </li>
+            
+        <li>
+            <a href="https://www.reddit.com/submit?url=https://www.yslibrary.net/2018/08/19/publishing-dart-package/&title=Dart%E3%81%AEPackage%28%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%29%E3%82%92%E5%85%AC%E9%96%8B%E3%81%99%E3%82%8B%20%7C%20CodingFeline" target="_blank" title=" Reddit">
+			<i class="fab fa-reddit-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Share on Reddit</span>
+		</a>
+        </li>
+           
+        <li>
+            <a href="mailto:?subject=DartのPackage(ライブラリ)を公開する%20%7C%20CodingFeline&body=https://www.yslibrary.net/2018/08/19/publishing-dart-package/" target="_blank" title="">
+			<i class="fas fa-envelope-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Email</span>
+		</a>
+        </li>
+        
+    </ul>
+</div>
+
+
+
+
+   <!-- Tag list -->
+  
+  
+
+
+  <div class="tag-list">
+    <ul>
+      
+        <li class="meta">Tag</li>
+      
+
+      
+        <li><a class="button" href="/tags#Dart">
+          <p><i class="fas fa-tag fa-fw fa-sm"></i> Dart</p>
+        </a></li>
+      
+    </ul>
+  </div>
+
+
+
+</article>
+
+<!-- Disqus -->
+
+<div class="comments">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'yslibrary';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+</div>
+
+
+<!-- Post navigation -->
+
+  <div id="post-nav">
+    
+    <div id="previous-post">
+        <a alt="(Android) App Signingなアプリの課金デバッグをしたい" href="/2018/11/29/debugging-iap-app-signing/">
+            <p>Previous post</p>
+            (Android) App Signingなアプリの課金デバッグをしたい
+        </a>
+    </div>
+    
+
+    
+    <div id="next-post">
+        <a alt="(Flutter) なぜStatefullWidgetではなくStateがbuildメソッドを持っているのか" href="/2018/07/22/flutter-statefullwidget-build/">
+            <p>Next post</p>
+            (Flutter) なぜStatefullWidgetではなくStateがbuildメソッドを持っているのか
+        </a>
+    </div>
+    
+</div>
+
+
+
+<!-- To change color of links in the page -->
+<style>
+  header#main {
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+  }
+  
+  
+  
+  
+</style>
+
+    </div>
+    <footer class="site-footer">
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- yslibrary.net - bottom -->
+<ins class="adsbygoogle"
+     style="display:block; margin-top:10px; margin-bottom:10px;"
+     data-ad-client="ca-pub-1022395241918455"
+     data-ad-slot="6501231341"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+    <p class="text">
+        © 2020, yshrsmz</p>
+            <div class="footer-icons">
+                <ul>
+                <!-- Social icons from Font Awesome, if enabled -->
+                
+<li>
+    <a feed.xml href="http://feeds.feedburner.com/TheoreticalCat"
+       title="Follow RSS feed">
+        <span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+    <a href="https://github.com/yshrsmz" title="Follow on GitHub">
+		<span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+<li>
+    <a href="https://www.linkedin.com/in/yshrsmz/" title="Follow on LinkedIn">
+		<span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+<li>
+    <a href="https://www.reddit.com/user/yshrsmz"
+       title="Follow on Reddit">
+		<span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-reddit fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+<li>
+    <a href="https://stackexchange.com/users/456702/yshrsmz" title="Follow on Stack Exchange">
+		<span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-stack-exchange fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+<li>
+    <a href="https://stackoverflow.com/users/855599/yshrsmz" title="Follow on Stack Overflow">
+		<span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-stack-overflow fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+<li>
+    <a class="type" href="https://twitter.com/_yshrsmz"
+       title="Follow on Twitter">
+        <span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+                </ul>
+            </div>
+</footer>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+  </body>
+</html>

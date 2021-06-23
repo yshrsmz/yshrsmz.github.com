@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<!--
+    Type on Strap jekyll theme v2.3.4
+    Copyright 2016-2021 Sylhare
+    Theme free for personal and commercial use under the MIT license
+    https://github.com/sylhare/Type-on-Strap/blob/master/LICENSE
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=0.5, maximum-scale=5">
+
+    <!-- Main JS (navbar.js, katex_init.js and masonry_init.js)-->
+    <script defer src="/assets/js/main.min.js"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/main.css">
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/atom+xml" title="CodingFeline" href="https://www.yslibrary.net/feed.xml"/>
+    
+    
+
+    <!-- KaTeX 0.12.0 -->
+    
+    <script defer src="/assets/js/vendor/katex.min.js"></script>
+    <script defer src="/assets/js/vendor/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+    
+
+    <!-- Mermaid 8.9.2 -->
+    
+
+    <!-- Simple Jekyll Search 1.9.1 -->
+    <script src="/assets/js/vendor/simple-jekyll-search.min.js" type="text/javascript"></script>
+
+    <!-- Google Analytics / Cookie Consent -->
+    <script>
+      const cookieName = 'cookie-notice-dismissed-https://www.yslibrary.net';
+      const isCookieConsent = 'false';
+      const analyticsName = 'UA-61198465-1';
+    </script>
+
+    
+    
+        <!-- Global site tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-61198465-1"></script>
+        <!-- Page analysis (analytics.js) -->
+        <script async src='https://www.google-analytics.com/analytics.js'></script>
+    
+
+    <!-- seo tags -->
+    <meta property="og:image" content="https://www.yslibrary.net/assets/img/dactyl.jpeg">
+    
+    <meta property="og:type" content="website" />
+    
+    <!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>最後にあれしたのいつだっけ？をトラッキングするAndroidアプリ、SinceTimerをリリースしてた | CodingFeline</title>
+<meta name="generator" content="Jekyll v4.2.0" />
+<meta property="og:title" content="最後にあれしたのいつだっけ？をトラッキングするAndroidアプリ、SinceTimerをリリースしてた" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Thoughts, stories and ideas" />
+<meta property="og:description" content="Thoughts, stories and ideas" />
+<link rel="canonical" href="https://www.yslibrary.net/2018/11/29/sincetimer-android-released/" />
+<meta property="og:url" content="https://www.yslibrary.net/2018/11/29/sincetimer-android-released/" />
+<meta property="og:site_name" content="CodingFeline" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-11-29T00:00:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="最後にあれしたのいつだっけ？をトラッキングするAndroidアプリ、SinceTimerをリリースしてた" />
+<script type="application/ld+json">
+{"mainEntityOfPage":{"@type":"WebPage","@id":"https://www.yslibrary.net/2018/11/29/sincetimer-android-released/"},"description":"Thoughts, stories and ideas","url":"https://www.yslibrary.net/2018/11/29/sincetimer-android-released/","@type":"BlogPosting","headline":"最後にあれしたのいつだっけ？をトラッキングするAndroidアプリ、SinceTimerをリリースしてた","dateModified":"2018-11-29T00:00:00+00:00","datePublished":"2018-11-29T00:00:00+00:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- RSS -->
+    <link type="application/atom+xml" rel="alternate" href="https://www.yslibrary.net/feed.xml" title="CodingFeline" />
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:title" content="最後にあれしたのいつだっけ？をトラッキングするAndroidアプリ、SinceTimerをリリースしてた">
+    <meta name="twitter:description" content="掲題のとおり、今年の7月末にアプリをGoogle Play Storeに公開していました。気がついたら4ヶ月も下書きのまま放置してしまっていた…名前は”SinceTimer(シンスタイマー)”です。「最後に映画観たのいつだっけ？」とか「最後にラーメン食べたのいつだっけ？」とかいった情報を管理するためのアプリです。...">
+    
+    <meta name="twitter:creator" content="@_yshrsmz">
+    <meta name="twitter:site" content="@_yshrsmz">
+    
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:image" content="https://www.yslibrary.net/assets/img/dactyl.jpeg">
+    <meta name="twitter:image:alt" content="最後にあれしたのいつだっけ？をトラッキングするAndroidアプリ、SinceTimerをリリースしてた">
+</head>
+
+  <body>
+    <header class="site-header">
+
+    <!-- Logo and title -->
+	<div class="branding">
+        
+		<a href="/">
+			<img alt="logo img" class="avatar" src="/assets/img/logo.png" />
+		</a>
+        
+        <a class="site-title" aria-label="CodingFeline" href="/">
+        CodingFeline
+		</a>
+	</div>
+
+    <!-- Toggle menu -->
+    <nav class="clear">
+    <a aria-label="pull" id="pull" class="toggle" href="#">
+    <i class="fas fa-bars fa-lg"></i>
+    </a>
+
+    <!-- Menu -->
+    <ul class="hide">
+        
+
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="ABOUT" title="ABOUT" href="/about/">
+                     ABOUT 
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="PRODUCTS" title="PRODUCTS" href="/products/">
+                     PRODUCTS 
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Search" title="Search" href="/search/">
+                     <i class="fas fa-search" aria-hidden="true"></i>
+                    
+                </a>
+            </li>
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Tags" title="Tags" href="/tags/">
+                     <i class="fas fa-tags" aria-hidden="true"></i>
+                    
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+    </ul>
+
+	</nav>
+</header>
+
+    <div class="content">
+      <article >
+  <header id="main" style="">
+    <div class="title-padder">
+      
+      <h1 id="%E6%9C%80%E5%BE%8C%E3%81%AB%E3%81%82%E3%82%8C%E3%81%97%E3%81%9F%E3%81%AE%E3%81%84%E3%81%A4%E3%81%A0%E3%81%A3%E3%81%91%EF%BC%9F%E3%82%92%E3%83%88%E3%83%A9%E3%83%83%E3%82%AD%E3%83%B3%E3%82%B0%E3%81%99%E3%82%8BAndroid%E3%82%A2%E3%83%97%E3%83%AA%E3%80%81SinceTimer%E3%82%92%E3%83%AA%E3%83%AA%E3%83%BC%E3%82%B9%E3%81%97%E3%81%A6%E3%81%9F" class="title">最後にあれしたのいつだっけ？をトラッキングするAndroidアプリ、SinceTimerをリリースしてた</h1>
+      
+
+
+<div class="post-info">
+    <p class="meta">
+      
+      
+      November 29, 2018
+    </p></div>
+
+      
+    </div>
+  </header>
+
+  <section class="post-content">
+  
+      <p><img src="/assets/img/products/sincetimer/feature.png" alt="feature" /></p>
+
+<p>掲題のとおり、今年の7月末にアプリを<a href="https://play.google.com/store/apps/details?id=com.codingfeline.sincetimer">Google Play Storeに公開していました</a>。気がついたら4ヶ月も下書きのまま放置してしまっていた…</p>
+
+<p>名前は”SinceTimer(シンスタイマー)”です。</p>
+
+<p>「最後に映画観たのいつだっけ？」とか「最後にラーメン食べたのいつだっけ？」とかいった情報を管理するためのアプリです。</p>
+
+<hr />
+
+<h2 id="画面">画面</h2>
+
+<p>トップ画面はこんな感じで</p>
+
+<p><img src="https://lh3.googleusercontent.com/wa4DdOgjUmwgAwEfdYNZnGE2xN0GOXOMnRboZz96emTmIK0QAqsk_dsmGdnLZA4RJJlmWHCTRAUzuvrZfil34sUlDY6FiuJNmWi_7KsVHxLA6Na4xSYauLXr72bUKxMfSavvko6oyVeYmDbWQ4MsDw5tp1dNtc5TCZ1vU9h9QYzjgOq5S0FDGfwTk1HrpC7NLiP-HEm0ms-MoLKfPSDSwg0mx_3uzoVunx1-hrhRRIPZB9W4y45vIa7lqiKrsmgX5K_dd0rrc0RV62EhLfJW_CBAkepfPkpYukuIMOEqN2jh-HvgDtHI_twRNHZeqgNT4jshCAUk78jaImmR_jBM-4xUE7OmLDp3E33fUu9Z3eSohs4PUIgRA0MAdxjQMwnYmNGEdThtZjZIKdcico8IrGxWYUsmRgCvqr0YRYrEbY5BwaOaXrU2Ql_i-8iPPAsmuGb4UmZ95SsY9-8wvr9JKXq0VXU5qq83SL18Px6qc4VcIZ414E_TYUWp-zlEsoa_4YpmGRXPsRSXhIKVYn-qyVg63vGTIsfgOOeVnpub8nSfBEVcEvo89BaNamaJbU2LGso5perIxni2FaPaiqq-8hNPh9pZYKcPDt9TssC9p7bCzBlW1fcyow2mfBwiFQ0=w448-h796-no" alt="トップ" /></p>
+
+<p>イベントの追加画面はこう</p>
+
+<p><img src="https://lh3.googleusercontent.com/7H975szAV8PRzGwpWFw9qb0zZ5X4T6KUOIbWrkGYaa1_ztSnLuQrvJF9kLYJ83s1cUmJW1UciAydsXZ0lbWCU4L9FsEgyVpy_UyaXvjCowgBwF8KLhWH4hhnNH_GcfK7AGBtYGb2PDTqQPFOZuPm0QVnxPOH5c2TTeB26pOikHQJhSNbjV_1mQhEzj6Opb0ygEGeWRewW-0ILxKmwHRYLV2FU3fMRPE_L2nlUiC4VPi0ksmFRWLsgct36FV_e7-glg-6VJtOHyshT_HxfkQTZ4xolGzYnMELcsK0EP2OsibRry0vg3A1LFCo_p1EVb6M8fnPAqUI6PbQDp0I3mI0AdkBEjabEb8qtLRs-uCaiohkgcS7fPAj47YCNVICw28x5uR0qDCY7kbTPWD2EDsLD7rbnIphOD8fziTAk3j7HePkkrNwH2p0n0DlW_LV8jfGpHFPdrlP3keLg6_2CL-D9oxexUJ7NK6LD-2aZt1vZXWoraoq3_76GN4IPFE57cVMxKfI46ixYU4j5D3ZIUHB5LwN07-ZaJpo0n2cqBW2oSeWNt8QUJi8aPZy_qjq7LVkIz5z3oxlsj0i7pwmvkXgv2tCYSAICFLSWkdUMrqswMaAdT8dn2p9Zi06VlCZ93w=w448-h796-no" alt="追加" /></p>
+
+<p>各イベントの詳細では履歴が一覧できます。FABから新しい履歴を追加</p>
+
+<p><img src="https://lh3.googleusercontent.com/uhU8mu23MCPu8rI55hq93D1qiWjwg2YH-vUCYGQzeOesgXz2qLY8jqxY881J7CTioTSDtZkBuV44p3dVK2d1DdhaoR7iRSHhAUT5yfCwXXMhX3g7aAJUzDW12D78BW0YGhQzzmNREC-FrgEZHd7s2Muec5Xif-bo2B3c_j3YxggzbV_sre6eZmKTz4hxVOGcCIM8jcmM6mNVEEUVZRem_XbCN1z_-U0oGjTkMGjTApMPFcyH1ZDVpB1KTux8KV1XDYXgp6S3cCbsnLuzFOxOR4djQUcdr-kcnYAVZ1qWrZDran4mHbmRBJo4FhQKA-IpzA8vlhVsCp_EDtNdINKk6AVHzx31kJUOPsVTym49WuHOiHjvkMbcRzsclVmheMxATgocYAhme0VcTbizxrpjK2lIWtbX094cA2bSK2X4YwrLpA2C2pdEcmQT0mP_8CMMqeR3_zldkHZkt8Ho1-vA3o9drPvVbHatNFTKoa1KmFszYPfcKZkGhP0Qx3tvJKmQymbQ3SkyKbduf0V1AKzfkgRT6YajdraqDJAOTXUDgGaUAsNGmrquqrZ68wX3hGe0IfWUll3Zc18XsI6ytO905yEY_ZPQPf0E_04bMrOjxm36MgJwmCLoDjMYETYSt-Q=w448-h796-no" alt="詳細" /></p>
+
+<p>今回はGoogle I/O 2018で発表された新しいMaterial Designを意識して作っています。</p>
+
+<h2 id="アイコン">アイコン</h2>
+
+<p>今までは<a href="https://99designs.jp/">99designs</a>で依頼してたのですが、今回はSketchで自作してみました。<br />
+素人にしてはソレっぽいのができてかなり気に入っています。<br />
+Material Designはガイドラインがしっかりしているので、やっぱいいですね。</p>
+
+<h2 id="今後の展望">今後の展望</h2>
+
+<p>もうちょっとほしい機能があるので、引き続き開発は続けていくつもりです。</p>
+
+<ul>
+  <li>ダークテーマ</li>
+  <li>タイマー</li>
+  <li>課金で広告非表示</li>
+  <li>検索</li>
+</ul>
+
+<h1 id="ここから下は技術者向け--">※ここから下は技術者向け ———-</h1>
+
+<h2 id="使った技術とか">使った技術とか</h2>
+
+<p>Android Architecture Components(以後AAC)をガッツリ使ってます。<br />
+最近は公式のライブラリが充実してきたので、迷うことが減っていいですね。初心者的には学ぶことが増えて一長一短でしょうけど…。</p>
+
+<p>最初はSingle Activityな構成にしようかと思ったんですが、「Toolbarの形が大きく異なる場合にどうするの？」という問題をうまく解決できそうになかったので、Activityは各画面で別になっています。<br />
+この問題、<a href="https://github.com/googlesamples/android-sunflower">googlesamples/android-sunflower</a>でも<a href="https://github.com/googlesamples/android-sunflower/issues/75">issueがあがっていて</a>、まだ公式でも意見がまとまっていないようです。うまいこと解決できるといいのですが。</p>
+
+<p>データベースはAACのRoomを使っています。RxJavaやLiveDataによるリアクティブな使い方をサポートしていて、ホントに使いやすいです。<br />
+なにより、自分で書いたSQLの結果をクラスに楽にマッピングでき最高です。もうテーブル構成まんまなデータをプレゼンテーション層で使う時代は終わったのです。<br />
+2.1.0からはFTSやViewもサポートするようなので、今後 <code class="language-plaintext highlighter-rouge">LIKE</code> を使わない検索の実装にも役立ちそうです。自力でN-gram的なことをしなきゃなんで、また別の困難はありそうですが。</p>
+
+<h3 id="architecture">Architecture?</h3>
+
+<p>Clean Architecture x MVIな感じです。<br />
+AACのViewModelがUsecaseとReducerを持ち、画面のState(Kotlinのdata class)をLiveDataでFragmentに公開しています。</p>
+
+<p>AndroidだとWebの仮想DOM的な差分更新の仕組みがないので、新しいStateとViewの状態を比べて更新の可否を決めるようなコードを書くことになり、若干手間はかかります。</p>
+
+<p>Stateの更新場所がまとまるのは大変良いので、<a href="https://github.com/airbnb/MvRx">AirbnbのMvRx</a>とかいろいろ先達を参考にしつつよい方法を模索していきたいです。</p>
+
+<p>参考</p>
+<ul>
+  <li>PlayStoreリンク: <a href="https://play.google.com/store/apps/details?id=com.codingfeline.sincetimer">https://play.google.com/store/apps/details?id=com.codingfeline.sincetimer</a></li>
+</ul>
+
+    
+  </section>
+
+  <!-- Social media shares -->
+  
+
+<div class="share-buttons">
+    <ul class="share-buttons">
+        <div class="meta">Share</div>
+        
+        <li>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https://www.yslibrary.net/2018/11/29/sincetimer-android-released/" target="_blank" title=" Facebook">
+			<i class="fab fa-facebook-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Share on Facebook</span>
+		</a>
+        </li>
+         
+        <li>
+            <a href="https://twitter.com/intent/tweet?text=%E6%9C%80%E5%BE%8C%E3%81%AB%E3%81%82%E3%82%8C%E3%81%97%E3%81%9F%E3%81%AE%E3%81%84%E3%81%A4%E3%81%A0%E3%81%A3%E3%81%91%EF%BC%9F%E3%82%92%E3%83%88%E3%83%A9%E3%83%83%E3%82%AD%E3%83%B3%E3%82%B0%E3%81%99%E3%82%8BAndroid%E3%82%A2%E3%83%97%E3%83%AA%E3%80%81SinceTimer%E3%82%92%E3%83%AA%E3%83%AA%E3%83%BC%E3%82%B9%E3%81%97%E3%81%A6%E3%81%9F%20https%3A%2F%2Fwww.yslibrary.net%2F2018%2F11%2F29%2Fsincetimer-android-released%2F" target="_blank" title="">
+			<i class="fab fa-twitter-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Tweet</span>
+		</a>
+        </li>
+            
+        <li>
+            <a href="https://www.reddit.com/submit?url=https://www.yslibrary.net/2018/11/29/sincetimer-android-released/&title=%E6%9C%80%E5%BE%8C%E3%81%AB%E3%81%82%E3%82%8C%E3%81%97%E3%81%9F%E3%81%AE%E3%81%84%E3%81%A4%E3%81%A0%E3%81%A3%E3%81%91%EF%BC%9F%E3%82%92%E3%83%88%E3%83%A9%E3%83%83%E3%82%AD%E3%83%B3%E3%82%B0%E3%81%99%E3%82%8BAndroid%E3%82%A2%E3%83%97%E3%83%AA%E3%80%81SinceTimer%E3%82%92%E3%83%AA%E3%83%AA%E3%83%BC%E3%82%B9%E3%81%97%E3%81%A6%E3%81%9F%20%7C%20CodingFeline" target="_blank" title=" Reddit">
+			<i class="fab fa-reddit-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Share on Reddit</span>
+		</a>
+        </li>
+           
+        <li>
+            <a href="mailto:?subject=最後にあれしたのいつだっけ？をトラッキングするAndroidアプリ、SinceTimerをリリースしてた%20%7C%20CodingFeline&body=https://www.yslibrary.net/2018/11/29/sincetimer-android-released/" target="_blank" title="">
+			<i class="fas fa-envelope-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Email</span>
+		</a>
+        </li>
+        
+    </ul>
+</div>
+
+
+
+
+   <!-- Tag list -->
+  
+  
+
+
+  <div class="tag-list">
+    <ul>
+      
+        <li class="meta">Tags</li>
+      
+
+      
+        <li><a class="button" href="/tags#android">
+          <p><i class="fas fa-tag fa-fw fa-sm"></i> android</p>
+        </a></li>
+      
+        <li><a class="button" href="/tags#sincetimer">
+          <p><i class="fas fa-tag fa-fw fa-sm"></i> sincetimer</p>
+        </a></li>
+      
+    </ul>
+  </div>
+
+
+
+</article>
+
+<!-- Disqus -->
+
+<div class="comments">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'yslibrary';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+</div>
+
+
+<!-- Post navigation -->
+
+  <div id="post-nav">
+    
+    <div id="previous-post">
+        <a alt="届かないCST-01" href="/2018/12/04/cst01-undelivered/">
+            <p>Previous post</p>
+            届かないCST-01
+        </a>
+    </div>
+    
+
+    
+    <div id="next-post">
+        <a alt="(Android) App Signingなアプリの課金デバッグをしたい" href="/2018/11/29/debugging-iap-app-signing/">
+            <p>Next post</p>
+            (Android) App Signingなアプリの課金デバッグをしたい
+        </a>
+    </div>
+    
+</div>
+
+
+
+<!-- To change color of links in the page -->
+<style>
+  header#main {
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+  }
+  
+  
+  
+  
+</style>
+
+    </div>
+    <footer class="site-footer">
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- yslibrary.net - bottom -->
+<ins class="adsbygoogle"
+     style="display:block; margin-top:10px; margin-bottom:10px;"
+     data-ad-client="ca-pub-1022395241918455"
+     data-ad-slot="6501231341"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+    <p class="text">
+        © 2020, yshrsmz</p>
+            <div class="footer-icons">
+                <ul>
+                <!-- Social icons from Font Awesome, if enabled -->
+                
+<li>
+    <a feed.xml href="http://feeds.feedburner.com/TheoreticalCat"
+       title="Follow RSS feed">
+        <span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+    <a href="https://github.com/yshrsmz" title="Follow on GitHub">
+		<span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+<li>
+    <a href="https://www.linkedin.com/in/yshrsmz/" title="Follow on LinkedIn">
+		<span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+<li>
+    <a href="https://www.reddit.com/user/yshrsmz"
+       title="Follow on Reddit">
+		<span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-reddit fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+<li>
+    <a href="https://stackexchange.com/users/456702/yshrsmz" title="Follow on Stack Exchange">
+		<span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-stack-exchange fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+<li>
+    <a href="https://stackoverflow.com/users/855599/yshrsmz" title="Follow on Stack Overflow">
+		<span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-stack-overflow fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+<li>
+    <a class="type" href="https://twitter.com/_yshrsmz"
+       title="Follow on Twitter">
+        <span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+                </ul>
+            </div>
+</footer>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+  </body>
+</html>

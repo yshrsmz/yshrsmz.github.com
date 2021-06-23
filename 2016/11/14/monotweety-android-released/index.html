@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<!--
+    Type on Strap jekyll theme v2.3.4
+    Copyright 2016-2021 Sylhare
+    Theme free for personal and commercial use under the MIT license
+    https://github.com/sylhare/Type-on-Strap/blob/master/LICENSE
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=0.5, maximum-scale=5">
+
+    <!-- Main JS (navbar.js, katex_init.js and masonry_init.js)-->
+    <script defer src="/assets/js/main.min.js"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/main.css">
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/atom+xml" title="CodingFeline" href="https://www.yslibrary.net/feed.xml"/>
+    
+    
+
+    <!-- KaTeX 0.12.0 -->
+    
+    <script defer src="/assets/js/vendor/katex.min.js"></script>
+    <script defer src="/assets/js/vendor/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+    
+
+    <!-- Mermaid 8.9.2 -->
+    
+
+    <!-- Simple Jekyll Search 1.9.1 -->
+    <script src="/assets/js/vendor/simple-jekyll-search.min.js" type="text/javascript"></script>
+
+    <!-- Google Analytics / Cookie Consent -->
+    <script>
+      const cookieName = 'cookie-notice-dismissed-https://www.yslibrary.net';
+      const isCookieConsent = 'false';
+      const analyticsName = 'UA-61198465-1';
+    </script>
+
+    
+    
+        <!-- Global site tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-61198465-1"></script>
+        <!-- Page analysis (analytics.js) -->
+        <script async src='https://www.google-analytics.com/analytics.js'></script>
+    
+
+    <!-- seo tags -->
+    <meta property="og:image" content="https://www.yslibrary.net/assets/img/dactyl.jpeg">
+    
+    <meta property="og:type" content="website" />
+    
+    <!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>通知エリアからツイートするAndroidアプリ、Monotweetyを公開した(コードもあるよ) | CodingFeline</title>
+<meta name="generator" content="Jekyll v4.2.0" />
+<meta property="og:title" content="通知エリアからツイートするAndroidアプリ、Monotweetyを公開した(コードもあるよ)" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Thoughts, stories and ideas" />
+<meta property="og:description" content="Thoughts, stories and ideas" />
+<link rel="canonical" href="https://www.yslibrary.net/2016/11/14/monotweety-android-released/" />
+<meta property="og:url" content="https://www.yslibrary.net/2016/11/14/monotweety-android-released/" />
+<meta property="og:site_name" content="CodingFeline" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2016-11-14T00:00:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="通知エリアからツイートするAndroidアプリ、Monotweetyを公開した(コードもあるよ)" />
+<script type="application/ld+json">
+{"mainEntityOfPage":{"@type":"WebPage","@id":"https://www.yslibrary.net/2016/11/14/monotweety-android-released/"},"description":"Thoughts, stories and ideas","url":"https://www.yslibrary.net/2016/11/14/monotweety-android-released/","@type":"BlogPosting","headline":"通知エリアからツイートするAndroidアプリ、Monotweetyを公開した(コードもあるよ)","dateModified":"2016-11-14T00:00:00+00:00","datePublished":"2016-11-14T00:00:00+00:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- RSS -->
+    <link type="application/atom+xml" rel="alternate" href="https://www.yslibrary.net/feed.xml" title="CodingFeline" />
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:title" content="通知エリアからツイートするAndroidアプリ、Monotweetyを公開した(コードもあるよ)">
+    <meta name="twitter:description" content="掲題のとおり、アプリをGoogle Play Storeに公開しました。 今回はコードもGitHubで公開してます。Apache v2です。名前は”Monotweety”。「モノツイーティ」と読みます。機能はホントにシンプルで、「通知エリアからツイートする」だけです。実際のところ通知エリアからツイートできるのはA...">
+    
+    <meta name="twitter:creator" content="@_yshrsmz">
+    <meta name="twitter:site" content="@_yshrsmz">
+    
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:image" content="https://www.yslibrary.net/assets/img/dactyl.jpeg">
+    <meta name="twitter:image:alt" content="通知エリアからツイートするAndroidアプリ、Monotweetyを公開した(コードもあるよ)">
+</head>
+
+  <body>
+    <header class="site-header">
+
+    <!-- Logo and title -->
+	<div class="branding">
+        
+		<a href="/">
+			<img alt="logo img" class="avatar" src="/assets/img/logo.png" />
+		</a>
+        
+        <a class="site-title" aria-label="CodingFeline" href="/">
+        CodingFeline
+		</a>
+	</div>
+
+    <!-- Toggle menu -->
+    <nav class="clear">
+    <a aria-label="pull" id="pull" class="toggle" href="#">
+    <i class="fas fa-bars fa-lg"></i>
+    </a>
+
+    <!-- Menu -->
+    <ul class="hide">
+        
+
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="ABOUT" title="ABOUT" href="/about/">
+                     ABOUT 
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="PRODUCTS" title="PRODUCTS" href="/products/">
+                     PRODUCTS 
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Search" title="Search" href="/search/">
+                     <i class="fas fa-search" aria-hidden="true"></i>
+                    
+                </a>
+            </li>
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Tags" title="Tags" href="/tags/">
+                     <i class="fas fa-tags" aria-hidden="true"></i>
+                    
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+    </ul>
+
+	</nav>
+</header>
+
+    <div class="content">
+      <article >
+  <header id="main" style="">
+    <div class="title-padder">
+      
+      <h1 id="%E9%80%9A%E7%9F%A5%E3%82%A8%E3%83%AA%E3%82%A2%E3%81%8B%E3%82%89%E3%83%84%E3%82%A4%E3%83%BC%E3%83%88%E3%81%99%E3%82%8BAndroid%E3%82%A2%E3%83%97%E3%83%AA%E3%80%81Monotweety%E3%82%92%E5%85%AC%E9%96%8B%E3%81%97%E3%81%9F%28%E3%82%B3%E3%83%BC%E3%83%89%E3%82%82%E3%81%82%E3%82%8B%E3%82%88%29" class="title">通知エリアからツイートするAndroidアプリ、Monotweetyを公開した(コードもあるよ)</h1>
+      
+
+
+<div class="post-info">
+    <p class="meta">
+      
+      
+      November 14, 2016
+    </p></div>
+
+      
+    </div>
+  </header>
+
+  <section class="post-content">
+  
+      <p><img src="https://raw.githubusercontent.com/yshrsmz/monotweety/master/assets/header.png" alt="header" /></p>
+
+<p>掲題のとおり、アプリを<a href="https://play.google.com/store/apps/details?id=net.yslibrary.monotweety">Google Play Storeに公開しました</a>。 <br />
+今回はコードも<a href="https://github.com/yshrsmz/monotweety">GitHubで公開してます</a>。Apache v2です。</p>
+
+<p>名前は”Monotweety”。「モノツイーティ」と読みます。</p>
+
+<p>機能はホントにシンプルで、「通知エリアからツイートする」だけです。</p>
+
+<p>実際のところ通知エリアからツイートできるのはAndroid 7.0以降の端末だけで、それ未満の端末では通知をタップすると編集ダイアログが表示されます。</p>
+
+<ol>
+  <li>通知から</li>
+</ol>
+
+<p><img src="https://lh3.googleusercontent.com/2qJiK92gIYxynwaFl5HPZt23cd60s_2djZLPVg_dIipvl-ykfWAvzTZAnO1hxclJxv6-1tXgOj0aNr6oKPbpykI4239Kl32xLZ8dJG_q07Whq1q1A3u60qSu9f8S4nTFVB2nYNRad5nzunaBYGAiwZ2SRw7LFwo6Gk8e_GjqU20BOOcvoYMs-vCbmEWIvBqr7UsFAEljrtqQ36h-4k2JRK4qsIY3Kk3ByU0lyQTKWmOE0n0d1kfUw0-MVFhlGzvbn8Ki1_18cVP9URmIN5Xfikkoy1Reuw1d1RR5ky-6LTZ5PUNB2iXX1kdKxLZVUKJ3thZImaZOuv8RzEsGKiR3hd7d5vEYt0F6qmmvplcPl8FUBNThdasF0PlbGN1NwIhTAc665Iegs7nZmVsu3vSVGBxmK9wHC9-MOnFBZkRK_hcRbOWexFLYescrI07mvRIyat6Ilys0RN-sKCQv5QYRLURe-LVRwgRKBO_EukLM95ABl1kfxIqmu0dH0iVBeW7894flNCCaoeDNz0xYUJd07xW7vyIfLEv9WA1sciOFvnMzE3Ab8mjPFNG_KoHM1i6KVx_jgEwRiiCDDtm2d993am6XvB55arzcds1My7bV9O553TMq=w448-h796-no" alt="notification" /></p>
+
+<ol>
+  <li>直でツイート</li>
+</ol>
+
+<p><img src="https://lh3.googleusercontent.com/at1jZ9ayA0sg5b3_D4bAiNn-IWOS2AGe9dTabTPzDwrfrmdeWJdgJPOk7CZJf6SPVO90eNO0eJlqxX6q2LqI1YsLygcVBSPsoWGtKlq88YrcEFrtkpJq0qsaXTs7Ub7uIBDCKqED0eZpkrLUCsFNl0I_xjZIlHmL6HA02bxKPvcwkWy65dvQEezcU6tFNw-J7r-PhSKeN50h4QT61g91E2Ov-GZE1XlZm64RqVgHfsLw-s6z8Pn9azQo-Ho9toUQx6SBKkkymBeoQ4uC_IoiOkyt5FO5Vje-qUkLyaQ8tPNpv0lr7fe3KPEiJqxaiTDm_m43yni3UxxrmMax9-ufIG83TkUEAKb-LlX-lYLrwFugyeeRbnjLuBomMuo6V4urXDQSYVhFINWgMwdaOMfeMRdXl8Fy_Hxw4SrY9w7qFT4ka4VwC3qczMx1A0DeTCnLS-d4iP9TXN93RnE_kPzRXAnzJgPgsue3oqh1us86cdMgIWIAzNAEUffIPFq2OllQdPk03Q7JQgCTMnCtmg_X2pnRbrQ2DdZZPco_L9ykHtJBArKpFcB-vpwzK4RhRYu83ZGTo5IkPjO6lEcBB3nKbS8dhAtLb_KQKNy_OWEc9KzKLf8b=w448-h796-no" alt="direct tweet" /></p>
+
+<ol>
+  <li>Android 7.0未満ではダイアログから</li>
+</ol>
+
+<p><img src="https://lh3.googleusercontent.com/2UsabktYkOXkuPfnibnpFQ_cGUJhJ8VNdMuKY4aXYi3bcBSfCDIpz73VHmD0fFvCsjKGOU9OKOo8_m_mMCJmYq-esRngM4aEbE4z5mPzwBMLPz6H779HE5cmL9C9BTW7x0U5S1M1IRgUF0Yum0eLATeoQcLoGBt_Wx7FN9BYTopLbtAe8k0c5XrnTqBbMe1aJE0FfokHkp-HLqhNmz3M5myE0ADBY2e3Snv-9Fcw2IwEgQGrooGLaUCXbndYeQ8STEqoanKrNTrP1MT7fdxzbVdNos8EqJyi4roS-WISbY4zmQ5hsYlIFpFXCKbJIcI0fqtAULxiqNBMpgnVFy06fhW0hJM17wILDa3T2Fp-Fdy7HsNyWClR4AIqvSIp884V4l6gnfjraBMDuxX5K-RwyHUMgoCuMhayr-pzkHGOX7ElfHcIxiducZWbg8fu0IPd5kDWjLpQz1gJA6_VdgApAIEmPZh_f3ctTjmuY6xuyC6tamtgqniY8OsBk0IbIgfaony_py0RRvff0Q99iyAb8ES6Z_j-ZUirL9LI2WjGFJE5caSlr5Dkyw69ueDXS7AkmUSTvbxwegOZeneJLdGeweZnY_SNmE5F6VksuzQi2uSEr8wk=w448-h796-no" alt="from dialog" /></p>
+
+<h2 id="モチベーション">モチベーション</h2>
+
+<ul>
+  <li>ひとりごとみたいにツイートすることが多いのでツイート特化型アプリがほしい</li>
+  <li>既存の通知エリアからツイートできるアプリは古くてメンテされてるか不明なものばかり</li>
+  <li>今風のかっこいいデザインのアプリがほしい</li>
+  <li>Android NでDirect Reply(通知から直で返信できる機能)が追加<br />
+-&gt; あれ、これ使えるんじゃ…？</li>
+</ul>
+
+<p>という感じ。</p>
+
+<p>要件は下記の通り</p>
+
+<ul>
+  <li>通知エリアからツイートできること</li>
+  <li>文字数超過したら編集できること</li>
+</ul>
+
+<p>で、この他にお遊びみたいなものだけどいわゆる「連ツイ(in reply toでツイートをつなげる)」機能もつけてみました。</p>
+
+<p>Direct Replyで用意されているのはカスタマイズができない入力エリアなので、文字数チェックは送信ボタンを押した後に行っていて、超過していた場合は編集用の画面が立ち上がる作りになっています。</p>
+
+<p>今回はだいたいコーディングだけで102時間くらいかかったらしい(wakatime調べ)。</p>
+
+<h2 id="アプリ名の由来">アプリ名の由来？</h2>
+
+<p>“Monochrome”ではなく”Monologue”のmonoです。<br />
+最初は”Monologue”で作ろうとしたけど案の定すでにTwitterに登録済みのアプリがありました…<br />
+<a href="http://yslibrary.net/2015/11/10/omnitweety-andrid-released-share-url-twitter/">Omnitweetyというアプリもリリースしてます</a>が、特に「Omni - Mono」で対になる、とか特に狙ったわけではないです。</p>
+
+<h1 id="ここから下は技術者向け--">※ここから下は技術者向け ———-</h1>
+
+<h2 id="使ったライブラリとか">使ったライブラリとか</h2>
+
+<p>網羅的なものは<a href="https://github.com/yshrsmz/monotweety/blob/master/app/build.gradle">build.gradle</a>見てもらうとして、主要なものを軽く紹介します。</p>
+
+<h3 id="kotlin"><a href="http://kotlinlang.org">Kotlin</a></h3>
+
+<p>最近流行りのアレ。<br />
+拡張関数とかdata classとか、とても便利です。<br />
+あとリスト操作関数が充実しててめちゃくちゃ捗ります。</p>
+
+<h3 id="conductor"><a href="https://github.com/bluelinelabs/conductor">Conductor</a></h3>
+
+<p>Viewベースのアプリケーションを作るためのフレームワーク。<br />
+数年前にSquareが<a href="https://medium.com/square-corner-blog/advocating-against-android-fragments-81fd0b462c97#.cf8ph0mnl">Fragment使わないぞ！って記事</a>をだしていましたが、その流れのライブラリですね。</p>
+
+<p>Fragment使いたくないけどどうすんの？って言われた時に候補としてまず挙がるのはSquare製の<a href="https://github.com/square/mortar">Mortar</a>/<a href="https://github.com/square/flow">Flow</a>だと思いますが、こちらのConductorはMortar/Flowよりもかなりシンプルな作りになっています。</p>
+
+<p>Mortar/FlowはDaggerと一緒に使う前提で作られてるような感じで、SystemServiceにカスタムのServiceを追加したりいろいろ前準備が多くて「なるほどわからん」状態だったけれども、こちらは完全に”better fragment”にフォーカスしているような印象です。</p>
+
+<p>DaggerだとかMVPだとかMVVMとかそういうのは開発者側で勝手にやってくれという方針なのでライブラリとして迷いどころは少なく、とても扱いやすかったです。なにより、サンプルが豊富で非常に助かりました。</p>
+
+<p>ちなみにLollipop以上だったらちゃんと画面間のShared Element Transitionも行えます。</p>
+
+<h3 id="dagger2"><a href="https://github.com/google/dagger">Dagger2</a></h3>
+
+<p>とてもイケてるDIライブラリ。そういえば本家SquareのDagger1はdeprecatedになってましたね。<br />
+今回のComponent構成はこんな感じ。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>AppComponent ─ UserComponent ┬ SettingComponent
+  │                          └ ComposeStatusComponent
+  │
+  └ ActivityComponent ┬ SplashComponent
+                      └ LoginComponent
+</code></pre></div></div>
+
+<p>グローバルなAppComponentの下にユーザ毎に作られるUserComponentがあります。<br />
+ユーザ情報が必要な各画面のComponentはUserComponentを親に持ちます。<br />
+ユーザ情報が必要ない画面のComponentはActivityComponentを親に持ちます。</p>
+
+<p>ここ、図の上ではSettingComponent/ComposeStatusComponentはActivityComponentに依存してないように見えますが、実はActivityComponentで管理されているインスタンスを、Componentに渡すModule経由で引き回してたりします。</p>
+
+<p>これはActivityがUserComponentの作成より前(ログイン確認より前)に作られるのが原因です。<br />
+Daggerでは複数のScoped Componentを親に持つことができないので、苦肉の策としてこのようにActivityComponentで管理されているインスタンスを渡す形にしました。<br />
+うまいやり方があればいいのですが。</p>
+
+<h3 id="storio"><a href="https://github.com/pushtorefresh/storio">StorIO</a></h3>
+
+<p>SQLiteをリアクティブに扱うライブラリ。<br />
+よりいろいろやってくれるSQLbrite、って感じでしょうか。<br />
+Not ORM。</p>
+
+<p>モデルとクエリの結果をマッピングするリゾルバクラスを生成するアノテーションプロセッサも用意されてますが、Kotlinはサポートされてないので手動で書く必要があります。</p>
+
+<p>今回実はSQLite使う必要特になかったのですが、アーキテクチャのデモ的な側面もあったのでSQLite入れてます。<br />
+GitHub上にAndroidアプリに様々なアーキテクチャ適用してみたよ系のデモレポジトリって結構あるのですが、だいたいAPI通信とメモリキャッシュまでで止まっててじゃあその先どう考えてるの？　って思うことが多かったので使ってみた次第。</p>
+
+<p>ともあれ、StorIOはAPIもきれいでわかりやすいので、リアクティブに使えるSQLiteライブラリを探している方は試してみてはいかがでしょう。</p>
+
+<h2 id="アーキテクチャ">アーキテクチャ</h2>
+
+<p>前作のOmnitweetyでは、Android Clean Architectureを採用しました。ほとんど写経です。<br />
+MonotweetyではAndroid Clean Architectureを踏襲しつつも諸々シンプルに再構成しています。<br />
+たとえばDataSource周りのファクトリクラスを廃止してみたり、機能ごとのパッケージ構成にしてみたり。<br />
+DataSourceの差し替えとか実際にアプリの実行中に発生することなんてほぼないので、まあ必要ないよねー、という判断です。</p>
+
+<p>あ、あとView周りに関してはMVPではなく、MVVMっぽいアーキテクチャとなっています。<br />
+開発が佳境だった頃にKotlinのAndroid Studio PluginとDataBindingの相性が非常に悪かったので今回は地道にbinding処理書いてますが、Kotlin 1.0.5でだいぶ改善したらしいのでそのうち書きなおすのもやってみたい。</p>
+
+<h2 id="アイコン">アイコン</h2>
+
+<p>アイコンはOmnitweetyと同様、<a href="https://99designs.jp/">99designs</a>を使っています。<br />
+今回はコンペではなく、Omnitweetyのコンペの時に最後まで悩んで落としてしまったデザイナーさんにお願いしました。<br />
+前回同様とてもかわいらしいアイコンが仕上がって満足しています。</p>
+
+<p>こちらからは以上です。</p>
+
+<p>参考:</p>
+
+<p>PlayStoreリンク: https://play.google.com/store/apps/details?id=net.yslibrary.monotweety<br />
+GitHubリンク: https://github.com/yshrsmz/monotweety<br />
+TwitterにURLを共有するAndroidアプリ、Omnitweetyを公開した: http://yslibrary.net/2015/11/10/omnitweety-andrid-released-share-url-twitter/</p>
+
+    
+  </section>
+
+  <!-- Social media shares -->
+  
+
+<div class="share-buttons">
+    <ul class="share-buttons">
+        <div class="meta">Share</div>
+        
+        <li>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https://www.yslibrary.net/2016/11/14/monotweety-android-released/" target="_blank" title=" Facebook">
+			<i class="fab fa-facebook-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Share on Facebook</span>
+		</a>
+        </li>
+         
+        <li>
+            <a href="https://twitter.com/intent/tweet?text=%E9%80%9A%E7%9F%A5%E3%82%A8%E3%83%AA%E3%82%A2%E3%81%8B%E3%82%89%E3%83%84%E3%82%A4%E3%83%BC%E3%83%88%E3%81%99%E3%82%8BAndroid%E3%82%A2%E3%83%97%E3%83%AA%E3%80%81Monotweety%E3%82%92%E5%85%AC%E9%96%8B%E3%81%97%E3%81%9F%28%E3%82%B3%E3%83%BC%E3%83%89%E3%82%82%E3%81%82%E3%82%8B%E3%82%88%29%20https%3A%2F%2Fwww.yslibrary.net%2F2016%2F11%2F14%2Fmonotweety-android-released%2F" target="_blank" title="">
+			<i class="fab fa-twitter-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Tweet</span>
+		</a>
+        </li>
+            
+        <li>
+            <a href="https://www.reddit.com/submit?url=https://www.yslibrary.net/2016/11/14/monotweety-android-released/&title=%E9%80%9A%E7%9F%A5%E3%82%A8%E3%83%AA%E3%82%A2%E3%81%8B%E3%82%89%E3%83%84%E3%82%A4%E3%83%BC%E3%83%88%E3%81%99%E3%82%8BAndroid%E3%82%A2%E3%83%97%E3%83%AA%E3%80%81Monotweety%E3%82%92%E5%85%AC%E9%96%8B%E3%81%97%E3%81%9F%28%E3%82%B3%E3%83%BC%E3%83%89%E3%82%82%E3%81%82%E3%82%8B%E3%82%88%29%20%7C%20CodingFeline" target="_blank" title=" Reddit">
+			<i class="fab fa-reddit-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Share on Reddit</span>
+		</a>
+        </li>
+           
+        <li>
+            <a href="mailto:?subject=通知エリアからツイートするAndroidアプリ、Monotweetyを公開した(コードもあるよ)%20%7C%20CodingFeline&body=https://www.yslibrary.net/2016/11/14/monotweety-android-released/" target="_blank" title="">
+			<i class="fas fa-envelope-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Email</span>
+		</a>
+        </li>
+        
+    </ul>
+</div>
+
+
+
+
+   <!-- Tag list -->
+  
+  
+
+
+  <div class="tag-list">
+    <ul>
+      
+        <li class="meta">Tags</li>
+      
+
+      
+        <li><a class="button" href="/tags#android">
+          <p><i class="fas fa-tag fa-fw fa-sm"></i> android</p>
+        </a></li>
+      
+        <li><a class="button" href="/tags#monotweety">
+          <p><i class="fas fa-tag fa-fw fa-sm"></i> monotweety</p>
+        </a></li>
+      
+        <li><a class="button" href="/tags#twitter">
+          <p><i class="fas fa-tag fa-fw fa-sm"></i> twitter</p>
+        </a></li>
+      
+    </ul>
+  </div>
+
+
+
+</article>
+
+<!-- Disqus -->
+
+<div class="comments">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'yslibrary';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+</div>
+
+
+<!-- Post navigation -->
+
+  <div id="post-nav">
+    
+    <div id="previous-post">
+        <a alt="CircleCIでDocker v1.10.0を使う" href="/2016/11/25/docker-v1-1-0-on-circleci/">
+            <p>Previous post</p>
+            CircleCIでDocker v1.10.0を使う
+        </a>
+    </div>
+    
+
+    
+    <div id="next-post">
+        <a alt="go getでprivate repositoryを取得するには" href="/2016/10/15/go-get-private-repository/">
+            <p>Next post</p>
+            go getでprivate repositoryを取得するには
+        </a>
+    </div>
+    
+</div>
+
+
+
+<!-- To change color of links in the page -->
+<style>
+  header#main {
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+  }
+  
+  
+  
+  
+</style>
+
+    </div>
+    <footer class="site-footer">
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- yslibrary.net - bottom -->
+<ins class="adsbygoogle"
+     style="display:block; margin-top:10px; margin-bottom:10px;"
+     data-ad-client="ca-pub-1022395241918455"
+     data-ad-slot="6501231341"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+    <p class="text">
+        © 2020, yshrsmz</p>
+            <div class="footer-icons">
+                <ul>
+                <!-- Social icons from Font Awesome, if enabled -->
+                
+<li>
+    <a feed.xml href="http://feeds.feedburner.com/TheoreticalCat"
+       title="Follow RSS feed">
+        <span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+    <a href="https://github.com/yshrsmz" title="Follow on GitHub">
+		<span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+<li>
+    <a href="https://www.linkedin.com/in/yshrsmz/" title="Follow on LinkedIn">
+		<span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+<li>
+    <a href="https://www.reddit.com/user/yshrsmz"
+       title="Follow on Reddit">
+		<span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-reddit fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+<li>
+    <a href="https://stackexchange.com/users/456702/yshrsmz" title="Follow on Stack Exchange">
+		<span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-stack-exchange fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+<li>
+    <a href="https://stackoverflow.com/users/855599/yshrsmz" title="Follow on Stack Overflow">
+		<span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-stack-overflow fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+<li>
+    <a class="type" href="https://twitter.com/_yshrsmz"
+       title="Follow on Twitter">
+        <span class="fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+                </ul>
+            </div>
+</footer>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+  </body>
+</html>
